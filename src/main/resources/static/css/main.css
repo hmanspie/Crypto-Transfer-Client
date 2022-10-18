@@ -1,0 +1,65 @@
+#body {
+    background-color: #DFCAB5;
+}
+
+#navbar {
+    background-color: #212227;
+    --bs-navbar-color: #8B8B93;
+    --bs-navbar-hover-color: #8F7154;
+    --bs-navbar-brand-color: #F1E4D7;
+    --bs-navbar-brand-hover-color: #F1E4D7;
+}
+
+#write-form {
+    background-color: #F1E4D7;
+    border-color: #8F7154;
+}
+
+/*fffcf5 - textfield background */
+
+.input-group-text {
+    background-color: #DFCAB5;
+    border-color: #DFCAB5;
+}
+
+.form-control {
+    background-color: #FFFCF5;
+}
+
+#send-btn {
+    background-color: #8B8B93;
+    border-color: #8B8B93;
+    transition: all 0.3s;
+}
+
+#send-btn:hover {
+    transform: scale(0.9);
+}
+
+#send-btn:active {
+    transform: scale(0.85);
+}
+
+.card {
+    background-color: #F1E4D7;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-width: unset;
+    border-style: none;
+}
+
+tbody tr:hover {
+    background: #DFCAB5; /* Цвет фона при наведении */
+}
+
+#home-text {
+    margin-top: 15px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+
+    font-family: "Times New Roman", sans-serif;
+    font-size: large;
+}
