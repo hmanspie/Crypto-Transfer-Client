@@ -1,0 +1,44 @@
+#body {
+    background-color: #DFCAB5;
+}
+
+#navbar {
+    background-color: #212227;
+    --bs-navbar-color: #8B8B93;
+    --bs-navbar-hover-color: #8F7154;
+    --bs-navbar-brand-color: #F1E4D7;
+    --bs-navbar-brand-hover-color: #F1E4D7;
+}
+
+#write-form {
+    background-color: #F1E4D7;
+    border-color: #8F7154;
+    /*--bs-body-bg: #252422;*/
+}
+
+.input-group-text {
+    background-color: #DFCAB5;
+    border-color: #DFCAB5;
+}
+
+.form-control {
+    background-color: #FFFCF5;
+}
+
+#send-btn {
+    background-color: #8B8B93;
+    border-color: #8B8B93;
+}
+
+.card {
+    background-color: #F1E4D7;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-width: unset;
+    border-style: none;
+}
+
+tbody tr:hover {
+    background: #DFCAB5; /* Цвет фона при наведении */
+}

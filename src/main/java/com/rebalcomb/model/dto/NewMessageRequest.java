@@ -1,10 +1,11 @@
 package com.rebalcomb.model.dto;
 
+
+import com.rebalcomb.model.entity.Account;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Data
 @Setter
@@ -12,12 +13,17 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountSignInRequest {
+public class NewMessageRequest {
 
     @NotBlank
-    private String login;
+    private String from;
 
     @NotBlank
-    private String passwd;
+    private String to;
 
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String body;
 }
