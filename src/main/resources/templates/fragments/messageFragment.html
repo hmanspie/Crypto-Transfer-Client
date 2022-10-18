@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<body>
+<div th:fragment="emptyFragment" style="display:none;"></div>
+
+<div class="container-fluid m-1 p-3 pb-2" th:fragment="writeFragment">
+    <form class="container shadow rounded-3 p-2" id="write-form">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="destination">To</span>
+            <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Title</span>
+            <input type="text" class="form-control" aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Text</span>
+            <textarea class="form-control" aria-label="Message"></textarea>
+        </div>
+        <div class="container d-flex align-items-stretch justify-content-end p-0">
+            <button type="button" class="btn btn-primary" id="send-btn">Send</button>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid m-1 p-3 pb-2" th:fragment="incomingFragment">
+    <div class="card">
+        <div class="card-header">
+            <p class="h4">Incoming messages</p>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Body</th>
+                    <th scope="col">Date and Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="message : ${messages}">
+                <tr onclick="window.open('http://google.com');">
+                    <td th:text="${message?.getId()}"></td>
+                    <td th:text="${message?.getTo()?.getLogin()}"></td>
+                    <td th:text="${message?.getTitle()}"></td>
+                    <td th:text="${message?.getBody()}"></td>
+                    <td th:text="${message?.getDate_time()}"></td>
+                </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid m-1 p-3 pb-2" th:fragment="outcomingFragment">
+    <div class="card">
+        <div class="card-header">
+            <p class="h4">Outcoming messages</p>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Body</th>
+                    <th scope="col">Date and Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="message : ${messages}">
+                <tr onclick="window.open('http://google.com');">
+                    <td th:text="${message?.getId()}"></td>
+                    <td th:text="${message?.getTo()?.getLogin()}"></td>
+                    <td th:text="${message?.getTitle()}"></td>
+                    <td th:text="${message?.getBody()}"></td>
+                    <td th:text="${message?.getDate_time()}"></td>
+                </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container" th:fragment="settingFragment"></div>
+</body>
+</html>

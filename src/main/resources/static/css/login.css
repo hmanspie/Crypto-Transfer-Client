@@ -1,0 +1,158 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body, html{
+    height: 100%;
+}
+
+.login-block{
+    width: 100%;
+    height: 100%;
+    float:left;
+    background-color:  #26262E;
+    display: block;
+}
+.check-block{
+    width: 50%;
+    height: 5%;
+    float:left;
+    display: table;
+    margin-top: 20px;
+    margin-left: 40%;
+}
+.check-text{
+    background: linear-gradient(burlywood, darkcyan);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 1%;
+    font-size: 13px;
+}
+.login-block-form{
+    width: 50%;
+    height: 50%;
+}
+.text-style{
+    font-family: 'Palatino Linotype', sans-serif;
+}
+
+.error-text{
+    background: linear-gradient(darkred, tomato);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: table;
+}
+.notification{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    font-size: 15px;
+}
+.info-text{
+    background: linear-gradient(green, greenyellow);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: table;
+}
+.head-text{
+    text-transform: uppercase;
+    margin-top: 70px;
+    font-size: 25px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+.username-text{
+    margin-top: 70px;
+    margin-left: 40%;
+    font-size: 15px;
+}
+.log-text{
+    margin-top: 20px;
+    margin-left: 40%;
+    font-size: 15px;
+}
+
+.forgort-text{
+    margin-top: 20px;
+    margin-left: 40%;
+    font-size: 12px;
+}
+.text-form {
+    background: linear-gradient(burlywood, darkcyan);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: table;
+}
+.text-rep:-webkit-autofill{
+    transition: all 5000s ease-in-out 0s;
+}
+.input-style {
+    margin-left: 40%;
+    border-width:  0 0 1px 0;
+    font-size: 15px;
+    width: 20%;
+    color: aquamarine;
+    background-color: transparent;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to right, rosybrown, darkturquoise);
+}
+.input-style:hover {
+    border-image-source: linear-gradient(to right, darkturquoise, rosybrown);
+}
+.input-style:focus {
+    outline: none;
+    color: aquamarine;
+    border-width:  0 0 1px 0;
+    border-image-source: linear-gradient(to right, darkturquoise, rosybrown);
+}
+.button-signin{
+    border-width:  0;
+    background: aquamarine;
+    color: #422E39;
+}
+.button-signin:hover {
+    background: linear-gradient(burlywood, darkcyan);
+    color: black;
+}
+.button-signin:active {
+    border-width: 1px;
+    border-color: aquamarine;
+}
+.box {
+    animation: 3s show ease;
+}
+
+@keyframes show {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.button{
+    outline: none;
+    width: 20%;
+    height: 30px;
+    margin-top: 20px;
+    margin-left: 40%;
+    border-radius: 30px;
+    font-size: 13px;
+    min-height: auto;
+    min-width: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.button-signup{
+
+    border-width: 2px;
+    background: transparent;
+    color: aquamarine;
+    border-color: aquamarine;
+}
+.button-signup:hover{
+    border-width: 0;
+    background: aquamarine;
+    color: black;
+}
+
+
