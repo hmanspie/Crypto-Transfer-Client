@@ -118,13 +118,6 @@
                 </thead>
                 <tbody>
                 <th:block th:each="message : ${messages}">
-                    <tr onclick="window.open('http://google.com');">
-                        <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getTo()?.getLogin()}"></td>
-                        <td th:text="${message?.getTitle()}"></td>
-                        <td th:text="${message?.getBody()}"></td>
-                        <td th:text="${message?.getDate_time()}"></td>
-                    </tr>
                 <tr onclick="window.open('http://google.com');">
                     <td th:text="${message?.getId()}"></td>
                     <td th:text="${message?.getFrom()?.getFullName()}"></td>
