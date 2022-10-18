@@ -1,5 +1,6 @@
 package com.rebalcomb.controllers;
 
+import com.rebalcomb.model.dto.NewMessageRequest;
 import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.service.MessageService;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ public class MessageController {
     @GetMapping("/write")
     public ModelAndView write(ModelAndView model){
         model.addObject("headPageValue", "write");
+        model.addObject("newMessageRequest", new NewMessageRequest());
         model.setViewName("headPage");
         return model;
     }
