@@ -13,8 +13,9 @@
 #write-form {
     background-color: #F1E4D7;
     border-color: #8F7154;
-    /*--bs-body-bg: #252422;*/
 }
+
+/*fffcf5 - textfield background */
 
 .input-group-text {
     background-color: #DFCAB5;
@@ -28,6 +29,15 @@
 #send-btn {
     background-color: #8B8B93;
     border-color: #8B8B93;
+    transition: all 0.3s;
+}
+
+#send-btn:hover {
+    transform: scale(0.9);
+}
+
+#send-btn:active {
+    transform: scale(0.85);
 }
 
 .card {
@@ -41,4 +51,15 @@ tbody, td, tfoot, th, thead, tr {
 
 tbody tr:hover {
     background: #DFCAB5; /* Цвет фона при наведении */
+}
+
+#home-text {
+    margin-top: 15px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+
+    font-family: "Times New Roman", sans-serif;
+    font-size: large;
 }
