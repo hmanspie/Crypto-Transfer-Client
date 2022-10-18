@@ -2,6 +2,82 @@
 <body>
 <div th:fragment="emptyFragment" style="display:none;"></div>
 
+<div class="container-fluid m-1 p-3 pb-2 justify-content-center" th:fragment="homeFragment">
+    <div class="container-fluid justify-content-center">
+        <img class="rounded mx-auto d-block" th:src="@{/logo/coffeelogo.png}" alt="Logotype">
+        <p id="home-text">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+            electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
+            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
+            Aldus PageMaker including versions of Lorem Ipsum
+        </p>
+    </div>
+
+    <div class="container-fluid mt-5" style="width: 15rem">
+        <div class="card shadow rounded mx-auto d-block">
+            <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="TeamLeader">
+            <div class="card-body">
+                <p class="card-text">Чевардін</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-md text-center">
+        <div class="row mt-5">
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Братчик</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Гапон</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Калич</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Нещерет</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Москалець</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Самолюк</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid m-1 p-3 pb-2" th:fragment="writeFragment">
     <form class="container shadow rounded-3 p-2" id="write-form" th:action="@{/sendNewMessage}" th:method="post"  th:object="${newMessageRequest}">
         <div class="input-group mb-3" >
