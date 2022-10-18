@@ -1,7 +1,6 @@
 package com.rebalcomb.model.dto;
 
 
-import com.rebalcomb.model.entity.Account;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -25,5 +24,5 @@ public class NewMessageRequest {
     private String title;
 
     @NotBlank
-    private String body;
+    private String bodyMessage;
 }
