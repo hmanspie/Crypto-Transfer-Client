@@ -3,20 +3,20 @@
 <div th:fragment="emptyFragment" style="display:none;"></div>
 
 <div class="container-fluid m-1 p-3 pb-2" th:fragment="writeFragment">
-    <form class="container shadow rounded-3 p-2" id="write-form">
-        <div class="input-group mb-3">
+    <form class="container shadow rounded-3 p-2" id="write-form" th:action="@{/sendNewMessage}" th:method="post"  th:object="${newMessageRequest}">
+        <div class="input-group mb-3" >
             <span class="input-group-text" id="destination">To</span>
             <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                   aria-describedby="basic-addon1">
+                   aria-describedby="basic-addon1" th:field="*{to}" required>
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="title">Title</span>
             <input type="text" class="form-control" aria-label="Username"
-                   aria-describedby="basic-addon1">
+                   aria-describedby="basic-addon1" th:field="*{title}" required>
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text">Text</span>
-            <textarea class="form-control" aria-label="Message"></textarea>
+            <textarea class="form-control" aria-label="Message" th:field="*{body}" required></textarea>
         </div>
         <div class="container d-flex align-items-stretch justify-content-end p-0">
             <button type="submit" class="btn btn-primary" id="send-btn">Send</button>
