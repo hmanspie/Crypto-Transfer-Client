@@ -10,12 +10,10 @@
     --bs-navbar-brand-hover-color: #F1E4D7;
 }
 
-#write-form {
+#write-form, #setting-form {
     background-color: #F1E4D7;
     border-color: #8F7154;
 }
-
-/*fffcf5 - textfield background */
 
 .input-group-text {
     background-color: #DFCAB5;
@@ -26,18 +24,33 @@
     background-color: #FFFCF5;
 }
 
-#send-btn {
+.btn {
     background-color: #8B8B93;
+    color: #F1E4D7;
     border-color: #8B8B93;
     transition: all 0.3s;
 }
 
-#send-btn:hover {
+.btn:hover {
+    background-color: #8B8B93;
+    color: #F1E4D7;
     transform: scale(0.9);
 }
 
-#send-btn:active {
+.btn:first-child:active {
+    background-color: #8B8B93;
+    color: #F1E4D7;
     transform: scale(0.85);
+}
+
+#btn-plus:hover, #btn-minus:hover {
+    background-color: #F1E4D7;
+    /*Do darkly*/
+}
+
+#btn-plus:active, #btn-minus:active {
+    background-color: #F1E4D7;
+    /*Do more darkly*/
 }
 
 .card {
@@ -62,4 +75,24 @@ tbody tr:hover {
 
     font-family: "Times New Roman", sans-serif;
     font-size: large;
+}
+
+.dropdown-menu.dropdown-menu-end {
+    background-color: #212227;
+    color: #F1E4D7;
+    transition: color .15s;
+}
+
+.dropdown-toggle::after {
+    color: #8B8B93;
+}
+
+.dropdown-menu.dropdown-menu-end .dropdown-item {
+    background-color: #212227;
+    color: #8B8B93;
+}
+
+.dropdown-menu.dropdown-menu-end .dropdown-item:hover {
+    background-color: #212227;
+    color: #8F7154;
 }
