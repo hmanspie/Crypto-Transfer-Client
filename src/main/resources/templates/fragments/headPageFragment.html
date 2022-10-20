@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<body>
+<div th:fragment="emptyFragment" style="display:none;"></div>
+
+<div class="container-fluid p-3 pb-2 justify-content-center" th:fragment="homeFragment">
+    <div class="container-fluid justify-content-center">
+        <img class="rounded mx-auto d-block" th:src="@{/logo/coffeelogo.png}" alt="Logotype">
+        <p id="home-text">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+            scrambled.
+        </p>
+    </div>
+
+    <div class="container-fluid mt-3" style="width: 15rem">
+        <div class="card shadow rounded mx-auto d-block">
+            <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="TeamLeader">
+            <div class="card-body">
+                <p class="card-text">Чевардін</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-md text-center">
+        <div class="row mt-5">
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/Neshcheret.png}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Нещерет</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/Moskalets.png}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Москалець</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/Bratchyk.png}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Братчик</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/Kalych.png}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Калич</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/Samoliuk.png}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Самолюк</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow">
+                    <img class="card-img-top" th:src="@{/developers/Hapon.png}" alt="Developer">
+                    <div class="card-body">
+                        <p class="card-text">Гапон</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-3 pb-2" th:fragment="writeFragment">
+    <form class="container shadow rounded-3 p-2" id="write-form" th:action="@{/sendNewMessage}" th:method="post"
+          th:object="${newMessageRequest}">
+
+        <div class="input-group mb-3" id="destination">
+            <span class="input-group-text">To</span>
+            <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                   aria-describedby="basic-addon1" th:field="*{to}" required>
+
+            <span class="input-group-text" id="btn-plus" onclick="addField()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </span>
+        </div>
+
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="title">Title</span>
+            <input type="text" class="form-control" aria-label="Username"
+                   aria-describedby="basic-addon1" th:field="*{title}" required>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Text</span>
+            <textarea class="form-control" aria-label="Message" th:field="*{bodyMessage}" required></textarea>
+        </div>
+        <div class="container d-flex align-items-stretch justify-content-end p-0">
+            <button type="submit" class="btn">Send</button>
+        </div>
+    </form>
+    <script th:src="@{/js/write.js}"></script>
+</div>
+
+<div class="container-fluid p-3 pb-2" th:fragment="incomingFragment">
+    <div class="card shadow">
+        <div class="card-header">
+            <p class="h4">Incoming messages</p>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Body</th>
+                    <th scope="col">Date and Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="message : ${messages}">
+                    <tr th:onclick="@{/headPage/message/${message?.getId()}}">
+                        <td th:text="${message?.getId()}"></td>
+                        <td th:text="${message?.getFrom()?.getFullName()}"></td>
+                        <td th:text="${message?.getTitle()}"></td>
+                        <td th:text="${message?.getBody()}"></td>
+                        <td th:text="${message?.getDate_time()}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-3 pb-2" th:fragment="outcomingFragment">
+    <div class="card shadow">
+        <div class="card-header">
+            <p class="h4">Outcoming messages</p>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Body</th>
+                    <th scope="col">Date and Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="message : ${messages}">
+                    <tr th:onclick="@{/headPage/message/${message?.getId()}}">
+                        <td th:text="${message?.getId()}"></td>
+                        <td th:text="${message?.getTo()?.getFullName()}"></td>
+                        <td th:text="${message?.getTitle()}"></td>
+                        <td th:text="${message?.getBody()}"></td>
+                        <td th:text="${message?.getDate_time()}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-3 pb-2" th:fragment="messageFragment">
+    <div class="card shadow">
+        <div class="card-header">
+            <p class="h3">Title</p>
+            <p class="h5">From: </p>
+            <p class="h5">To: </p>
+            <p class="h6">Time</p>
+        </div>
+        <div class="card-body">
+            <p id="message-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse venenatis eros eu nunc sagittis mattis. Sed venenatis orci vitae sapien mollis, sed efficitur ex maximus. Integer nisi tellus, pellentesque interdum posuere non, maximus ut felis. Aliquam iaculis nulla sit amet velit porta, iaculis tempus purus tempus. In ullamcorper malesuada arcu, et suscipit tortor ultricies sodales. Donec finibus eu mauris a egestas. Praesent ut lorem at turpis porta aliquam a ac sem. Ut eu arcu varius, consequat lectus quis, tincidunt ante. Vivamus nec magna vitae lorem consequat gravida. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum varius eleifend commodo. Fusce molestie volutpat dui, sed euismod odio sollicitudin in. Aenean eu est ut dui viverra vestibulum vel non erat. Pellentesque vitae interdum ipsum.
+
+                Morbi eu tempor enim. Curabitur mollis viverra cursus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec a orci id erat malesuada ornare. Donec a tempor ex, et varius massa. In cursus et dolor sit amet porttitor. Quisque quis imperdiet ante. Curabitur bibendum neque odio, at rhoncus sem euismod at. Etiam tristique libero purus. Maecenas consectetur velit in metus pretium ornare. Aenean felis turpis, pellentesque ac viverra quis, condimentum vel magna. Phasellus a porta lacus. In eu euismod elit. Donec sagittis massa lacus, vitae lacinia nisi fermentum ac. Morbi vel mi leo. Etiam auctor nulla id convallis tincidunt.
+
+                Aenean vitae nisi semper, efficitur nisi eu, pharetra arcu. Nunc maximus sagittis arcu et viverra. Nam faucibus, purus feugiat semper convallis, nisl ligula auctor mauris, vitae posuere eros magna eu mauris. Mauris enim est, commodo ut ex vel, interdum fringilla nibh. Duis interdum at mauris vitae laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare lorem convallis, placerat ipsum et, finibus urna. Cras neque elit, dapibus sed laoreet sed, ornare sed sem.
+
+                Aliquam lobortis turpis leo, sed tincidunt mi malesuada iaculis. Nullam ligula dolor, auctor sed urna vitae, mollis pulvinar elit. Aliquam a iaculis dolor. Donec at aliquam ipsum, sit amet consectetur purus. Proin et magna sed massa fringilla commodo. Phasellus nec enim bibendum, mattis dui eu, dictum nulla. Nullam a dictum nisl. Phasellus finibus non neque quis pretium. Morbi consectetur bibendum odio, in malesuada orci commodo eget. Etiam tempor ipsum id dignissim tempor. Nulla ac mauris nec lorem pharetra lacinia eget eu est. Quisque ultricies semper urna tristique fringilla.
+
+                Sed in mauris nec nisi mattis vehicula. Pellentesque sed gravida sapien. Nam nec nunc at augue dictum pharetra. Nam non molestie turpis, et convallis dolor. Duis hendrerit massa vitae tellus tempus, sed rhoncus mauris eleifend. Sed vitae faucibus felis. Aliquam urna lacus, dapibus in eleifend ac, scelerisque euismod sem. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+
+                Vestibulum at velit eu massa posuere tristique. In eget mattis velit. Morbi pharetra lacus vitae elit viverra, in auctor erat tincidunt. Nullam ac sem sit amet ligula porttitor consectetur. Curabitur a pulvinar ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla dictum tristique libero, id cursus ligula euismod.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-3 pb-2 justify-content-center" th:fragment="profileFragment">
+    <div class="container" id="profile-card">
+        <p class="h4" id="profile-title">Profile</p>
+        <div class="profile-top-line"></div>
+        <div class="container text-center p-0">
+            <div class="row">
+                <div class="col-8">
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h6">Fullname</p>
+                        <input type="text" class="form-control" placeholder="Fullname" aria-label="Fullname" aria-describedby="basic-addon1">
+                        <p class="text-description">Your name may appear around GitHub where you contribute or are mentioned. You can remove it at any time.</p>
+                    </div>
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h6">Password</p>
+                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                        <p class="text-description">You can remove it at any time.</p>
+                    </div>
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h6">Email</p>
+                        <input type="text" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+                        <p class="text-description">You can remove it at any time.</p>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <p class="h6 text-start mt-3">Profile picture</p>
+                    <img id="profile-icon" th:src="@{/developers/Hapon.png}">
+                </div>
+            </div>
+
+            <div class="container d-flex align-items-stretch justify-content-center p-0">
+                <button type="submit" class="btn" id="apply-setting-btn">Update profile</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-3 pb-2" th:fragment="settingFragment">
+    <form class="container shadow rounded-3 p-2" id="setting-form">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="ip-service">IP</span>
+            <input type="text" class="form-control" placeholder="Address Service" aria-label="Address Service"
+                   aria-describedby="basic-addon1" required>
+        </div>
+        <div class="container d-flex align-items-stretch justify-content-end p-0">
+            <button type="submit" class="btn">Apply</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
