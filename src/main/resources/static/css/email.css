@@ -1,0 +1,15 @@
+.email-form.container.shadow.rounded-3.p-2 {
+    background-color: #F1E4D7;
+    border-color: #8F7154;
+    margin-top: 50%;
+    margin-bottom: 50%;
+}
+
+.email-title {
+    text-align: center;
+}
+
+.email-line {
+    background-color: #212227;
+    height: 2px;
+}
