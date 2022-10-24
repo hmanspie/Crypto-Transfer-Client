@@ -139,6 +139,24 @@ tbody tr:hover {
 
 /* Button */
 
+/* Select */
+
+.form-select {
+    background-color: #FFFCF5;
+    border-color: #FFFCF5;
+}
+
+/* Select */
+
+/* Check */
+
+.form-check-input {
+    background-color: #FFFCF5;
+    border-color: #FFFCF5;
+}
+
+/* Check */
+
 /* Card */
 
 .card {
