@@ -130,10 +130,10 @@
                 <th:block th:each="message : ${messages}">
                     <tr th:onclick="@{/headPage/message/${message?.getId()}}">
                         <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getFrom()?.getFullName()}"></td>
+                        <td th:text="${message?.getFrom()}"></td>
                         <td th:text="${message?.getTitle()}"></td>
-                        <td th:text="${message?.getBody()}"></td>
-                        <td th:text="${message?.getDate_time()}"></td>
+                        <td th:text="${message?.getBodyMessage()}"></td>
+                        <td th:text="${message?.getDateTime()}"></td>
                     </tr>
                 </th:block>
                 </tbody>
@@ -162,10 +162,10 @@
                 <th:block th:each="message : ${messages}">
                     <tr th:onclick="@{/headPage/message/${message?.getId()}}">
                         <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getTo()?.getFullName()}"></td>
+                        <td th:text="${message?.getTo()}"></td>
                         <td th:text="${message?.getTitle()}"></td>
-                        <td th:text="${message?.getBody()}"></td>
-                        <td th:text="${message?.getDate_time()}"></td>
+                        <td th:text="${message?.getBodyMessage()}"></td>
+                        <td th:text="${message?.getDateTime()}"></td>
                     </tr>
                 </th:block>
                 </tbody>
