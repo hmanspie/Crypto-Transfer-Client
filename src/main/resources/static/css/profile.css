@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+#profile-card {
+    background-color: #DFCAB5;
+    width: 28%;
+}
+
+#profile-title {
+    color: #212227;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.profile-top-line {
+    background-color: #212227;
+    height: 2px;
+}
+
+#profile-card .container.p-0.text-start.mt-3 .h6 {
+    left: 50%;
+}
+
+#profile-input {
+    width: 50%;
+    height: 50%;
+    background-color: #ECDCCCFF;
+}
+
+#profile-card col {
+    width: 50%;
+}
+
+#profile-icon {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+}

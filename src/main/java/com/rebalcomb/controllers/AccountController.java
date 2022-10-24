@@ -94,4 +94,9 @@ public class AccountController {
     public String getViewForForgortPassword(Model model) {
         return "forgort";
     }
+
+    @GetMapping("/email")
+    public String email(){
+        return "email";
+    }
 }

@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/profile.css}"/>
     <link rel="icon" type="image/x-icon" th:href="@{/favicon/darkicon.ico}">
     <title>Head Page</title>
 </head>
@@ -15,21 +16,27 @@
 <div th:insert="~{fragments/navBarFragment :: 'navbarFragment'}"></div>
 <div class="container-fluid m-0 p-0 w-100">
     <div class="container-fluid m-0 p-0 w-100">
-        <th:blockRequest th:if="${headPageValue} == 'home'">
-            <div th:insert="~{fragments/messageFragment :: 'homeFragment'}"></div>
-        </th:blockRequest>
-        <th:blockRequest th:if="${headPageValue} == 'write'">
-            <div th:insert="~{fragments/messageFragment :: 'writeFragment'}"></div>
-        </th:blockRequest>
-        <th:blockRequest th:if="${headPageValue} == 'incoming'">
-            <div th:insert="~{fragments/messageFragment :: 'incomingFragment'}"></div>
-        </th:blockRequest>
-        <th:blockRequest th:if="${headPageValue} == 'outcoming'">
-            <div th:insert="~{fragments/messageFragment :: 'outcomingFragment'}"></div>
-        </th:blockRequest>
-        <th:blockRequest th:if="${headPageValue} == 'setting'">
-            <div th:insert="~{fragments/messageFragment :: 'settingFragment'}"></div>
-        </th:blockRequest>
+        <th:block th:if="${headPageValue} == 'home'">
+            <div th:insert="~{fragments/headPageFragment :: 'homeFragment'}"></div>
+        </th:block>
+        <th:block th:if="${headPageValue} == 'write'">
+            <div th:insert="~{fragments/headPageFragment :: 'writeFragment'}"></div>
+        </th:block>
+        <th:block th:if="${headPageValue} == 'incoming'">
+            <div th:insert="~{fragments/headPageFragment :: 'incomingFragment'}"></div>
+        </th:block>
+        <th:block th:if="${headPageValue} == 'outcoming'">
+            <div th:insert="~{fragments/headPageFragment :: 'outcomingFragment'}"></div>
+        </th:block>
+        <th:block th:if="${headPageValue} == 'messageShow'">
+            <div th:insert="~{fragments/headPageFragment :: 'messageFragment'}"></div>
+        </th:block>
+        <th:block th:if="${headPageValue} == 'profile'">
+            <div th:insert="~{fragments/headPageFragment :: 'profileFragment'}"></div>
+        </th:block>
+        <th:block th:if="${headPageValue} == 'setting'">
+            <div th:insert="~{fragments/headPageFragment :: 'settingFragment'}"></div>
+        </th:block>
     </div>
 </div>
 </body>

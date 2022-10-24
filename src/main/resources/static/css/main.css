@@ -2,6 +2,8 @@
     background-color: #DFCAB5;
 }
 
+/* NavBar */
+
 #navbar {
     background-color: #212227;
     --bs-navbar-color: #8B8B93;
@@ -10,48 +12,29 @@
     --bs-navbar-brand-hover-color: #F1E4D7;
 }
 
-#write-form {
-    background-color: #F1E4D7;
-    border-color: #8F7154;
+.dropdown-menu.dropdown-menu-end {
+    background-color: #212227;
+    color: #F1E4D7;
+    transition: color .15s;
 }
 
-/*fffcf5 - textfield background */
-
-.input-group-text {
-    background-color: #DFCAB5;
-    border-color: #DFCAB5;
+.dropdown-toggle::after {
+    color: #8B8B93;
 }
 
-.form-control {
-    background-color: #FFFCF5;
+.dropdown-menu.dropdown-menu-end .dropdown-item {
+    background-color: #212227;
+    color: #8B8B93;
 }
 
-#send-btn {
-    background-color: #8B8B93;
-    border-color: #8B8B93;
-    transition: all 0.3s;
+.dropdown-menu.dropdown-menu-end .dropdown-item:hover {
+    background-color: #212227;
+    color: #8F7154;
 }
 
-#send-btn:hover {
-    transform: scale(0.9);
-}
+/* NavBar */
 
-#send-btn:active {
-    transform: scale(0.85);
-}
-
-.card {
-    background-color: #F1E4D7;
-}
-
-tbody, td, tfoot, th, thead, tr {
-    border-width: unset;
-    border-style: none;
-}
-
-tbody tr:hover {
-    background: #DFCAB5; /* Цвет фона при наведении */
-}
+/* Home Page */
 
 #home-text {
     margin-top: 15px;
@@ -63,3 +46,151 @@ tbody tr:hover {
     font-family: "Times New Roman", sans-serif;
     font-size: large;
 }
+
+/* Home Page */
+
+/* Write Page */
+
+#write-form {
+    background-color: #F1E4D7;
+    border-color: #8F7154;
+}
+
+#btn-plus:hover, #btn-minus:hover {
+    background-color: #F1E4D7;
+    /*Do darkly*/
+}
+
+#btn-plus:active, #btn-minus:active {
+    background-color: #F1E4D7;
+    /*Do more darkly*/
+}
+
+/* Write Page */
+
+/* Setting Page*/
+
+.setting-form.container.shadow.rounded-3.p-2 {
+    background-color: #F1E4D7;
+    border-color: #8F7154;
+}
+
+.setting-title {
+    text-align: center;
+}
+
+.setting-line {
+    background-color: #212227;
+    height: 2px;
+}
+
+#private-key {
+    resize: none;
+}
+
+/* Setting Page*/
+
+/* Table */
+
+tbody, td, tfoot, th, thead, tr {
+    border-width: unset;
+    border-style: none;
+}
+
+tbody tr:hover {
+    background: #DFCAB5; /* Цвет фона при наведении */
+}
+
+/* Table */
+
+/* Input */
+
+.input-group-text {
+    background-color: #DFCAB5;
+    border-color: #DFCAB5;
+}
+
+/* Input */
+
+.form-control {
+    background-color: #FFFCF5;
+}
+
+/* Button */
+
+.btn {
+    background-color: #8B8B93;
+    color: #F1E4D7;
+    border-color: #8B8B93;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background-color: #8B8B93;
+    color: #F1E4D7;
+    transform: scale(0.9);
+}
+
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+    background-color: #8B8B93;
+    color: #F1E4D7;
+    transform: scale(0.85);
+}
+
+/* Button */
+
+/* Select */
+
+.form-select {
+    background-color: #FFFCF5;
+    border-color: #FFFCF5;
+}
+
+/* Select */
+
+/* Check */
+
+.form-check-input {
+    background-color: #FFFCF5;
+    border-color: #FFFCF5;
+}
+
+/* Check */
+
+/* Card */
+
+.card {
+    background-color: #F1E4D7;
+}
+
+/* Card */
+
+/* Modal-dialog */
+
+.modal-content {
+    background-color: #F1E4D7;
+    border-color: #8F7154;
+}
+
+.modal-header {
+    border-color: #8F7154;
+}
+
+.modal-body {
+    border-color: #8F7154;
+}
+
+.modal-footer {
+    border-color: #8F7154;
+}
+
+/* Modal-dialog */
+
+/* Text description */
+
+.text-description {
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+}
+
+/* Text description */
