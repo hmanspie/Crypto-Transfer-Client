@@ -77,7 +77,7 @@
 
 <div class="container-fluid p-3 pb-2" th:fragment="writeFragment">
     <form class="container shadow rounded-3 p-2" id="write-form" th:action="@{/sendNewMessage}" th:method="post"
-          th:object="${newMessageRequest}">
+          th:object="${messageRequest}">
 
         <div class="input-group mb-3" id="destination">
             <span class="input-group-text">To</span>
