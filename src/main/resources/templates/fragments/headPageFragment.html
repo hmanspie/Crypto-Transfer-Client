@@ -236,26 +236,41 @@
         <div class="container text-center p-0">
             <div class="row">
                 <div class="col-8">
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h6">Login</p>
+                        <input type="text" class="form-control" placeholder="Login" aria-label="Login"
+                               aria-describedby="basic-addon1">
+                        <p class="text-description">Don't forget your email if you don't want to recover your email</p>
+                    </div>
+
                     <div class="container p-0 text-start mt-3">
                         <p class="h6">Fullname</p>
                         <input type="text" class="form-control" placeholder="Fullname" aria-label="Fullname"
                                aria-describedby="basic-addon1">
-                        <p class="text-description">Your name may appear around GitHub where you contribute or are
-                            mentioned. You can remove it at any time.</p>
+                        <p class="text-description">You can remove it at any time.</p>
+                    </div>
+
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h6">Old password</p>
+                        <input type="text" class="form-control" placeholder="Password" aria-label="Password"
+                               aria-describedby="basic-addon1">
+                        <p class="text-description">We will use the old password to be sure about you</p>
                     </div>
 
                     <div class="container p-0 text-start mt-3">
-                        <p class="h6">Password</p>
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                        <p class="h6">New password</p>
+                        <input type="text" class="form-control" placeholder="Password" aria-label="Password"
                                aria-describedby="basic-addon1">
-                        <p class="text-description">You can remove it at any time.</p>
+                        <p class="text-description">Remember your new password</p>
                     </div>
 
                     <div class="container p-0 text-start mt-3">
                         <p class="h6">Email</p>
-                        <input type="text" class="form-control" placeholder="Email" aria-label="Username"
+                        <input type="text" class="form-control" placeholder="Email" aria-label="Email"
                                aria-describedby="basic-addon1">
-                        <p class="text-description">You can remove it at any time.</p>
+                        <p class="text-description">Change your e-mail and receive a letter to the new address</p>
                     </div>
                 </div>
                 <div class="col-3">
@@ -284,11 +299,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="ip-service">IP</span>
-                        <input type="text" class="form-control" placeholder="Address Service"
-                               aria-label="Address Service"
-                               aria-describedby="basic-addon1" required>
+                    <div class="input-group">
+                        <span class="input-group-text">IP:Port</span>
+                        <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="form-control">
+                        <input type="text" aria-label="Port Service" placeholder="8081" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -328,6 +342,79 @@
                 </div>
             </div>
             <script th:src="@{/js/setting.js}" ></script>
+            <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                <div class="container p-0 text-start mt-4">
+                    <p class="h5">Encryption mode</p>
+                    <div class="setting-line mb-2"></div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1" checked>
+                                <label class="form-check-label" for="radioEncryption1">
+                                    ECB
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption2">
+                                <label class="form-check-label" for="radioEncryption2">
+                                    CBC
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption3">
+                                <label class="form-check-label" for="radioEncryption3">
+                                    PCBC
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">
+                                <label class="form-check-label" for="radioEncryption4">
+                                    CFB
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption5">
+                                <label class="form-check-label" for="radioEncryption5">
+                                    OFB
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption6">
+                                <label class="form-check-label" for="radioEncryption6">
+                                    CTR
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                <div class="container p-0 text-start mt-4">
+                    <p class="h5">Length key</p>
+                    <div class="setting-line"></div>
+                    <select class="form-select mt-2" aria-label="Length key">
+                        <option value="1">128</option>
+                        <option value="2">192</option>
+                        <option value="3">256</option>
+                    </select>
+                    <p class="text-description mt-3">The longest key will be the strongest</p>
+                </div>
+            </div>
+            <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                <div class="container p-0 text-start mt-4">
+                    <p class="h5">Number of picture</p>
+                    <div class="setting-line"></div>
+                    <div class="form-outline mt-2">
+                        <input type="number" id="typeNumber" class="form-control" value="1">
+                        <!-- Замість '1' поставити метод що витягує нинішнє значення -->
+                    </div>
+                    <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>
+                    <button type="submit" class="btn mt-2 ms-0">Save</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
