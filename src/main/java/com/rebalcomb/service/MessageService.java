@@ -39,7 +39,7 @@ public class MessageService {
     private ListenableFuture<StompSession> stompSessionIncoming;
     private Thread threadOutcoming;
     private Thread threadIncoming;
-
+    private CountDownLatch latch;
     public List<MessageRequest> findAllByRecipient() throws IOException, InterruptedException {
         if(threadIncoming == null) {
             incomingListener();
@@ -95,11 +95,11 @@ public class MessageService {
         writeFile(jsonString, OUTCOMING_MESSAGES);
         blockRequest.getMessageRequest().setBodyMessage(AESUtil.encrypt(blockRequest.getMessageRequest().getBodyMessage()));
         blockRequest.getMessageRequest().setFrom(AccountController.activeAccount.getLogin());
-        CountDownLatch latch = new CountDownLatch(1);
         if (stompSessionSend != null && stompSessionSend.get().isConnected()) {
             stompSessionSend.get().send(SendMessageHandler.END_POINT + "" +
                     stompSessionSend.get().getSessionId(), blockRequest);
         } else {
+            latch = new CountDownLatch(1);
             StompSessionHandler sessionHandler = new SendMessageHandler(latch);
             WebSocketStompClient stompClient = new StompClient().getWebSocket();
             stompSessionSend = stompClient.connect(StompClient.URL_SEND, sessionHandler);
@@ -107,7 +107,7 @@ public class MessageService {
                     stompSessionSend.get().getSessionId(), blockRequest);
 
         }
-        //latch.await();
+        latch.await();
         return SendMessageHandler.isSend;
     }
 
