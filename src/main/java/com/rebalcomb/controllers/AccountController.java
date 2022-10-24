@@ -2,8 +2,8 @@ package com.rebalcomb.controllers;
 
 import com.rebalcomb.model.dto.AccountSignInRequest;
 import com.rebalcomb.model.dto.AccountSignUpRequest;
+import com.rebalcomb.model.dto.KeyPairRequest;
 import com.rebalcomb.model.entity.Account;
-import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 public class AccountController {
 
-    public static String activeAccount;
+    public static Account activeAccount;
     private Logger logger = LoggerFactory.getLogger(AccountController.class);
 
+    public static KeyPairRequest KEY_PAIR;
     private final AccountService accountService;
 
     @Autowired
@@ -39,13 +39,14 @@ public class AccountController {
     @PostMapping("/login")
     public String login(Model model, @Valid @ModelAttribute AccountSignInRequest accountSignInRequest) throws InterruptedException {
         if (accountService.isAccess(accountSignInRequest)) {
-            activeAccount = accountSignInRequest.getLogin();
+            //activeAccount = accountSignInRequest.getLogin();
+            accountService.getPublicKey();
             return "headPage";
-        }
-        else{
+        } else{
             logger.error("Incorrect login or password");
             model.addAttribute("isError", true);
             model.addAttribute("error", "Incorrect login or password!");
+            AccountController.activeAccount = null;
             return "login";
         }
     }

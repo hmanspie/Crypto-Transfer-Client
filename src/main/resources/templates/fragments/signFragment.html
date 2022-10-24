@@ -1,4 +1,4 @@
-<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="signInFragment">
+<th:blockRequest xmlns:th="http://www.thymeleaf.org" th:fragment="signInFragment">
     <div class="box text-style" tabindex="-1">
         <form name="loginForm" th:action="@{/login}" th:method="post"  th:object="${accountSignInRequest}">>
             <div>
@@ -21,9 +21,9 @@
             <button class="button-signup button" type="submit">Sign up</button>
         </form>
     </div>
-</th:block>
+</th:blockRequest>
 
-<th:block xmlns:th="http://www.thymeleaf.org"  th:fragment="signUpFragment">
+<th:blockRequest xmlns:th="http://www.thymeleaf.org"  th:fragment="signUpFragment">
     <div class="box text-style" tabindex="-1">
         <form th:object="${accountSignUpRequest}" th:action="@{/register}" th:method="post">
             <div>
@@ -54,7 +54,7 @@
                 <input class="input-style text-rep" name="passwordRepeat" autocomplete="off" type="password" id="passwordRepeat"
                        th:field="*{confirmPassword}" minlength="8" maxlength="35" required>
             </div>
-            <div class="check-block">
+            <div class="check-blockRequest">
                 <input type="checkbox" id="agree" name="agree" required>
 
                 <label class="check-text" for="agree">I agree to the Terms of User </label>
@@ -65,4 +65,4 @@
             <button class="button-signup button" type="submit">Sign in</button>
         </form>
     </div>
-</th:block>
+</th:blockRequest>

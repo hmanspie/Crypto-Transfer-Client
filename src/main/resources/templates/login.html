@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="logo"></div>
-<div class="login-block">
+<div class="login-blockRequest">
     <div th:insert="~{fragments/signFragment :: (${howForm} ? 'signUpFragment' : 'signInFragment')}"></div>
     <div th:insert="~{fragments/errorFragment :: (${isError} ? 'errorFragment' : 'infoFragment')}"></div>
 </div>

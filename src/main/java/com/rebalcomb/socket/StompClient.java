@@ -12,6 +12,7 @@ public class StompClient {
     public static final String URL_INCOMING = "ws://localhost:8080/incomingMessage";
     public static final String URL_OUTCOMING = "ws://localhost:8080/outcomingMessage";
     public static final String URL_SEND = "ws://localhost:8080/sendMessage";
+    public static final String URL_KEYGENERATE = "ws://localhost:8080/keyGenerate";
     private WebSocketClient client = new StandardWebSocketClient();
     private WebSocketStompClient stompClient = new WebSocketStompClient(client);
 

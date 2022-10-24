@@ -15,21 +15,21 @@
 <div th:insert="~{fragments/navBarFragment :: 'navbarFragment'}"></div>
 <div class="container-fluid m-0 p-0 w-100">
     <div class="container-fluid m-0 p-0 w-100">
-        <th:block th:if="${headPageValue} == 'home'">
+        <th:blockRequest th:if="${headPageValue} == 'home'">
             <div th:insert="~{fragments/messageFragment :: 'homeFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'write'">
+        </th:blockRequest>
+        <th:blockRequest th:if="${headPageValue} == 'write'">
             <div th:insert="~{fragments/messageFragment :: 'writeFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'incoming'">
+        </th:blockRequest>
+        <th:blockRequest th:if="${headPageValue} == 'incoming'">
             <div th:insert="~{fragments/messageFragment :: 'incomingFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'outcoming'">
+        </th:blockRequest>
+        <th:blockRequest th:if="${headPageValue} == 'outcoming'">
             <div th:insert="~{fragments/messageFragment :: 'outcomingFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'setting'">
+        </th:blockRequest>
+        <th:blockRequest th:if="${headPageValue} == 'setting'">
             <div th:insert="~{fragments/messageFragment :: 'settingFragment'}"></div>
-        </th:block>
+        </th:blockRequest>
     </div>
 </div>
 </body>

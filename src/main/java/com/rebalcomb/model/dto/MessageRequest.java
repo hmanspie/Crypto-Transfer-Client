@@ -10,12 +10,22 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountSignInRequest {
+public class MessageRequest {
 
     @NotBlank
-    private String login;
+    private Long id;
 
     @NotBlank
-    private String passwd;
+    private String from;
 
+    @NotBlank
+    private String to;
+
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String bodyMessage;
+
+    private String dateTime;
 }
