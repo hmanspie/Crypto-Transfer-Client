@@ -1,5 +1,6 @@
 package com.rebalcomb.crypto;
 
+import com.rebalcomb.service.MessageService;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -12,29 +13,7 @@ import java.util.stream.Stream;
 public class Hiding implements IHiding {
     private static final String OUTPUT_FILE_PATH = "outpng.png";
     private String indicator = "A";
-
-    public void methodCheek() {
-        IHiding hiding = new Hiding();
-
-        StringBuilder startMassage = new StringBuilder();
-        for (int i = 0; i < 515; i++) {
-            startMassage.append("1");
-        }
-        System.out.println(startMassage.length());
-        System.out.println(startMassage);
-        List<String> encodedString = hiding.generateHidingMassage(startMassage.toString());
-
-        int firstHash = startMassage.toString().hashCode();
-
-        List<String> big = addRedundantPictures(encodedString, 3);
-
-        System.out.println("Length: " + big.size());
-        String massage = hiding.getOpenMassageForHidingMassage(big);
-        //String massage = hiding.getOpenMassageForHidingMassage(encodedString);
-        System.out.println(massage);
-        System.out.println(massage.length());
-        System.out.println("Result: " + (firstHash == massage.hashCode()));
-    }
+    private final String SEPARATOR = "###@###";
 
     private String steganography(String imageForBase64, String msg) {
 
@@ -47,7 +26,7 @@ public class Hiding implements IHiding {
         int msglendecode = (image.getRGB(0, 0) >> 8) << 8;
 
         msglendecode |= msg.length();
-        image.setRGB(0, 0, msglendecode);//hidig msg length at first position
+        image.setRGB(0, 0, msglendecode);
 
         for (int i = 1, msgpos = 0, row = 0, j = 0; row < h; row++) {
             for (int col = 0; col < w && j < msgbytes.length; col++, i++) {
@@ -90,7 +69,6 @@ public class Hiding implements IHiding {
         }
 
         return convertToBase64();
-        //return image;
     }
 
     private String decodeSteganography(String encodedString) {
@@ -146,7 +124,6 @@ public class Hiding implements IHiding {
 
     private void deleteFile() {
         File file = new File(OUTPUT_FILE_PATH);
-        System.out.println("Result for delete: " + file.delete());
     }
 
     private ArrayList<String> divideIntoParts(String rawMassage) {
@@ -168,26 +145,35 @@ public class Hiding implements IHiding {
         for (int i = 0; i < massage.size(); i++) {
             massage.set(i, indicator + i + massage.get(i));
         }
-
         return massage;
     }
 
-    public List<String> generateHidingMassage(String rawMassage) {
-        ArrayList<String> massage = divideIntoParts(rawMassage);
+    public String generateHidingMassage(String rawMassage) {
+        List<String> massage = divideIntoParts(rawMassage);
         String[] hiddenMassages = new String[massage.size()];
-        String[] massImage = getImageForDatabase(massage.size());
+        List<String> massImage;
+        try {
+            massImage = MessageService.getRandomImageList(massage.size());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         for (int i = 0; i < massage.size(); i++) {
-            hiddenMassages[i] = steganography(massImage[i], massage.get(i));
+            hiddenMassages[i] = steganography(massImage.get(i), massage.get(i));
         }
-        return Arrays.stream(hiddenMassages).toList();
+
+        StringBuilder resultMassage = new StringBuilder();
+        for (String part : hiddenMassages) {
+            resultMassage.append(part).append(SEPARATOR);
+        }
+        return resultMassage.toString();
     }
 
-    public String getOpenMassageForHidingMassage(List<String> hidingMassage) {
+    public String getOpenMassageForHidingMassage(String hidingMassage) {
         StringBuilder openMassage = new StringBuilder();
         ArrayList<String> redundantMassage = new ArrayList<>();
 
-        for (String massage : hidingMassage) {
+        for (String massage : hidingMassage.split(SEPARATOR)) {
             String decodeMassage = decodeSteganography(massage);
             String numberPart = decodeMassage.substring(1, 2);
             String indicatorForMassage = decodeMassage.substring(0, 1);
@@ -214,22 +200,24 @@ public class Hiding implements IHiding {
         }
     }
 
-    public List<String> addRedundantPictures(List<String> hidingMassage, int count) {
+    public String addRedundantPictures(String hidingMassage, int count) {
+        List<String> hidingMassageParts = Arrays.stream(hidingMassage.split(SEPARATOR)).toList();
         indicator = "B";
-        StringBuilder startMassage = new StringBuilder();
-        for (int i = 0; i < count * 250; i++) {
-            startMassage.append("l");
-        }
-        List<String> additionalLoad = generateHidingMassage(startMassage.toString());
-        hidingMassage = Stream.of(hidingMassage, additionalLoad).flatMap(Collection::stream).toList();
-        int[] order = generateRandomOrder(hidingMassage.size());
-        String[] redundantMassage = new String[hidingMassage.size()];
+        List<String> additionalLoad = Arrays.stream(generateHidingMassage("l".repeat(Math.max(0, count * 250))).split(SEPARATOR)).toList();
+        hidingMassageParts = Stream.of(hidingMassageParts, additionalLoad).flatMap(Collection::stream).toList();
+        int[] order = generateRandomOrder(hidingMassageParts.size());
+        String[] redundantMassage = new String[hidingMassageParts.size()];
 
-        for (int i = 0; i < hidingMassage.size(); i++) {
-            redundantMassage[i] = hidingMassage.get(order[i]);
+        for (int i = 0; i < hidingMassageParts.size(); i++) {
+            redundantMassage[i] = hidingMassageParts.get(order[i]);
+        }
+
+        StringBuilder resultMassage = new StringBuilder();
+        for (String part: redundantMassage) {
+            resultMassage.append(part).append(SEPARATOR);
         }
         indicator = "A";
-        return List.of(redundantMassage);
+        return resultMassage.toString();
     }
 
     private int[] generateRandomOrder(int length) {
@@ -252,33 +240,5 @@ public class Hiding implements IHiding {
             }
         }
         return resultOrder;
-    }
-
-    private String[] getImageForDatabase(int count) {
-
-
-        return TEST();
-    } //TODO: create method which get image for database
-
-    private String[] TEST() {
-        String[] result = new String[3];
-        String[] path = new String[]{"PicturesForMassage\\18.png", "PicturesForMassage\\19.png", "PicturesForMassage\\20.png"};
-        for (int i = 0; i < result.length; i++) {
-            result[i] = ToBase64(path[i]);
-        }
-        return result;
-
-    }//TODO delete this method
-
-    //generate format for Database
-    private String ToBase64(String path) {
-        byte[] fileContent;
-        try {
-            fileContent = FileUtils.readFileToByteArray(new File(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        deleteFile();
-        return Base64.getEncoder().encodeToString(fileContent);
     }
 }

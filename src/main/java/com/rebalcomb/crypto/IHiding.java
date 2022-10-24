@@ -3,15 +3,15 @@ package com.rebalcomb.crypto;
 import java.util.List;
 
 public interface IHiding {
-    default List<String> generateHidingMassage(String rawMassage) {
+    default String generateHidingMassage(String rawMassage) {
         return null;
     }
 
-    default String getOpenMassageForHidingMassage(List<String> hidingMassage) {
+    default String getOpenMassageForHidingMassage(String hidingMassage) {
         return null;
     }
 
-    default List<String> addRedundantPictures(List<String> hidingMassage, int count) {
+    default String addRedundantPictures(String hidingMassage, int count) {
         return null;
     }
 }

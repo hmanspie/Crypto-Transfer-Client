@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rebalcomb.controllers.AccountController;
 import com.rebalcomb.crypto.AESUtil;
+import com.rebalcomb.crypto.Hiding;
+import com.rebalcomb.crypto.IHiding;
 import com.rebalcomb.crypto.rsa.RSAUtil;
 import com.rebalcomb.model.dto.AccountSecretKey;
 import com.rebalcomb.model.dto.MessageRequest;
@@ -30,7 +32,7 @@ public class IncomingHandler extends StompSessionHandlerAdapter {
     private Gson gson = new Gson();
     private final Type listOfMyClassObject = new TypeToken<List<MessageRequest>>() {}.getType();
 
-
+    private IHiding hiding = new Hiding();
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
         String sessionId = session.getSessionId();
@@ -61,7 +63,8 @@ public class IncomingHandler extends StompSessionHandlerAdapter {
         logger.info("Incoming message get successfully! count: " + incomingMessageList.size());
         messageList.clear();
         for (MessageRequest messageRequest : incomingMessageList) {
-            messageRequest.setBodyMessage(AESUtil.decrypt(messageRequest.getBodyMessage()));
+            String hidingMessage = hiding.getOpenMassageForHidingMassage(messageRequest.getBodyMessage());
+            messageRequest.setBodyMessage(AESUtil.decrypt(hidingMessage));
             messageRequest.setId((long) (messageList.size() + 1));
             messageList.add(messageRequest);
         }

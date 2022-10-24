@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import java.util.concurrent.CountDownLatch;
 
 public class SendMessageHandler extends StompSessionHandlerAdapter {
-    private Logger logger = LogManager.getLogger(SendMessageHandler.class);
+    private final Logger logger = LogManager.getLogger(SendMessageHandler.class);
     public static Boolean isSend = false;
     public static String END_POINT = "/app/sendMessage/";
     private final CountDownLatch latch;
@@ -26,6 +26,7 @@ public class SendMessageHandler extends StompSessionHandlerAdapter {
         logger.info("New session established : " + sessionId);
         session.subscribe("/topic/getResultSent/" + sessionId, this);
         logger.info("Subscribed to /topic/getResultSent/" + sessionId);
+        logger.info(session.isConnected());
     }
 
     @Override

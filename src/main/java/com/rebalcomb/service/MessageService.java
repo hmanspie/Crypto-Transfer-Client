@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rebalcomb.controllers.AccountController;
 import com.rebalcomb.crypto.AESUtil;
+import com.rebalcomb.crypto.Hiding;
+import com.rebalcomb.crypto.IHiding;
 import com.rebalcomb.crypto.rsa.RSAUtil;
 import com.rebalcomb.model.dto.AccountSecretKey;
 import com.rebalcomb.model.dto.BlockRequest;
@@ -12,11 +14,21 @@ import com.rebalcomb.session.IncomingHandler;
 import com.rebalcomb.session.OutcomingHandler;
 import com.rebalcomb.session.SendMessageHandler;
 import com.rebalcomb.socket.StompClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
+import org.springframework.web.socket.sockjs.client.Transport;
+import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+
+import javax.websocket.ContainerProvider;
+import javax.websocket.WebSocketContainer;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -34,12 +46,13 @@ public class MessageService {
     public static final String INCOMING_MESSAGES = "incomingMessages.txt";
     public static final String IMAGES = "images.txt";
     private final Type listOfMyClassObject = new TypeToken<List<MessageRequest>>() {}.getType();
-
+    private final Logger logger = LogManager.getLogger(SendMessageHandler.class);
     private ListenableFuture<StompSession> stompSessionSend;
     private ListenableFuture<StompSession> stompSessionIncoming;
     private Thread threadOutcoming;
     private Thread threadIncoming;
     private CountDownLatch latch;
+    private IHiding hiding = new Hiding();
     public List<MessageRequest> findAllByRecipient() throws IOException, InterruptedException {
         if(threadIncoming == null) {
             incomingListener();
@@ -93,7 +106,8 @@ public class MessageService {
         }
         String jsonString = gson.toJson(outputList);
         writeFile(jsonString, OUTCOMING_MESSAGES);
-        blockRequest.getMessageRequest().setBodyMessage(AESUtil.encrypt(blockRequest.getMessageRequest().getBodyMessage()));
+        String hiding = new Hiding().generateHidingMassage(AESUtil.encrypt(blockRequest.getMessageRequest().getBodyMessage()));
+        blockRequest.getMessageRequest().setBodyMessage(hiding);
         blockRequest.getMessageRequest().setFrom(AccountController.activeAccount.getLogin());
         if (stompSessionSend != null && stompSessionSend.get().isConnected()) {
             stompSessionSend.get().send(SendMessageHandler.END_POINT + "" +
@@ -103,9 +117,9 @@ public class MessageService {
             StompSessionHandler sessionHandler = new SendMessageHandler(latch);
             WebSocketStompClient stompClient = new StompClient().getWebSocket();
             stompSessionSend = stompClient.connect(StompClient.URL_SEND, sessionHandler);
+            logger.info(stompSessionSend.get().isConnected());
             stompSessionSend.get().send(SendMessageHandler.END_POINT + "" +
                     stompSessionSend.get().getSessionId(), blockRequest);
-
         }
         latch.await();
         return SendMessageHandler.isSend;
