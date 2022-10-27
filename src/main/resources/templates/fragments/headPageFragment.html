@@ -77,7 +77,7 @@
 
 <div class="container-fluid p-3 pb-2" th:fragment="writeFragment">
     <form class="container shadow rounded-3 p-2" id="write-form" th:action="@{/sendNewMessage}" th:method="post"
-          th:object="${newMessageRequest}">
+          th:object="${messageRequest}">
 
         <div class="input-group mb-3" id="destination">
             <span class="input-group-text">To</span>
@@ -130,10 +130,10 @@
                 <th:block th:each="message : ${messages}">
                     <tr th:onclick="@{/headPage/message/${message?.getId()}}">
                         <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getFrom()?.getFullName()}"></td>
+                        <td th:text="${message?.getFrom()}"></td>
                         <td th:text="${message?.getTitle()}"></td>
-                        <td th:text="${message?.getBody()}"></td>
-                        <td th:text="${message?.getDate_time()}"></td>
+                        <td th:text="${message?.getBodyMessage()}"></td>
+                        <td th:text="${message?.getDateTime()}"></td>
                     </tr>
                 </th:block>
                 </tbody>
@@ -162,10 +162,10 @@
                 <th:block th:each="message : ${messages}">
                     <tr th:onclick="@{/headPage/message/${message?.getId()}}">
                         <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getTo()?.getFullName()}"></td>
+                        <td th:text="${message?.getTo()}"></td>
                         <td th:text="${message?.getTitle()}"></td>
-                        <td th:text="${message?.getBody()}"></td>
-                        <td th:text="${message?.getDate_time()}"></td>
+                        <td th:text="${message?.getBodyMessage()}"></td>
+                        <td th:text="${message?.getDateTime()}"></td>
                     </tr>
                 </th:block>
                 </tbody>
@@ -325,6 +325,18 @@
             </div>
             <div class="container d-flex align-items-stretch p-0 justify-content-center">
                 <div class="container p-0 text-start mt-4">
+                    <p class="h5">Length key</p>
+                    <div class="setting-line"></div>
+                    <select class="form-select mt-2" aria-label="Length key">
+                        <option value="1">128</option>
+                        <option value="2">192</option>
+                        <option value="3">256</option>
+                    </select>
+                    <p class="text-description mt-3">The longest key will be the strongest</p>
+                </div>
+            </div>
+            <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                <div class="container p-0 text-start mt-4">
                     <p class="h5">Generate new keys</p>
                     <div class="setting-line"></div>
                     <p class="h6 mt-2">Current key: </p>
@@ -336,6 +348,7 @@
                             data-bs-toggle="tooltip"
                             data-popper-placement="top"
                             title="Click to copy"
+                            readonly
                             >{Key}</textarea>
                     <button type="submit" class="btn mt-2 ms-0">Generate Keys</button>
                     <p class="text-description mt-3">If you will change your keys then older keys will invalid</p>
@@ -388,18 +401,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                <div class="container p-0 text-start mt-4">
-                    <p class="h5">Length key</p>
-                    <div class="setting-line"></div>
-                    <select class="form-select mt-2" aria-label="Length key">
-                        <option value="1">128</option>
-                        <option value="2">192</option>
-                        <option value="3">256</option>
-                    </select>
-                    <p class="text-description mt-3">The longest key will be the strongest</p>
                 </div>
             </div>
             <div class="container d-flex align-items-stretch p-0 justify-content-center">

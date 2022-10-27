@@ -3,6 +3,7 @@ package com.rebalcomb.model.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.NotBlank;
+import java.math.BigInteger;
 
 @Data
 @Setter
@@ -10,12 +11,14 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountSignInRequest {
+public class KeyPairRequest {
 
     @NotBlank
     private String login;
 
     @NotBlank
-    private String passwd;
+    private BigInteger publicKey;
 
+    @NotBlank
+    private BigInteger module;
 }

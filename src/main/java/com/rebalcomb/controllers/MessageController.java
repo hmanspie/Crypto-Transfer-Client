@@ -1,7 +1,6 @@
 package com.rebalcomb.controllers;
 
-import com.rebalcomb.model.dto.NewMessageRequest;
-import com.rebalcomb.model.entity.Message;
+import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 @Controller
 @RequestMapping("/headPage")
 public class MessageController {
@@ -42,22 +45,22 @@ public class MessageController {
     @GetMapping("/write")
     public ModelAndView write(ModelAndView model){
         model.addObject("headPageValue", "write");
-        model.addObject("newMessageRequest", new NewMessageRequest());
+        model.addObject("messageRequest", new MessageRequest());
         model.setViewName("headPage");
         return model;
     }
 
     @GetMapping("/incoming")
-    public ModelAndView incoming(ModelAndView model) throws InterruptedException {
-        model.addObject("messages",messageService.findAllByRecipient(AccountController.activeAccount));
+    public ModelAndView incoming(ModelAndView model) throws IOException, InterruptedException {
+        model.addObject("messages",messageService.findAllByRecipient());
         model.addObject("headPageValue", "incoming");
         model.setViewName("headPage");
         return model;
     }
 
     @GetMapping("/outcoming")
-    public ModelAndView outcoming(ModelAndView model) throws InterruptedException {
-        model.addObject("messages", messageService.findAllBySender(AccountController.activeAccount));
+    public ModelAndView outcoming(ModelAndView model) throws IOException, ExecutionException, InterruptedException {
+        model.addObject("messages", messageService.findAllBySender());
         model.addObject("headPageValue", "outcoming");
         model.setViewName("headPage");
         return model;

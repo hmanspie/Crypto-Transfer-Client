@@ -56,12 +56,12 @@
                 <input class="input-style text-rep" name="passwordRepeat" autocomplete="off" type="password" id="passwordRepeat"
                        th:field="*{confirmPassword}" minlength="8" maxlength="35" required>
             </div>
-<!--            <div class="check-block">-->
-<!--                <input type="checkbox" id="agree" name="agree" required>-->
+            <div class="check-block">
+                <input type="checkbox" id="agree" name="agree" required>
 
-<!--                <label class="check-text" for="agree">I agree to the Terms of User </label>-->
-<!--            </div>-->
-            <button class="button-signup button " type="submit" >Sign up</button>
+                <label class="check-text" for="agree">I agree to the Terms of User </label>
+            </div>
+            <button class="button-signin button" type="submit" >Sign up</button>
         </form>
         <form th:action="@{/goToSignInForm}" th:method="get">
             <div class="box-signup">
