@@ -15,11 +15,11 @@ import java.util.List;
 
 public class StompClient {
 
-    public static final String URL_SERVICE = "ws://localhost:8080/service";
-    public static final String URL_REGISTERED = "ws://localhost:8080/registered";
-    public static final String URL_INCOMING = "ws://localhost:8080/incomingMessage";
-    public static final String URL_OUTCOMING = "ws://localhost:8080/outcomingMessage";
-    public static final String URL_SEND = "ws://localhost:8080/sendMessage";
+    public static final String URL_SERVICE = "ws://192.168.43.206:8080/service";
+    public static final String URL_REGISTERED = "ws://192.168.43.206:8080/registered";
+    public static final String URL_INCOMING = "ws://192.168.43.206:8080/incomingMessage";
+    public static final String URL_OUTCOMING = "ws://192.168.43.206:8080/outcomingMessage";
+    public static final String URL_SEND = "ws://192.168.43.206:8080/sendMessage";
     public static final String URL_KEYGENERATE = "ws://localhost:8080/keyGenerate";
     private WebSocketClient webSocketClient;
     private WebSocketStompClient stompClient;
