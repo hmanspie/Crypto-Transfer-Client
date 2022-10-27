@@ -2,7 +2,7 @@
     <div class="box text-style" tabindex="-1">
         <form name="loginForm" th:action="@{/login}" th:method="post"  th:object="${accountSignInRequest}">>
             <div>
-                <h3 class="text-form head-text">SIGN IN</h3>
+                <h3 class="text-form head-text">Welcome to CryptoChat</h3>
             </div>
             <h2 class="text-form username-text">Login</h2>
             <div>
@@ -14,11 +14,13 @@
                 <input class="input-style text-rep" autocomplete="off" name="passwordIn" type="password" id="passwordIn"
                        th:field="*{passwd}" required>
             </div>
-            <a th:href="@{/goToForgortPasswordForm}" class="text-form forgort-text">Forgort password?</a>
+            <a th:href="@{/goToForgortPasswordForm}" class="forgot-text">Forgot password?</a>
             <button class="button-signin button" type="submit" >Sign in</button>
-        </form>
-        <form th:action="@{/goToSignUpForm}" th:method="get">
-            <button class="button-signup button" type="submit">Sign up</button>
+            <img class="rounded mx-auto d-block deviderOr" th:src="@{/devider/deviderOr.jpg}" alt="or">
+            <div class="box-signup">
+                <text class="text-signup">New in CryptoChat? </text>
+                <a th:href="@{/goToSignUpForm}" class="link-signup">Create Account</a>
+            </div>
         </form>
     </div>
 </th:block>
@@ -27,7 +29,7 @@
     <div class="box text-style" tabindex="-1">
         <form th:object="${accountSignUpRequest}" th:action="@{/register}" th:method="post">
             <div>
-                <h3 class="text-form head-text">SIGN UP</h3>
+                <h3 class="text-form sign-up-head-text">Sign Up in CryptoChat</h3>
             </div>
             <h2 class="text-form username-text">Login</h2>
             <div>
@@ -54,15 +56,18 @@
                 <input class="input-style text-rep" name="passwordRepeat" autocomplete="off" type="password" id="passwordRepeat"
                        th:field="*{confirmPassword}" minlength="8" maxlength="35" required>
             </div>
-            <div class="check-block">
-                <input type="checkbox" id="agree" name="agree" required>
+<!--            <div class="check-block">-->
+<!--                <input type="checkbox" id="agree" name="agree" required>-->
 
-                <label class="check-text" for="agree">I agree to the Terms of User </label>
-            </div>
-            <button class="button-signin button" type="submit" >Sign up</button>
+<!--                <label class="check-text" for="agree">I agree to the Terms of User </label>-->
+<!--            </div>-->
+            <button class="button-signup button " type="submit" >Sign up</button>
         </form>
         <form th:action="@{/goToSignInForm}" th:method="get">
-            <button class="button-signup button" type="submit">Sign in</button>
+            <div class="box-signup">
+                <text class="text-signup-signup">Already have an account? </text>
+                <a th:href="@{/goToSignInForm}" class="link-signup">Sign in</a>
+            </div>
         </form>
     </div>
 </th:block>
