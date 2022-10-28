@@ -140,6 +140,34 @@
             </table>
         </div>
     </div>
+    <script th:inline="javascript">
+        let newMessages = [[${newMessages}]];
+        let from = [[${message?.getFrom()}]];
+
+        function notifyMe() {
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            }
+
+            else if (Notification.permission === "granted") {
+                let notification = new Notification(from);
+            }
+
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    if (permission === "granted") {
+                        let notification = new Notification("Notification");
+                    }
+                });
+            }
+        }
+
+        if (newMessages){
+            setTimeout(() => notifyMe(), 0);
+        }
+
+        setInterval(() => location.reload(), 5000);
+    </script>
 </div>
 
 <div class="container-fluid p-3 pb-2" th:fragment="outcomingFragment">
