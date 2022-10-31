@@ -42,7 +42,7 @@ public class UserController {
         if (userService.signUp(signUpRequest)) {
             model.addObject("isError", false);
             model.addObject("info", INFO);
-            model.addObject("accountSignInRequest", new SignInRequest());
+            model.addObject("signInRequest", new SignInRequest());
             model.addObject("howForm", false);
         } else{
             model.addObject("isError", true);
@@ -103,7 +103,7 @@ public class UserController {
         if (userService.updateProfile(updateProfileRequest)) {
             model.addObject("isError", false);
             model.addObject("info", INFO);
-            model.addObject("accountSignInRequest", new SignInRequest());
+            model.addObject("signInRequest", new SignInRequest());
             model.addObject("howForm", false);
         } else{
             model.addObject("isError", true);
