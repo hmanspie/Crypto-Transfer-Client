@@ -267,14 +267,14 @@
                 <div class="col-8">
                     <div class="container p-0 text-start mt-3">
                         <p class="h6">Login</p>
-                        <input type="text" class="form-control" th:field="*{username}" placeholder="Username" aria-label="Login"
+                        <input type="text" class="form-control" th:field="*{username}" th:placeholder="${signUpRequest?.getUsername()}" aria-label="Login"
                                aria-describedby="basic-addon1">
                         <p class="text-description">Don't forget your email if you don't want to recover your email</p>
                     </div>
 
                     <div class="container p-0 text-start mt-3">
                         <p class="h6">Fullname</p>
-                        <input type="text" class="form-control" th:field="*{fullname}" placeholder="Fullname" aria-label="Fullname"
+                        <input type="text" class="form-control" th:field="*{fullName}" th:placeholder="${signUpRequest?.getFullName()}" aria-label="Fullname"
                                aria-describedby="basic-addon1">
                         <p class="text-description">You can remove it at any time.</p>
                     </div>
@@ -282,34 +282,34 @@
 
                     <div class="container p-0 text-start mt-3">
                         <p class="h6">Old password</p>
-                        <input type="text" class="form-control" th:field="*{password}" placeholder="Password" aria-label="Password"
+                        <input type="text" class="form-control" th:field="*{password}" placeholder="********" aria-label="Password"
                                aria-describedby="basic-addon1">
                         <p class="text-description">We will use the old password to be sure about you</p>
                     </div>
 
                     <div class="container p-0 text-start mt-3">
                         <p class="h6">New password</p>
-                        <input type="text" class="form-control" th:field="*{confirmPassword}" placeholder="Password" aria-label="Password"
+                        <input type="text" class="form-control" th:field="*{confirmPassword}" placeholder="********" aria-label="Password"
                                aria-describedby="basic-addon1">
                         <p class="text-description">Remember your new password</p>
                     </div>
 
                     <div class="container p-0 text-start mt-3">
                         <p class="h6">Email</p>
-                        <input type="text" class="form-control" th:field="*{email}" placeholder="Email" aria-label="Email"
+                        <input type="text" class="form-control" th:field="*{email}" th:placeholder="${signUpRequest?.getEmail()}" aria-label="Email"
                                aria-describedby="basic-addon1">
                         <p class="text-description">Change your e-mail and receive a letter to the new address</p>
                     </div>
                 </div>
                 </form>
-                <div class="col-3">
-                    <p class="h6 text-start mt-3">Profile picture</p>
-                    <img id="profile-icon" th:src="@{/image/developers/Hapon.png}">
-                </div>
+<!--                <div class="col-3">-->
+<!--                    <p class="h6 text-start mt-3">Profile picture</p>-->
+<!--                    <img id="profile-icon" th:src="@{/image/developers/Hapon.png}">-->
+<!--                </div>-->
             </div>
 
             <div class="container d-flex align-items-stretch justify-content-center p-0">
-                <button type="submit" class="btn" id="apply-setting-btn">Update profile</button>
+                <button type="submit" class="btn" id="apply-setting-btn">Save</button>
             </div>
 
         </div>

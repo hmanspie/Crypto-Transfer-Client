@@ -117,7 +117,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:secretBlock th:each="message : ${messages}">
+                <th:block th:each="message : ${messages}">
                 <tr onclick="window.open('http://google.com');">
                     <td th:text="${message?.getId()}"></td>
                     <td th:text="${message?.getFrom().getFullName()}"></td>
@@ -125,7 +125,7 @@
                     <td th:text="${message?.getBody()}"></td>
                     <td th:text="${message?.getDate_time()}"></td>
                 </tr>
-                </th:secretBlock>
+                </th:block>
                 </tbody>
             </table>
         </div>
@@ -149,7 +149,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:secretBlock th:each="message : ${messages}">
+                <th:block th:each="message : ${messages}">
                 <tr onclick="window.open('http://google.com');">
                     <td th:text="${message?.getId()}"></td>
                     <td th:text="${message?.getTo().getFullName()}"></td>
@@ -157,7 +157,7 @@
                     <td th:text="${message?.getBody()}"></td>
                     <td th:text="${message?.getDate_time()}"></td>
                 </tr>
-                </th:secretBlock>
+                </th:block>
                 </tbody>
             </table>
         </div>

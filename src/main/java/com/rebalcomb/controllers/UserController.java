@@ -2,6 +2,7 @@ package com.rebalcomb.controllers;
 
 import com.rebalcomb.model.dto.SignInRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
+import com.rebalcomb.model.entity.User;
 import com.rebalcomb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
+import java.security.Principal;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -83,17 +86,23 @@ public class UserController {
         return "logout";
     }
 
-    @GetMapping("/profile")
-    public ModelAndView profile(ModelAndView model){
+    @GetMapping("/headPage/profile")
+    public ModelAndView profile(ModelAndView model, Principal principal){
+        Optional<User> user = userService.findByUsername(principal.getName());
+        SignUpRequest signUpRequest = new SignUpRequest();
+        signUpRequest.setUsername(user.get().getUsername());
+        signUpRequest.setEmail(user.get().getEmail());
+        signUpRequest.setFullName(user.get().getFullName());
         model.addObject("headPageValue", "profile");
+        model.addObject("signUpRequest", signUpRequest);
         model.addObject("updateProfileRequest", new SignUpRequest());
         model.setViewName("headPage");
         return model;
     }
+
     @PostMapping("/updateProfile")
     public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
-                                   ModelAndView model) {
-
+                                                                                    ModelAndView model) {
         if (!userService.validatePassword(updateProfileRequest)) {
             model.addObject("error", "Confirm password doesn't match!");
             model.addObject("headPageValue", "profile");
@@ -103,12 +112,11 @@ public class UserController {
         if (userService.updateProfile(updateProfileRequest)) {
             model.addObject("isError", false);
             model.addObject("info", INFO);
-            model.addObject("signInRequest", new SignInRequest());
-            model.addObject("howForm", false);
+            model.addObject("signUnRequest", updateProfileRequest);
+
         } else{
             model.addObject("isError", true);
             model.addObject("error", INFO);
-            model.addObject("howForm", true);
         }
         return model;
     }
