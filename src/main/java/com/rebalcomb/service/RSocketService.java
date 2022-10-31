@@ -33,11 +33,11 @@ public class RSocketService {
         gson = gsonBuilder.setPrettyPrinting().create();
     }
 
-    protected String sendUser(User user) {
-        return rSocketRequester
+    protected User sendUser(User user) {
+        return gson.fromJson(rSocketRequester
                 .route("signUp")
                 .data(gson.toJson(user))
-                .retrieveMono(String.class).block();
+                .retrieveMono(String.class).block(), User.class);
     }
 
     protected KeyPair getPublicKey(String serverId) {

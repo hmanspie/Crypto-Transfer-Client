@@ -41,7 +41,8 @@ public class UserService {
     //todo потрібно зробити обробку винятку Duplicate entry 'exemple@gmail.com' for key 'users.users_email_uindex'
     public Boolean signUp(SignUpRequest request) {
         User user = UserMapper.mapUserRequest(request);
-        if(Boolean.parseBoolean(rSocketService.sendUser(user))) {
+        user = rSocketService.sendUser(user);
+        if(user != null) {
             userRepository.save(user);
             UserController.INFO = user.getFullName() + " is successfully registered!";
             return true;
