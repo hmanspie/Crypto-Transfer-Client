@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="logo">
-    <img class="rounded mx-auto d-block logo" th:src="@{/logo/greylogo.png}" alt="Logotype">
+    <img class="rounded mx-auto d-block logo" th:src="@{/image/logo/greylogo.png}" alt="Logotype">
 </div>
 <div class="login-block">
     <div th:insert="~{fragments/signFragment :: (${howForm} ? 'signUpFragment' : 'signInFragment')}"></div>
