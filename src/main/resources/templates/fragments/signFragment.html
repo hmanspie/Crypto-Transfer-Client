@@ -2,7 +2,7 @@
     <div class="box text-style" tabindex="-1">
         <form th:action="@{/login}" th:method="post">>
             <div>
-                <h3 class="text-form head-text">SIGN IN</h3>
+                <h3 class="text-form head-text">Welcome to CryptoChat</h3>
             </div>
             <h2 class="text-form username-text">Login</h2>
             <div>
@@ -14,20 +14,22 @@
                 <input class="input-style text-rep" autocomplete="off" name="password" type="password" id="password" placeholder="Password"
                         required>
             </div>
-            <a th:href="@{/goToForgortPasswordForm}" class="text-form forgort-text">Forgort password?</a>
+            <a th:href="@{/goToForgortPasswordForm}" class="forgot-text">Forgot password?</a>
             <button class="button-signin button" type="submit" >Sign in</button>
-        </form>
-        <form th:action="@{/goToSignUpForm}" th:method="get">
-            <button class="button-signup button" type="submit">Sign up</button>
+            <img class="rounded mx-auto d-block deviderOr" th:src="@{/devider/devider-or.jpg}" alt="or">
+            <div class="box-signup">
+                <text class="text-signup">New in CryptoChat? </text>
+                <a th:href="@{/goToSignUpForm}" class="link-signup">Create Account</a>
+            </div>
         </form>
     </div>
 </th:secretBlock>
 
-<th:secretBlock xmlns:th="http://www.thymeleaf.org"  th:fragment="signUpFragment">
+<th:blockRequest xmlns:th="http://www.thymeleaf.org"  th:fragment="signUpFragment">
     <div class="box text-style" tabindex="-1">
         <form th:object="${signUpRequest}" th:action="@{/registered}" th:method="post">
             <div>
-                <h3 class="text-form head-text">SIGN UP</h3>
+                <h3 class="text-form sign-up-head-text">Sign Up in CryptoChat</h3>
             </div>
             <h2 class="text-form username-text">Login</h2>
             <div>
@@ -62,7 +64,10 @@
             <button class="button-signin button" type="submit" >Sign up</button>
         </form>
         <form th:action="@{/goToSignInForm}" th:method="get">
-            <button class="button-signup button" type="submit">Sign in</button>
+            <div class="box-signup">
+                <text class="text-signup-signup">Already have an account? </text>
+                <a th:href="@{/goToSignInForm}" class="link-signup">Sign in</a>
+            </div>
         </form>
     </div>
-</th:secretBlock>
+</th:blockRequest>

@@ -140,6 +140,34 @@
             </table>
         </div>
     </div>
+    <script th:inline="javascript">
+        let newMessages = [[${newMessages}]];
+        let from = [[${message?.getFrom()}]];
+
+        function notifyMe() {
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            }
+
+            else if (Notification.permission === "granted") {
+                let notification = new Notification(from);
+            }
+
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    if (permission === "granted") {
+                        let notification = new Notification("Notification");
+                    }
+                });
+            }
+        }
+
+        if (newMessages){
+            setTimeout(() => notifyMe(), 0);
+        }
+
+        setInterval(() => location.reload(), 5000);
+    </script>
 </div>
 
 <div class="container-fluid p-3 pb-2" th:fragment="outcomingFragment">
@@ -326,6 +354,18 @@
             </div>
             <div class="container d-flex align-items-stretch p-0 justify-content-center">
                 <div class="container p-0 text-start mt-4">
+                    <p class="h5">Length key</p>
+                    <div class="setting-line"></div>
+                    <select class="form-select mt-2" aria-label="Length key">
+                        <option value="1">128</option>
+                        <option value="2">192</option>
+                        <option value="3">256</option>
+                    </select>
+                    <p class="text-description mt-3">The longest key will be the strongest</p>
+                </div>
+            </div>
+            <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                <div class="container p-0 text-start mt-4">
                     <p class="h5">Generate new keys</p>
                     <div class="setting-line"></div>
                     <p class="h6 mt-2">Current key: </p>
@@ -337,6 +377,7 @@
                             data-bs-toggle="tooltip"
                             data-popper-placement="top"
                             title="Click to copy"
+                            readonly
                             >{Key}</textarea>
                     <button type="submit" class="btn mt-2 ms-0">Generate Keys</button>
                     <p class="text-description mt-3">If you will change your keys then older keys will invalid</p>
@@ -389,18 +430,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                <div class="container p-0 text-start mt-4">
-                    <p class="h5">Length key</p>
-                    <div class="setting-line"></div>
-                    <select class="form-select mt-2" aria-label="Length key">
-                        <option value="1">128</option>
-                        <option value="2">192</option>
-                        <option value="3">256</option>
-                    </select>
-                    <p class="text-description mt-3">The longest key will be the strongest</p>
                 </div>
             </div>
             <div class="container d-flex align-items-stretch p-0 justify-content-center">
