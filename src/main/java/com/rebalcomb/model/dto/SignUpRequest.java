@@ -9,11 +9,11 @@ import javax.validation.constraints.Size;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountSignUpRequest {
+public class SignUpRequest {
 
     @NotBlank
     @Size(min = 3, max = 25, message = "Invalid login")
-    String login;
+    String username;
 
     @NotBlank
     @Size(min = 6, max = 15, message = "Invalid fullName")
@@ -25,7 +25,7 @@ public class AccountSignUpRequest {
 
     @NotBlank
     @Size(max = 50, min = 8, message = "Invalid password")
-    String passwd;
+    String password;
 
     @NotBlank
     String confirmPassword;

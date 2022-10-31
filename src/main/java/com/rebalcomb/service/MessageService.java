@@ -1,146 +1,140 @@
 package com.rebalcomb.service;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.rebalcomb.controllers.AccountController;
+import com.google.gson.GsonBuilder;
 import com.rebalcomb.crypto.AESUtil;
 import com.rebalcomb.crypto.Hiding;
-import com.rebalcomb.crypto.IHiding;
-import com.rebalcomb.crypto.rsa.RSAUtil;
-import com.rebalcomb.model.dto.AccountSecretKey;
-import com.rebalcomb.model.dto.BlockRequest;
+import com.rebalcomb.io.File;
+import com.rebalcomb.mapper.MessageMapper;
+import com.rebalcomb.model.dto.SecretBlock;
 import com.rebalcomb.model.dto.MessageRequest;
-import com.rebalcomb.session.IncomingHandler;
-import com.rebalcomb.session.OutcomingHandler;
-import com.rebalcomb.session.SendMessageHandler;
-import com.rebalcomb.socket.StompClient;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import com.rebalcomb.model.entity.Message;
+import com.rebalcomb.model.entity.User;
+import com.rebalcomb.repository.MessageRopository;
+import com.rebalcomb.util.LocalDateTimeDeserializer;
+import com.rebalcomb.util.LocalDateTimeSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.web.socket.client.WebSocketClient;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.Transport;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
-
-import javax.websocket.ContainerProvider;
-import javax.websocket.WebSocketContainer;
+import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
+import java.util.Optional;
 
 @Service
+@Transactional
 public class MessageService {
-    private Gson gson = new Gson();
-    public static final String OUTCOMING_MESSAGES = "outcomingMessages.txt";
-    public static final String INCOMING_MESSAGES = "incomingMessages.txt";
+    private final UserService userService;
+    private final MessageRopository messageRepository;
     public static final String IMAGES = "images.txt";
-    private final Type listOfMyClassObject = new TypeToken<List<MessageRequest>>() {}.getType();
-    private final Logger logger = LogManager.getLogger(SendMessageHandler.class);
-    private ListenableFuture<StompSession> stompSessionSend;
-    private ListenableFuture<StompSession> stompSessionIncoming;
-    private Thread threadOutcoming;
-    private Thread threadIncoming;
-    private CountDownLatch latch;
-    private IHiding hiding = new Hiding();
-    public List<MessageRequest> findAllByRecipient() throws IOException, InterruptedException {
-        if(threadIncoming == null) {
-            incomingListener();
-        }
-        return gson.fromJson(readFile(INCOMING_MESSAGES), listOfMyClassObject);
+    private final RSocketService rSocketService;
+    private final GsonBuilder gsonBuilder = new GsonBuilder();
+    private final Gson gson;
+    @Autowired
+    public MessageService(UserService userService, MessageRopository messageRepository, RSocketService rSocketService) {
+        this.userService = userService;
+        this.messageRepository = messageRepository;
+        this.rSocketService = rSocketService;
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+        gson = gsonBuilder.setPrettyPrinting().create();
+        incomingListener();
+    }
+
+    public List<Message> findAllByRecipient(String username) {
+        return findAllByUsernameTo(username);
+    }
+
+    public List<Message> findAllBySender(String username) {
+        return findAllByUsernameFrom(username);
+    }
+
+    public SecretBlock encryptMessage(SecretBlock secretBlock){
+        String hiding = new Hiding().generateHidingMassage(AESUtil.encrypt(secretBlock.getMessageRequest().getBodyMessage(), userService.findSecretByUsername(secretBlock.getMessageRequest().getFrom())));
+        secretBlock.getMessageRequest().setBodyMessage(hiding);
+        return secretBlock;
+    }
+    public Message decryptMessage(Message message) {
+        String secret = message.getTo().getSecret();
+        String hidingMessage = new Hiding().getOpenMassageForHidingMassage(message.getBody());
+        message.setBody(AESUtil.decrypt(hidingMessage, secret));
+        return message;
+    }
+
+    public void saveMessage(MessageRequest messageRequest){
+        Message message = MessageMapper.mapMessage(messageRequest,
+                userService.findByUsername(messageRequest.getFrom()).get(),
+                userService.findByUsername(messageRequest.getTo()).get());
+        save(decryptMessage(message));
     }
 
     public void incomingListener(){
-        threadIncoming = new Thread(() -> {
+        Thread threadIncoming = new Thread(() -> {
             try {
                 do {
-                    if (stompSessionIncoming != null && stompSessionIncoming.get().isConnected()) {
-                        AccountSecretKey accountSecretKey = new AccountSecretKey();
-                        accountSecretKey.setLogin(AccountController.activeAccount.getLogin());
-                        accountSecretKey.setSecret(RSAUtil.decrypt(AESUtil.SECRET_KEY,
-                                                        AccountController.KEY_PAIR.getPublicKey(),
-                                                            AccountController.KEY_PAIR.getModule()));
-                        stompSessionIncoming.get().send(IncomingHandler.END_POINT + "" +
-                                                                        stompSessionIncoming.get().getSessionId(), accountSecretKey);
-                    } else {
-                        StompSessionHandler sessionHandler = new IncomingHandler();
-                        WebSocketStompClient stompClient = new StompClient().getWebSocket();
-                        stompSessionIncoming = stompClient.connect(StompClient.URL_INCOMING, sessionHandler);
+                    for (MessageRequest messageRequest : rSocketService.getIncoming("1")) {
+                        saveMessage(messageRequest);
                     }
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 }
                 while (true);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
                 throw new RuntimeException(e);
             }
         });
         threadIncoming.start();
     }
-    public List<MessageRequest> findAllBySender() throws IOException, ExecutionException, InterruptedException {
-        return gson.fromJson(readFile(OUTCOMING_MESSAGES), listOfMyClassObject);
+
+    public Message secretBlockConvertToMessage(SecretBlock secretBlock, User user){
+        return MessageMapper.mapMessage(secretBlock.getMessageRequest(),
+                userService.findByUsername(secretBlock
+                        .getMessageRequest().getFrom()).get(), user);
     }
 
-    public Boolean sendMessage(BlockRequest blockRequest) throws IOException, InterruptedException, ExecutionException {
-        String listJson = readFile(OUTCOMING_MESSAGES);
-        List<MessageRequest> outputList = gson.fromJson(listJson, listOfMyClassObject);
-        if(outputList != null) {
-            blockRequest.getMessageRequest().setId((long) outputList.size() + 1);
-            outputList.add(blockRequest.getMessageRequest());
-        }
-        else {
-            blockRequest.getMessageRequest().setId(1L);
-            outputList = new ArrayList<>();
-            outputList.add(blockRequest.getMessageRequest());
-        }
-        String jsonString = gson.toJson(outputList);
-        writeFile(jsonString, OUTCOMING_MESSAGES);
-        String hiding = new Hiding().generateHidingMassage(AESUtil.encrypt(blockRequest.getMessageRequest().getBodyMessage()));
-        blockRequest.getMessageRequest().setBodyMessage(hiding);
-        blockRequest.getMessageRequest().setFrom(AccountController.activeAccount.getLogin());
-        if (stompSessionSend != null && stompSessionSend.get().isConnected()) {
-            stompSessionSend.get().send(SendMessageHandler.END_POINT + "" +
-                    stompSessionSend.get().getSessionId(), blockRequest);
+    // todo потрібно зробити попередження про те що адресата не знайдено
+    public Boolean sendMessage(SecretBlock secretBlock) {
+        Optional<User> to = userService.findByUsername(secretBlock.getMessageRequest().getTo());
+        if (to.isPresent()) {
+            //save(secretBlockConvertToMessage(secretBlock, userService.findByUsername(to.get().getUsername()).get()));
+            return Boolean.parseBoolean(rSocketService.sendMessage(encryptMessage(secretBlock)));
         } else {
-            latch = new CountDownLatch(1);
-            StompSessionHandler sessionHandler = new SendMessageHandler(latch);
-            WebSocketStompClient stompClient = new StompClient().getWebSocket();
-            stompSessionSend = stompClient.connect(StompClient.URL_SEND, sessionHandler);
-            logger.info(stompSessionSend.get().isConnected());
-            stompSessionSend.get().send(SendMessageHandler.END_POINT + "" +
-                    stompSessionSend.get().getSessionId(), blockRequest);
-        }
-        latch.await();
-        return SendMessageHandler.isSend;
+            User user = rSocketService.searchUserInMainServer(secretBlock.getMessageRequest().getTo());
+            if (user != null) {
+                user.getIncomingMessageList().clear();
+                userService.save(user);
+                save(secretBlockConvertToMessage(secretBlock, userService.findByUsername(user.getUsername()).get()));
+                return Boolean.parseBoolean(rSocketService.sendMessage(encryptMessage(secretBlock)));
+            }
+        } return false;
     }
 
     public static List<String> getRandomImageList(Integer count) throws IOException {
-        String output = readFile(IMAGES);
+        String output = File.readFile(IMAGES);
         String [] imageArray = output.split("\r\n");
             List<String> imageList = new ArrayList<>();
             for (int i = 0; i < count; i++) {
                 imageList.add(imageArray[(int) (Math.random() * imageArray.length)]);
             } return imageList;
     }
-    public static void writeFile(String text, String file) throws IOException {
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write(text);
-        fileWriter.close();
+
+    public List<Message> findAllByUsernameFrom(String username){
+        return messageRepository.findAllByUsernameFrom(username);
     }
-    public static String readFile(String file) throws IOException {
-        Path fileName = Path.of(file);
-        return Files.readString(fileName);
+
+    public List<Message> findAllByUsernameTo(String username){
+        return messageRepository.findAllByUsernameTo(username);
     }
+
+    public Message findTopByOrderByIdDesc(){
+        return messageRepository.findTopByOrderByIdDesc();
+    }
+    public List<String> findAllUsername(){
+        return userService.findAllUsername();
+    }
+    public void save(Message message){
+        messageRepository.save(message);
+    }
+
 
 }

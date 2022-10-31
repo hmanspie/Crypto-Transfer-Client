@@ -1,5 +1,6 @@
-package com.rebalcomb.crypto.rsa;
+package com.rebalcomb.crypto;
 
+import com.rebalcomb.model.dto.KeyPair;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.security.SecureRandom;
 @Getter
 @EqualsAndHashCode
 public class RSAUtil {
-
+    public static KeyPair KEY_PAIR;
     private final static BigInteger bitCount = new BigInteger("64");
     private BigInteger p;
     private BigInteger q;

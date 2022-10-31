@@ -4,7 +4,7 @@
 
 <div class="container-fluid m-1 p-3 pb-2 justify-content-center" th:fragment="homeFragment">
     <div class="container-fluid justify-content-center">
-        <img class="rounded mx-auto d-blockRequest" th:src="@{/logo/coffeelogo.png}" alt="Logotype">
+        <img class="rounded mx-auto d-secretBlock" th:src="@{/logo/coffeelogo.png}" alt="Logotype">
         <p id="home-text">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
             industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
@@ -16,7 +16,7 @@
     </div>
 
     <div class="container-fluid mt-5" style="width: 15rem">
-        <div class="card shadow rounded mx-auto d-blockRequest">
+        <div class="card shadow rounded mx-auto d-secretBlock">
             <img class="card-img-top" th:src="@{/developers/cat.jpg}" alt="TeamLeader">
             <div class="card-body">
                 <p class="card-text">Чевардін</p>
@@ -117,15 +117,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:blockRequest th:each="message : ${messages}">
+                <th:secretBlock th:each="message : ${messages}">
                 <tr onclick="window.open('http://google.com');">
                     <td th:text="${message?.getId()}"></td>
-                    <td th:text="${message?.getFrom()}"></td>
+                    <td th:text="${message?.getFrom().getFullName()}"></td>
                     <td th:text="${message?.getTitle()}"></td>
-                    <td th:text="${message?.getBodyMessage()}"></td>
-                    <td th:text="${message?.getDateTime()}"></td>
+                    <td th:text="${message?.getBody()}"></td>
+                    <td th:text="${message?.getDate_time()}"></td>
                 </tr>
-                </th:blockRequest>
+                </th:secretBlock>
                 </tbody>
             </table>
         </div>
@@ -149,15 +149,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:blockRequest th:each="message : ${messages}">
+                <th:secretBlock th:each="message : ${messages}">
                 <tr onclick="window.open('http://google.com');">
                     <td th:text="${message?.getId()}"></td>
-                    <td th:text="${message?.getTo()}"></td>
+                    <td th:text="${message?.getTo().getFullName()}"></td>
                     <td th:text="${message?.getTitle()}"></td>
-                    <td th:text="${message?.getBodyMessage()}"></td>
-                    <td th:text="${message?.getDateTime()}"></td>
+                    <td th:text="${message?.getBody()}"></td>
+                    <td th:text="${message?.getDate_time()}"></td>
                 </tr>
-                </th:blockRequest>
+                </th:secretBlock>
                 </tbody>
             </table>
         </div>

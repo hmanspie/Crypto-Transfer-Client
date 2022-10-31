@@ -5,8 +5,6 @@ import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -27,5 +25,6 @@ public class MessageRequest {
     @NotBlank
     private String bodyMessage;
 
+    @NotBlank
     private String dateTime;
 }

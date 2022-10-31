@@ -2,6 +2,7 @@ package com.rebalcomb.model.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Setter
@@ -9,9 +10,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BlockRequest {
+public class SignInRequest {
 
-    private MessageRequest messageRequest;
+    @NotBlank
+    private String login;
 
-    private String secretKey;
+    @NotBlank
+    private String passwd;
+
 }

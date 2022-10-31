@@ -3,19 +3,17 @@ package com.rebalcomb.model.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.NotBlank;
+import java.math.BigInteger;
 
 @Data
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountSignInRequest {
+public class KeyPair {
 
     @NotBlank
-    private String login;
+    private BigInteger publicKey;
 
     @NotBlank
-    private String passwd;
-
+    private BigInteger module;
 }

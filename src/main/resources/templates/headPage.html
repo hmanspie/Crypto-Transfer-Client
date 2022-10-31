@@ -16,27 +16,27 @@
 <div th:insert="~{fragments/navBarFragment :: 'navbarFragment'}"></div>
 <div class="container-fluid m-0 p-0 w-100">
     <div class="container-fluid m-0 p-0 w-100">
-        <th:block th:if="${headPageValue} == 'home'">
+        <th:secretBlock th:if="${headPageValue} == 'home'">
             <div th:insert="~{fragments/headPageFragment :: 'homeFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'write'">
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'write'">
             <div th:insert="~{fragments/headPageFragment :: 'writeFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'incoming'">
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'incoming'">
             <div th:insert="~{fragments/headPageFragment :: 'incomingFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'outcoming'">
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'outcoming'">
             <div th:insert="~{fragments/headPageFragment :: 'outcomingFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'messageShow'">
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'messageShow'">
             <div th:insert="~{fragments/headPageFragment :: 'messageFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'profile'">
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'profile'">
             <div th:insert="~{fragments/headPageFragment :: 'profileFragment'}"></div>
-        </th:block>
-        <th:block th:if="${headPageValue} == 'setting'">
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'setting'">
             <div th:insert="~{fragments/headPageFragment :: 'settingFragment'}"></div>
-        </th:block>
+        </th:secretBlock>
     </div>
 </div>
 </body>
