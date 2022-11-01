@@ -3,6 +3,7 @@ package com.rebalcomb.service;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.rebalcomb.controllers.UserController;
 import com.rebalcomb.crypto.RSAUtil;
+import com.rebalcomb.exceptions.DuplicateAccountException;
 import com.rebalcomb.mapper.UserMapper;
 import com.rebalcomb.model.dto.SignUpRequest;
 import com.rebalcomb.model.entity.User;
@@ -39,9 +40,14 @@ public class UserService {
     }
 
     //todo потрібно зробити обробку винятку Duplicate entry 'exemple@gmail.com' for key 'users.users_email_uindex'
-    public Boolean signUp(SignUpRequest request) {
+    public Boolean signUp(SignUpRequest request) throws DuplicateAccountException {
         User user = UserMapper.mapUserRequest(request);
-        user = rSocketService.sendUser(user);
+        try {
+            user = rSocketService.sendUser(user);
+        } catch (Exception e) {
+            throw new DuplicateAccountException();
+        }
+
         if(user != null) {
             userRepository.save(user);
             UserController.INFO = user.getFullName() + " is successfully registered!";

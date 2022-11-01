@@ -21,5 +21,4 @@ public class EmailHandler {
         TLSEmail tlsEmail = new TLSEmail();
         tlsEmail.answerToEmail(email, code);
     }
-
 }
