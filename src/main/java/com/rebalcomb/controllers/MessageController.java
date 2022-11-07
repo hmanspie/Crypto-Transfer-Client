@@ -1,15 +1,16 @@
 package com.rebalcomb.controllers;
 
 import com.rebalcomb.model.dto.MessageRequest;
+import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import reactor.core.publisher.Flux;
 import java.io.IOException;
 import java.security.Principal;
 
@@ -24,7 +25,10 @@ public class MessageController {
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
     }
-
+    @GetMapping(value = "/findAll")
+    public Flux<Message> findAll() {
+        return messageService.findAll();
+    }
     @GetMapping
     public ModelAndView headPage(ModelAndView model){
         model.addObject("headPageValue", "main");

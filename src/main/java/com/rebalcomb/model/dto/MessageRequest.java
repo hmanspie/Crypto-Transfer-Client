@@ -14,10 +14,10 @@ public class MessageRequest {
     private Long id;
 
     @NotBlank
-    private String from;
+    private String user_from;
 
     @NotBlank
-    private String to;
+    private String user_to;
 
     @NotBlank
     private String title;

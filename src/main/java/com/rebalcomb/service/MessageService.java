@@ -11,11 +11,13 @@ import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.model.entity.User;
 import com.rebalcomb.repository.MessageRopository;
-import com.rebalcomb.util.LocalDateTimeDeserializer;
-import com.rebalcomb.util.LocalDateTimeSerializer;
+import io.rsocket.transport.netty.client.TcpClientTransport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,18 +30,37 @@ public class MessageService {
     private final UserService userService;
     private final MessageRopository messageRepository;
     public static final String IMAGES = "images.txt";
-    private final RSocketService rSocketService;
-    private final GsonBuilder gsonBuilder = new GsonBuilder();
-    private final Gson gson;
+    private RSocketRequester requester;
+    private final RSocketRequester.Builder builder;
+
     @Autowired
-    public MessageService(UserService userService, MessageRopository messageRepository, RSocketService rSocketService) {
+    public MessageService(UserService userService, MessageRopository messageRepository, RSocketRequester.Builder builder) {
         this.userService = userService;
         this.messageRepository = messageRepository;
-        this.rSocketService = rSocketService;
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-        gson = gsonBuilder.setPrettyPrinting().create();
+        this.builder = builder;
+        this.requester = this.builder
+                                .transport(TcpClientTransport
+                                        .create("localhost", 7000));
         incomingListener();
+    }
+    public Flux<Message> findAll(){
+        Flux<Message> flux = this.requester
+                            .route("message.findAll")
+                            .retrieveFlux(Message.class);
+        return flux;
+    }
+
+    public Mono<Boolean> send(SecretBlock secretBlock) {
+        return this.requester
+                .route("message.send")
+                .data(secretBlock)
+                .retrieveMono(Boolean.class);
+    }
+    public Flux<MessageRequest> getIncoming(String serverId) {
+        return this.requester
+                .route("message.getIncoming")
+                .data(serverId)
+                .retrieveFlux(MessageRequest.class);
     }
 
     public List<Message> findAllByRecipient(String username) {
@@ -51,21 +72,19 @@ public class MessageService {
     }
 
     public SecretBlock encryptMessage(SecretBlock secretBlock){
-        String hiding = new Hiding().generateHidingMassage(AESUtil.encrypt(secretBlock.getMessageRequest().getBodyMessage(), userService.findSecretByUsername(secretBlock.getMessageRequest().getFrom())));
+        String hiding = new Hiding().generateHidingMassage(AESUtil.encrypt(secretBlock.getMessageRequest().getBodyMessage(), userService.findSecretByUsername(secretBlock.getMessageRequest().getUser_from())));
         secretBlock.getMessageRequest().setBodyMessage(hiding);
         return secretBlock;
     }
     public Message decryptMessage(Message message) {
-        String secret = message.getTo().getSecret();
+        String secret = userService.findSecretByUsername(message.getUser_to());
         String hidingMessage = new Hiding().getOpenMassageForHidingMassage(message.getBody());
         message.setBody(AESUtil.decrypt(hidingMessage, secret));
         return message;
     }
 
     public void saveMessage(MessageRequest messageRequest){
-        Message message = MessageMapper.mapMessage(messageRequest,
-                userService.findByUsername(messageRequest.getFrom()).get(),
-                userService.findByUsername(messageRequest.getTo()).get());
+        Message message = MessageMapper.mapMessage(messageRequest);
         save(decryptMessage(message));
     }
 
@@ -73,9 +92,10 @@ public class MessageService {
         Thread threadIncoming = new Thread(() -> {
             try {
                 do {
-                    for (MessageRequest messageRequest : rSocketService.getIncoming("1")) {
+                    List<MessageRequest> messageRequests = getIncoming("1").collectList().block();
+                    if(messageRequests != null)
+                    for (MessageRequest messageRequest : messageRequests)
                         saveMessage(messageRequest);
-                    }
                     Thread.sleep(5000);
                 }
                 while (true);
@@ -86,27 +106,12 @@ public class MessageService {
         threadIncoming.start();
     }
 
-    public Message secretBlockConvertToMessage(SecretBlock secretBlock, User user){
-        return MessageMapper.mapMessage(secretBlock.getMessageRequest(),
-                userService.findByUsername(secretBlock
-                        .getMessageRequest().getFrom()).get(), user);
-    }
-
-    // todo потрібно зробити попередження про те що адресата не знайдено
     public Boolean sendMessage(SecretBlock secretBlock) {
-        Optional<User> to = userService.findByUsername(secretBlock.getMessageRequest().getTo());
+        Optional<User> to = userService.findByUsername(secretBlock.getMessageRequest().getUser_to());
         if (to.isPresent()) {
-            //save(secretBlockConvertToMessage(secretBlock, userService.findByUsername(to.get().getUsername()).get()));
-            return Boolean.parseBoolean(rSocketService.sendMessage(encryptMessage(secretBlock)));
-        } else {
-            User user = rSocketService.searchUserInMainServer(secretBlock.getMessageRequest().getTo());
-            if (user != null) {
-                user.getIncomingMessageList().clear();
-                userService.save(user);
-                save(secretBlockConvertToMessage(secretBlock, userService.findByUsername(user.getUsername()).get()));
-                return Boolean.parseBoolean(rSocketService.sendMessage(encryptMessage(secretBlock)));
-            }
-        } return false;
+            return send(encryptMessage(secretBlock)).block();
+        }
+        return false;
     }
 
     public static List<String> getRandomImageList(Integer count) throws IOException {

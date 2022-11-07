@@ -1,16 +1,18 @@
 package com.rebalcomb.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rebalcomb.model.entity.enums.Role;
 import com.rebalcomb.model.entity.enums.Status;
-import lombok.Data;
-
+import lombok.*;
+import org.hibernate.Hibernate;
 import javax.persistence.*;
-import java.util.List;
-
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -18,39 +20,37 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 40)
     private String fullName;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, unique = true, length = 255)
     private String username;
 
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 40)
     private Role role;
 
-    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 40)
     private Status status;
 
-    @Column(nullable = false)
-    private Boolean isAdmin;
-
-    @Column(nullable = false, length = 256)
+    @Column(nullable = false, length = 255)
     private String secret;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "to", fetch = FetchType.LAZY)
-    private List<Message> incomingMessageList;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "from", fetch = FetchType.LAZY)
-    private List<Message> outcomingMessageList;
-
-
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

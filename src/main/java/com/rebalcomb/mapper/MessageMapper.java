@@ -2,22 +2,17 @@ package com.rebalcomb.mapper;
 
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.entity.Message;
-import com.rebalcomb.model.entity.User;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
 
 public class MessageMapper {
 
-    public static Message mapMessage(MessageRequest request, User from, User to) {
-        DateTimeFormatter formatter  = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss");
+    public static Message mapMessage(MessageRequest request) {
         Message message = new Message();
-        message.setFrom(from);
-        message.setTo(to);
+        message.setUser_from(request.getUser_from());
+        message.setUser_to(request.getUser_to());
         message.setTitle(request.getTitle());
         message.setBody(request.getBodyMessage());
-        message.setDate_time(LocalDateTime.parse(request.getDateTime(), formatter));
-        message.setIs_read(false);
+        message.setDate_time(Timestamp.valueOf(request.getDateTime()));
         message.setIs_send(false);
         return message;
     }

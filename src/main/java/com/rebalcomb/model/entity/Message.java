@@ -1,23 +1,18 @@
 package com.rebalcomb.model.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
-
+import org.hibernate.Hibernate;
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
+@ToString
 @NoArgsConstructor
-@EqualsAndHashCode
+@AllArgsConstructor
 @Table(name = "messages")
 public class Message {
 
@@ -25,31 +20,35 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="from_id", nullable=false)
-    private User from;
+    @Column(nullable = false, length = 40)
+    private String user_from;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="to_id", nullable=false)
-    private User to;
+    @Column(nullable = false, length = 40)
+    private String user_to;
 
     @Column(nullable = false, length = 40)
     private String title;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false)
     private String body;
 
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(nullable = false)
-    private LocalDateTime date_time;
+    private Timestamp date_time;
 
     @JsonIgnore
     @Column(nullable = false)
     private Boolean is_send;
 
-    @JsonIgnore
-    @Column(nullable = false)
-    private Boolean is_read;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Message message = (Message) o;
+        return id != null && Objects.equals(id, message.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
