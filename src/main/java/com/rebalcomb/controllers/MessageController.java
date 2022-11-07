@@ -74,4 +74,10 @@ public class MessageController {
         return model;
     }
 
+    @GetMapping("/setting")
+    public ModelAndView settings(ModelAndView model){
+        model.addObject("headPageValue", "setting");
+        model.setViewName("headPage");
+        return model;
+    }
 }
