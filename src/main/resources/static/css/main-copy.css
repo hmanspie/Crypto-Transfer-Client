@@ -1,0 +1,274 @@
+#body {
+    background-color: #f8f8f8;
+}
+
+.main-container{
+    background:white;
+    border-radius: 30px;
+    margin: 3% 3% 3% 18%;
+    height: 53.5em;
+}
+
+/* NavBar */
+
+#navbar {
+    background-color: #212227;
+    --bs-navbar-color: #8B8B93;
+    --bs-navbar-hover-color: #8F7154;
+    --bs-navbar-brand-color: #F1E4D7;
+    --bs-navbar-brand-hover-color: #F1E4D7;
+}
+
+.dropdown-menu.dropdown-menu-end {
+    background-color: #212227;
+    color: #F1E4D7;
+    transition: color .15s;
+}
+
+.dropdown-toggle::after {
+    color: #8B8B93;
+}
+
+.dropdown-menu.dropdown-menu-end .dropdown-item {
+    background-color: #212227;
+    color: #8B8B93;
+}
+
+.dropdown-menu.dropdown-menu-end .dropdown-item:hover {
+    background-color: #212227;
+    color: #8F7154;
+}
+
+/* NavBar */
+
+/* Home Page */
+
+#home-text {
+    margin-top: 15px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+
+    font-family: "Times New Roman", sans-serif;
+    font-size: large;
+}
+
+/* Home Page */
+
+/* Write Page */
+
+#write-form {
+    width: 69%;
+    position: fixed;
+    margin: 5%;
+}
+
+#btn-plus:hover, #btn-minus:hover {
+    background-color: #F1E4D7;
+    /*Do darkly*/
+}
+
+#btn-plus:active, #btn-minus:active {
+    background-color: #F1E4D7;
+    /*Do more darkly*/
+}
+
+/* Write Page */
+
+/* Setting Page*/
+
+.setting-form.container.shadow.rounded-3.p-2 {
+    border-color: #8F7154;
+}
+
+
+.setting-title {
+    text-align: center;
+}
+
+.setting-line {
+    background-color: #212227;
+    height: 2px;
+}
+
+#private-key {
+    resize: none;
+}
+
+/* Setting Page*/
+
+/* Profile Page */
+
+#profile-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-container{
+    margin-top: 6%;
+}
+
+/* Table */
+
+tbody, td, tfoot, th, thead, tr {
+    border-width: unset;
+    border-style: none;
+}
+
+tbody tr:hover {
+    background: #DFCAB5; /* Цвет фона при наведении */
+}
+
+/* Table */
+
+/* Input */
+
+.input-group-text {
+    width: 100%;
+
+}
+
+/* Input */
+
+.form-control {
+    width: 95%;
+
+}
+
+.write-text-area{
+    height: 25em;
+}
+
+/* SideBar */
+
+/* Button */
+
+.btn {
+    background-color: #8B8B93;
+    color: #F1E4D7;
+    border-color: #8B8B93;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background-color: #8B8B93;
+    color: #F1E4D7;
+    transform: scale(0.9);
+}
+
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+    background-color: #8B8B93;
+    color: #F1E4D7;
+    transform: scale(0.85);
+}
+
+/* Button */
+
+/* Select */
+
+.form-select {
+    border-color: #FFFCF5;
+}
+
+/* Select */
+
+/* Check */
+
+.form-check-input {
+    background-color: #FFFCF5;
+    border-color: #FFFCF5;
+}
+
+/* Check */
+
+/* Card */
+
+.card {
+    background-color: #8B8B93;
+    color: white;
+}
+
+/* Card */
+
+/* Modal-dialog */
+
+.modal-content {
+    border-color: #8F7154;
+}
+
+.modal-header {
+    border-color: #8F7154;
+}
+
+.modal-body {
+    border-color: #8F7154;
+}
+
+.modal-footer {
+    border-color: #8F7154;
+}
+
+/* Modal-dialog */
+
+.setting-dialog{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.setting-dialog-key{
+    display: flex;
+    align-items: center;
+    margin-top: 2%;
+    height: 20px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Text description */
+
+.text-description {
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+}
+
+/* Text description */

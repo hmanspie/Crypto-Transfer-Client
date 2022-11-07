@@ -1,0 +1,17 @@
+<aside id="sidebar" class="nano" th:fragment="sidebarFragment">
+    <div class="nano-content">
+        <div class="logo-container">
+            <a th:href="@{/headPage}"><img class="rounded mx-auto d-block sidebar-logo" th:src="@{/image/logo/greylogo.png}" alt="Logotype"></a>
+        </div> <a class="compose-button" th:href="@{/headPage/write}">Write</a>
+        <menu class="menu-segment">
+            <ul id="side-bar-menu">
+                <li onclick="openMenu(id)" id="side-bar-incoming" class="blinks"><a th:href="@{/headPage/incoming}">Incoming<span> (43)</span></a></li>
+                <li onclick="openMenu(id)" id="side-bar-outcoming" class="blinks"><a th:href="@{/headPage/outcoming}">Outcoming</a></li>
+                <li onclick="openMenu(id)" id="side-bar-profile" class="blinks"><a th:href="@{/headPage/profile}">Profile</a></li>
+                <li onclick="openMenu(id)" id="side-bar-setting" class="blinks"><a th:href="@{/headPage/setting}">Settings</a></li>
+                <li id="side-bar-logout"><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </menu>
+    </div>
+    <script th:src="@{/js/side-bar.js}"></script>
+</aside>

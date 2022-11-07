@@ -101,7 +101,7 @@
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text">Text</span>
-            <textarea class="form-control" aria-label="Message" th:field="*{bodyMessage}" required></textarea>
+            <textarea class="form-control write-text-area" aria-label="Message" th:field="*{bodyMessage}" required></textarea>
         </div>
         <div class="container d-flex align-items-stretch justify-content-end p-0">
             <button type="submit" class="btn">Send</button>
@@ -110,9 +110,42 @@
     <script th:src="@{/image/js/write.js}"></script>
 </div>
 
+<div id="main">
+    <div class="action-bar">
+        <ul>
+            <li><a class="icon circle-icon glyphicon glyphicon-chevron-down"></a></li>
+            <li><a class="icon circle-icon glyphicon glyphicon-refresh"></a></li>
+            <li><a class="icon circle-icon glyphicon glyphicon-share-alt"></a></li>
+            <li><a class="icon circle-icon red glyphicon glyphicon-remove"></a></li>
+            <li><a class="icon circle-icon red glyphicon glyphicon-flag"></a></li>
+        </ul>
+    </div>
+    <div id="main-nano-wrapper" class="nano">
+        <div class="nano-content">
+            <ul class="message-list">
+                <li class="unread">
+                    <div class="col col-1"><span class="dot"></span>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="chk1">
+                            <label for="chk1" class="toggle"></label>
+                        </div>
+                        <div class="date">11:49 11-12-2022</div>
+                        <text class="title">Lucas Kriebel</text>
+                        <span class="star-toggle glyphicon glyphicon-star-empty"></span>
+                    </div>
+                    <div class="col col-2">
+                        <div class="subject">Lucas Kriebel (@LucasKriebel) has sent you a direct message on Twitter! &nbsp;&ndash;&nbsp; <span class="teaser">@LucasKriebel - Very cool :) Nicklas, You have a new direct message.</span></div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid p-3 pb-2" th:fragment="incomingFragment">
     <div class="card shadow">
-        <div class="card-header">
+        <div class="card-header" style="text-align: center">
             <p class="h4">Incoming messages</p>
         </div>
         <div class="card-body">
@@ -172,7 +205,7 @@
 
 <div class="container-fluid p-3 pb-2" th:fragment="outcomingFragment">
     <div class="card shadow">
-        <div class="card-header">
+        <div class="card-header" style="text-align: center">
             <p class="h4">Outcoming messages</p>
         </div>
         <div class="card-body">
@@ -259,9 +292,9 @@
 
 <div class="container-fluid p-3 pb-2 justify-content-center" th:fragment="profileFragment">
     <div class="container" id="profile-card">
-        <p class="h4" id="profile-title">Profile</p>
+<!--        <p class="h4" id="profile-title">Profile</p>-->
         <div class="profile-top-line"></div>
-        <div class="container text-center p-0">
+        <div class="container text-center p-0 profile-container">
             <div class="row">
                 <form th:object="${updateProfileRequest}" th:action="@{/updateProfile}" th:method="post">
                 <div class="col-8">
@@ -316,61 +349,58 @@
     </div>
 </div>
 
-<div class="container-fluid p-3 pb-2" th:fragment="settingFragment">
+<div class="container-fluid p-3 pb-2 setting-dialog" th:fragment="settingFragment">
 
     <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" style="margin-top: 12%" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">IP Address</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!--                    <h1 class="modal-title fs-5" id="staticBackdropLabel">IP Address</h1>-->
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
                 </div>
                 <div class="modal-body">
                     <div class="input-group">
                         <span class="input-group-text">IP:Port</span>
-                        <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="form-control">
-                        <input type="text" aria-label="Port Service" placeholder="8081" class="form-control">
+                        <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="">
+                        <input type="text" aria-label="Port Service" placeholder="8081" class="">
+                        <button type="button" class="btn">Change</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn">Change</button>
                 </div>
             </div>
         </div>
-    </div>
+<!--    </div>-->
 
-    <div class="container w-25 justify-content-center">
+<!--    <div class="container w-25 justify-content-center">-->
         <div class="setting-form container shadow rounded-3 p-2">
-            <p class="h2 setting-title">Setting</p>
-            <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                <div class="container p-0 text-start mt-4">
-                    <p class="h5">Address service</p>
-                    <div class="setting-line"></div>
+<!--            <p class="h2 setting-title">Setting</p>-->
+            <div>
+                    <text class="h5">Address service</text>
+                    <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="">
                     <button type="button" class="btn mt-3 ms-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">IP Address</button>
-                    <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from our side</p>
-                </div>
+                    <div class="tooltip">?
+                        <span class="tooltiptext">If you don't have connection try change IP service. Maybe it's problem from our side</span>
+                    </div>
+<!--                    <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from our side</p>-->
             </div>
-            <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                <div class="container p-0 text-start mt-4">
-                    <p class="h5">Length key</p>
-                    <div class="setting-line"></div>
+            <div class="setting-dialog-key">
+                    <p class="">Length key </p>
                     <select class="form-select mt-2" aria-label="Length key">
                         <option value="1">128</option>
                         <option value="2">192</option>
                         <option value="3">256</option>
                     </select>
-                    <p class="text-description mt-3">The longest key will be the strongest</p>
-                </div>
+                    <p class="text-description mt-3"> The longest key will be the strongest</p>
             </div>
             <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                <div class="container p-0 text-start mt-4">
-                    <p class="h5">Generate new keys</p>
-                    <div class="setting-line"></div>
-                    <p class="h6 mt-2">Current key: </p>
+                <div class="container p-0 text-start mt-4" style="display: flex; align-items: center;">
+<!--                    <p class="h5">Generate new keys</p>-->
+<!--                    <div class="setting-line"></div>-->
+                    <text class="h6 mt-2">Current key </text>
                     <textarea
-                            class="form-control mt-2"
+                            class=""
+                            style="height: 22px; width: 33%;"
                             id="private-key"
                             onclick="copyToClipboard(this.id)"
                             aria-label="With textarea"
@@ -379,17 +409,16 @@
                             title="Click to copy"
                             readonly
                             >{Key}</textarea>
-                    <button type="submit" class="btn mt-2 ms-0">Generate Keys</button>
-                    <p class="text-description mt-3">If you will change your keys then older keys will invalid</p>
+                    <button type="submit" class="btn mt-2 ms-0" style="margin: 0% 1% 0% 1%;">Generate Keys</button>
+                    <div class="tooltip">?
+                        <span class="tooltiptext">If you will change your keys then older keys will invalid</span>
+                    </div>
                 </div>
             </div>
             <script th:src="@{/image/js/setting.js}" ></script>
-            <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                <div class="container p-0 text-start mt-4">
-                    <p class="h5">Encryption mode</p>
-                    <div class="setting-line mb-2"></div>
-                    <div class="row">
-                        <div class="col">
+            <div style="text-align: center;">
+                <p class="" style="margin-bottom: 0px;">Encryption mode</p>
+                <div style="display: flex; align-items: center; justify-content: center">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1" checked>
                                 <label class="form-check-label" for="radioEncryption1">
@@ -408,8 +437,6 @@
                                     PCBC
                                 </label>
                             </div>
-                        </div>
-                        <div class="col">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">
                                 <label class="form-check-label" for="radioEncryption4">
@@ -428,21 +455,18 @@
                                     CTR
                                 </label>
                             </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                <div class="container p-0 text-start mt-4">
-                    <p class="h5">Number of picture</p>
-                    <div class="setting-line"></div>
-                    <div class="form-outline mt-2">
-                        <input type="number" id="typeNumber" class="form-control" value="1">
+            <div class="">
+                <div style="display: flex; align-items: center; justify-content: center">
+                    <p class="h5">Number of picture </p>
+                        <input type="number" id="typeNumber" value="1" style=" width: 15%; margin: 0% 1% 0% 1%;">
                         <!-- Замість '1' поставити метод що витягує нинішнє значення -->
+                    <div class="tooltip">?
+                        <span class="tooltiptext">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</span>
                     </div>
-                    <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>
-                    <button type="submit" class="btn mt-2 ms-0">Save</button>
                 </div>
+                <button type="submit" class="btn mt-2 ms-0" style="width: 100%">Save</button>
             </div>
 
         </div>
