@@ -11,10 +11,30 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Hiding implements IHiding {
+    /**
+     * This is the name of the intermediate file in which the image sent from the server in Base64 format is stored,
+     * for its further reading in the format BufferedImage
+     */
     private static final String OUTPUT_FILE_PATH = "outpng.png";
+
+    /**
+     * This indicator is used to indicate the main message and its follow-up
+     * assembly (if it was divided into several images)
+     */
     private String indicator = "A";
+    /**
+     * It is used to indicate the transition between images when the deadline for submission is formed
+     * to the server, or reverse splitting into separate images on the client side
+     */
     private final String SEPARATOR = "###@###";
 
+    /**
+     * Converts the image type from the Base64 format to the BufferedImage class using the convertToPNG() method
+     * and hides the message in the card using the LSB method
+     * @param imageForBase64 - Picture in format Base64
+     * @param msg - Message length <= 255 characters
+     * @return A picture with a hidden message in Base64 format
+     */
     private String steganography(String imageForBase64, String msg) {
 
         BufferedImage image = convertToPNG(imageForBase64);
@@ -71,6 +91,12 @@ public class Hiding implements IHiding {
         return convertToBase64();
     }
 
+    /**
+     * Converts the image type from the Base64 format to the BufferedImage class using the convertToPNG() method
+     * and retrieves the message hidden by the LSB method
+     * @param encodedString - A picture with a hidden message in Base64 format
+     * @return The message that was hidden in the picture
+     */
     private String decodeSteganography(String encodedString) {
         BufferedImage bimg = convertToPNG(encodedString);
         int w = bimg.getWidth(), h = bimg.getHeight();
@@ -97,6 +123,10 @@ public class Hiding implements IHiding {
         return massage.toString();
     }
 
+    /**
+     * Reads an image named OUTPUT_FILE_PATH and converts it to Base64 format
+     * @return Picture in format Base64
+     */
     private String convertToBase64() {
         byte[] fileContent;
         try {
@@ -104,10 +134,15 @@ public class Hiding implements IHiding {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        deleteFile();
         return Base64.getEncoder().encodeToString(fileContent);
     }
 
+    /**
+     * Decodes the image from Base64 format, then writes it to a file named OUTPUT_FILE_PATH,
+     * and reads in BufferedImage format
+     * @param encodedString - Picture in format Base64
+     * @return Picture in format BufferedImage
+     */
     private BufferedImage convertToPNG(String encodedString) {
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
         BufferedImage image;
@@ -118,14 +153,16 @@ public class Hiding implements IHiding {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        deleteFile();
         return image;
     }
 
-    private void deleteFile() {
-        File file = new File(OUTPUT_FILE_PATH);
-    }
-
+    /**
+     * Accepts an unprocessed message and splits it into 253 character parts
+     * adding an indicator with the value A (this is an indicator of the main message), as well as
+     * adds a number to the indicator that indicates the order of the message parts
+     * @param rawMassage - The message that needs to be prepared for hiding in the picture
+     * @return ArrayList<String> which is used when hiding a message
+     */
     private ArrayList<String> divideIntoParts(String rawMassage) {
         int partLength = 253;
 
@@ -148,6 +185,13 @@ public class Hiding implements IHiding {
         return massage;
     }
 
+    /**
+     * After receiving the message, it calls the divideIntoParts(rawMassage) method to prepare the message
+     * then the MessageService.getRandomImageList() method receives the required number of pictures and through a loop
+     * hide all parts of the message in pictures and write pictures in Base64 format in 1 line via SEPARATOR
+     * @param rawMassage - Unprocessed message
+     * @return A line in which pictures with a hidden message are recorded through a SEPARATOR
+     */
     public String generateHidingMassage(String rawMassage) {
         List<String> massage = divideIntoParts(rawMassage);
         String[] hiddenMassages = new String[massage.size()];
@@ -169,6 +213,13 @@ public class Hiding implements IHiding {
         return resultMassage.toString();
     }
 
+    /**
+     * Divides into an array of pictures and checks for an indicator, if A + a number, then saves to ArrayList<String>,
+     * then sorts, then iterate through each Arraylist<String> object and extract messages from each picture
+     * without the first 2 characters (indicator + part number)
+     * @param hidingMassage - The line in which the pictures with the hidden message are recorded are separated by SEPARATOR
+     * @return The message is hidden in the pictures
+     */
     public String getOpenMassageForHidingMassage(String hidingMassage) {
         StringBuilder openMassage = new StringBuilder();
         ArrayList<String> redundantMassage = new ArrayList<>();
@@ -191,6 +242,11 @@ public class Hiding implements IHiding {
         return openMassage.toString();
     }
 
+    /**
+     * Tests whether a string is a character
+     * @param number - A string that is checked to see if it is a number
+     * @return true, if string is a number otherwise false
+     */
     private boolean checkNumber(String number) {
         try {
             Integer.parseInt(number);
@@ -200,6 +256,13 @@ public class Hiding implements IHiding {
         }
     }
 
+    /**
+     * Adds redundant images to the finished message and mixes them together.
+     * Messages in redundant pictures have a B indicator
+     * @param hidingMassage - The result returned by the generateHidingMassage() method
+     * @param count - The number of redundant pictures that will be added to the main message
+     * @return Messages with redundant images
+     */
     public String addRedundantPictures(String hidingMassage, int count) {
         List<String> hidingMassageParts = Arrays.stream(hidingMassage.split(SEPARATOR)).toList();
         indicator = "B";
@@ -220,6 +283,11 @@ public class Hiding implements IHiding {
         return resultMassage.toString();
     }
 
+    /**
+     * The method randomly generates a sequence of numbers of a given length
+     * @param length - Number of numbers to be generated from 0 to length key
+     * @return int[]
+     */
     private int[] generateRandomOrder(int length) {
         Random random = new Random();
         int[] resultOrder = new int[length];
@@ -242,3 +310,6 @@ public class Hiding implements IHiding {
         return resultOrder;
     }
 }
+/**
+ * Steganography techniques were taken from this site https://stackoverflow.com/questions/16643495/hiding-message-in-jpg-image
+ */

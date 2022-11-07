@@ -1,5 +1,6 @@
 package com.rebalcomb.controllers;
 
+import com.rebalcomb.exceptions.DuplicateAccountException;
 import com.rebalcomb.model.dto.SignInRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
 import com.rebalcomb.model.entity.User;
@@ -34,7 +35,7 @@ public class UserController {
 
     @PostMapping("/registered")
     public ModelAndView registered(@Valid @ModelAttribute SignUpRequest signUpRequest,
-                                                        ModelAndView model) throws InterruptedException, ExecutionException {
+                                                        ModelAndView model) throws InterruptedException, ExecutionException, DuplicateAccountException {
         model.setViewName("login");
         if (!userService.validatePassword(signUpRequest)) {
             model.addObject("isError", true);
