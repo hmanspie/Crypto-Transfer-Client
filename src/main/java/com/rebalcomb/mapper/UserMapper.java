@@ -2,12 +2,10 @@ package com.rebalcomb.mapper;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.rebalcomb.model.dto.SignUpRequest;
-import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.model.entity.User;
 import com.rebalcomb.model.entity.enums.Role;
 import com.rebalcomb.model.entity.enums.Status;
 import org.springframework.stereotype.Component;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -22,7 +20,6 @@ public class UserMapper {
         user.setPassword(BCrypt.withDefaults().hashToString(12, request.getPassword().toCharArray()));
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setIsAdmin(false);
         user.setSecret(BigInteger.probablePrime(32, new SecureRandom()).toString());
         return user;
     }

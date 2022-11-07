@@ -1,6 +1,5 @@
 package com.rebalcomb.controllers;
 
-import com.rebalcomb.crypto.RSAUtil;
 import com.rebalcomb.mapper.BlockMapper;
 import com.rebalcomb.mapper.MessageRequestMapper;
 import com.rebalcomb.model.dto.SecretBlock;
@@ -36,9 +35,7 @@ public class SendController {
 
     @PostMapping("/sendNewMessage")
     public ModelAndView login(ModelAndView model, @Valid @ModelAttribute MessageRequest messageRequest, Principal principal) throws InterruptedException, IOException, ExecutionException {
-        if(RSAUtil.KEY_PAIR == null)
-            userService.getPublicKeyFromMainServer();
-        if(messageRequest.getTo().equals(principal.getName())){
+        if(messageRequest.getUser_to().equals(principal.getName())){
             model.addObject("isSend", false);
             model.addObject("headPageValue", "write");
             model.addObject("messageRequest", new MessageRequest());

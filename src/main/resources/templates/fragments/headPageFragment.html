@@ -82,7 +82,7 @@
         <div class="input-group mb-3" id="destination">
             <span class="input-group-text">To</span>
             <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                   aria-describedby="basic-addon1" th:field="*{to}" required>
+                   aria-describedby="basic-addon1" th:field="*{user_to}" required>
 
             <span class="input-group-text" id="btn-plus" onclick="addField()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -163,7 +163,7 @@
                 <th:secretBlock th:each="message : ${messages}">
                     <tr th:onclick="@{/headPage/message/${message?.getId()}}">
                         <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getFrom().getFullName()}"></td>
+                        <td th:text="${message?.getUser_from()}"></td>
                         <td th:text="${message?.getTitle()}"></td>
                         <td th:text="${message?.getBody()}"></td>
                         <td th:text="${message?.getDate_time()}"></td>
@@ -223,7 +223,7 @@
                 <th:secretBlock th:each="message : ${messages}">
                     <tr th:onclick="@{/headPage/message/${message?.getId()}}">
                         <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getTo().getFullName()}"></td>
+                        <td th:text="${message?.getUser_to()}"></td>
                         <td th:text="${message?.getTitle()}"></td>
                         <td th:text="${message?.getBody()}"></td>
                         <td th:text="${message?.getDate_time()}"></td>
