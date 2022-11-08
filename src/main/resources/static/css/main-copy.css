@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&display=swap');
+
 #body {
     background-color: #f8f8f8;
 }
 
 .main-container{
-    background:white;
+    background: white;
     border-radius: 30px;
     margin: 3% 3% 3% 18%;
     height: 53.5em;
@@ -186,7 +188,7 @@ tbody tr:hover {
 /* Card */
 
 .card {
-    background-color: #8B8B93;
+    /*background-color: #8B8B93;*/
     color: white;
 }
 
@@ -272,3 +274,47 @@ tbody tr:hover {
 }
 
 /* Text description */
+
+.custom-table {
+    margin-top: 5px;
+    display: flex;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: #616167;
+}
+
+.custom-table:hover {
+    background-color: white;
+    color: #212227;
+}
+
+.id-message {
+    display: flex;
+    margin: 0 10px 0 10px;
+    width: 2%;
+}
+
+.user-message {
+    margin: 0 25px 0 10px;
+    display: flex;
+    width: 3%;
+}
+
+.title-message {
+    margin: 0 10px 0 100px;
+    display: flex;
+    width: 15%;
+}
+
+.body-message {
+    margin: 0 10px 0 10px;
+    display: flex;
+    width: 70%;
+}
+
+.time-message {
+    margin: 0 0 0 10px;
+    display: flex;
+    width: 10%;
+}

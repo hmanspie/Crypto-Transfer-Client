@@ -101,7 +101,8 @@
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text">Text</span>
-            <textarea class="form-control write-text-area" aria-label="Message" th:field="*{bodyMessage}" required></textarea>
+            <textarea class="form-control write-text-area" aria-label="Message" th:field="*{bodyMessage}"
+                      required></textarea>
         </div>
         <div class="container d-flex align-items-stretch justify-content-end p-0">
             <button type="submit" class="btn">Send</button>
@@ -134,7 +135,9 @@
                         <span class="star-toggle glyphicon glyphicon-star-empty"></span>
                     </div>
                     <div class="col col-2">
-                        <div class="subject">Lucas Kriebel (@LucasKriebel) has sent you a direct message on Twitter! &nbsp;&ndash;&nbsp; <span class="teaser">@LucasKriebel - Very cool :) Nicklas, You have a new direct message.</span></div>
+                        <div class="subject">Lucas Kriebel (@LucasKriebel) has sent you a direct message on Twitter!
+                            &nbsp;&ndash;&nbsp; <span class="teaser">@LucasKriebel - Very cool :) Nicklas, You have a new direct message.</span>
+                        </div>
 
                     </div>
                 </li>
@@ -145,30 +148,38 @@
 
 <div class="container-fluid p-3 pb-2" th:fragment="incomingFragment">
     <div class="card shadow">
-        <div class="card-header" style="text-align: center">
-            <p class="h4">Incoming messages</p>
-        </div>
         <div class="card-body">
+
+            <th:block th:each="message : ${messages}">
+                <div class="custom-table">
+                    <div class="id-message" th:text="${message?.getId()}"></div>
+                    <div class="user-message" th:text="${message?.getUser_from()}"></div>
+                    <div class="title-message" th:text="${message?.getTitle()}"></div>
+                    <div class="body-message" th:text="${message?.getBody()}"></div>
+                    <div class="time-message" th:text="${message?.getDate_time()}"></div>
+                </div>
+            </th:block>
+
             <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Sender</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Body</th>
-                    <th scope="col">Date and Time</th>
-                </tr>
-                </thead>
+                <!--                <thead>-->
+                <!--                <tr>-->
+                <!--                    <th scope="col">#</th>-->
+                <!--                    <th scope="col">Sender</th>-->
+                <!--                    <th scope="col">Title</th>-->
+                <!--                    <th scope="col">Body</th>-->
+                <!--                    <th scope="col">Date and Time</th>-->
+                <!--                </tr>-->
+                <!--                </thead>-->
                 <tbody>
-                <th:secretBlock th:each="message : ${messages}">
-                    <tr th:onclick="@{/headPage/message/${message?.getId()}}">
-                        <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getUser_from()}"></td>
-                        <td th:text="${message?.getTitle()}"></td>
-                        <td th:text="${message?.getBody()}"></td>
-                        <td th:text="${message?.getDate_time()}"></td>
-                    </tr>
-                </th:secretBlock>
+                <!--                <th:secretBlock th:each="message : ${messages}">-->
+                <!--                    <tr th:onclick="@{/headPage/message/${message?.getId()}}">-->
+                <!--                        <td th:text="${message?.getId()}"></td>-->
+                <!--                        <td th:text="${message?.getUser_from()}"></td>-->
+                <!--                        <td th:text="${message?.getTitle()}"></td>-->
+                <!--                        <td th:text="${message?.getBody()}"></td>-->
+                <!--                        <td th:text="${message?.getDate_time()}"></td>-->
+                <!--                    </tr>-->
+                <!--                </th:secretBlock>-->
                 </tbody>
             </table>
         </div>
@@ -180,13 +191,9 @@
         function notifyMe() {
             if (!("Notification" in window)) {
                 alert("This browser does not support desktop notification");
-            }
-
-            else if (Notification.permission === "granted") {
+            } else if (Notification.permission === "granted") {
                 let notification = new Notification(from);
-            }
-
-            else if (Notification.permission !== 'denied') {
+            } else if (Notification.permission !== 'denied') {
                 Notification.requestPermission(function (permission) {
                     if (permission === "granted") {
                         let notification = new Notification("Notification");
@@ -195,7 +202,7 @@
             }
         }
 
-        if (newMessages){
+        if (newMessages) {
             setTimeout(() => notifyMe(), 0);
         }
 
@@ -205,32 +212,39 @@
 
 <div class="container-fluid p-3 pb-2" th:fragment="outcomingFragment">
     <div class="card shadow">
-        <div class="card-header" style="text-align: center">
-            <p class="h4">Outcoming messages</p>
-        </div>
         <div class="card-body">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Destination</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Body</th>
-                    <th scope="col">Date and Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                <th:secretBlock th:each="message : ${messages}">
-                    <tr th:onclick="@{/headPage/message/${message?.getId()}}">
-                        <td th:text="${message?.getId()}"></td>
-                        <td th:text="${message?.getUser_to()}"></td>
-                        <td th:text="${message?.getTitle()}"></td>
-                        <td th:text="${message?.getBody()}"></td>
-                        <td th:text="${message?.getDate_time()}"></td>
-                    </tr>
-                </th:secretBlock>
-                </tbody>
-            </table>
+            <th:block th:each="message : ${messages}">
+                <div class="custom-table">
+                    <div class="id-message" th:text="${message?.getId()}"></div>
+                    <div class="user-message" th:text="${message?.getUser_to()}"></div>
+                    <div class="title-message" th:text="${message?.getTitle()}"></div>
+                    <div class="body-message" th:text="${message?.getBody()}"></div>
+                    <div class="time-message" th:text="${message?.getDate_time()}"></div>
+                </div>
+            </th:block>
+
+            <!--   <table class="table">-->
+            <!--                <thead>-->
+            <!--                <tr>-->
+            <!--                    <th scope="col">#</th>-->
+            <!--                    <th scope="col">Destination</th>-->
+            <!--                    <th scope="col">Title</th>-->
+            <!--                    <th scope="col">Body</th>-->
+            <!--                    <th scope="col">Date and Time</th>-->
+            <!--                </tr>-->
+            <!--                </thead>-->
+            <!--                <tbody>-->
+            <!--                <th:secretBlock th:each="message : ${messages}">-->
+            <!--                    <tr th:onclick="@{/headPage/message/${message?.getId()}}">-->
+            <!--                        <td th:text="${message?.getId()}"></td>-->
+            <!--                        <td th:text="${message?.getUser_to()}"></td>-->
+            <!--                        <td th:text="${message?.getTitle()}"></td>-->
+            <!--                        <td th:text="${message?.getBody()}"></td>-->
+            <!--                        <td th:text="${message?.getDate_time()}"></td>-->
+            <!--                    </tr>-->
+            <!--                </th:secretBlock>-->
+            <!--                </tbody>-->
+            <!--            </table>-->
         </div>
     </div>
 </div>
@@ -292,53 +306,59 @@
 
 <div class="container-fluid p-3 pb-2 justify-content-center" th:fragment="profileFragment">
     <div class="container" id="profile-card">
-<!--        <p class="h4" id="profile-title">Profile</p>-->
+        <!--        <p class="h4" id="profile-title">Profile</p>-->
         <div class="profile-top-line"></div>
         <div class="container text-center p-0 profile-container">
             <div class="row">
                 <form th:object="${updateProfileRequest}" th:action="@{/updateProfile}" th:method="post">
-                <div class="col-8">
-                    <div class="container p-0 text-start mt-3">
-                        <p class="h6">Login</p>
-                        <input type="text" class="form-control" th:field="*{username}" th:placeholder="${signUpRequest?.getUsername()}" aria-label="Login"
-                               aria-describedby="basic-addon1">
-                        <p class="text-description">Don't forget your email if you don't want to recover your email</p>
-                    </div>
+                    <div class="col-8">
+                        <div class="container p-0 text-start mt-3">
+                            <p class="h6">Login</p>
+                            <input type="text" class="form-control" th:field="*{username}"
+                                   th:placeholder="${signUpRequest?.getUsername()}" aria-label="Login"
+                                   aria-describedby="basic-addon1">
+                            <p class="text-description">Don't forget your email if you don't want to recover your
+                                email</p>
+                        </div>
 
-                    <div class="container p-0 text-start mt-3">
-                        <p class="h6">Fullname</p>
-                        <input type="text" class="form-control" th:field="*{fullName}" th:placeholder="${signUpRequest?.getFullName()}" aria-label="Fullname"
-                               aria-describedby="basic-addon1">
-                        <p class="text-description">You can remove it at any time.</p>
-                    </div>
+                        <div class="container p-0 text-start mt-3">
+                            <p class="h6">Fullname</p>
+                            <input type="text" class="form-control" th:field="*{fullName}"
+                                   th:placeholder="${signUpRequest?.getFullName()}" aria-label="Fullname"
+                                   aria-describedby="basic-addon1">
+                            <p class="text-description">You can remove it at any time.</p>
+                        </div>
 
 
-                    <div class="container p-0 text-start mt-3">
-                        <p class="h6">Old password</p>
-                        <input type="text" class="form-control" th:field="*{password}" placeholder="********" aria-label="Password"
-                               aria-describedby="basic-addon1">
-                        <p class="text-description">We will use the old password to be sure about you</p>
-                    </div>
+                        <div class="container p-0 text-start mt-3">
+                            <p class="h6">Old password</p>
+                            <input type="text" class="form-control" th:field="*{password}" placeholder="********"
+                                   aria-label="Password"
+                                   aria-describedby="basic-addon1">
+                            <p class="text-description">We will use the old password to be sure about you</p>
+                        </div>
 
-                    <div class="container p-0 text-start mt-3">
-                        <p class="h6">New password</p>
-                        <input type="text" class="form-control" th:field="*{confirmPassword}" placeholder="********" aria-label="Password"
-                               aria-describedby="basic-addon1">
-                        <p class="text-description">Remember your new password</p>
-                    </div>
+                        <div class="container p-0 text-start mt-3">
+                            <p class="h6">New password</p>
+                            <input type="text" class="form-control" th:field="*{confirmPassword}" placeholder="********"
+                                   aria-label="Password"
+                                   aria-describedby="basic-addon1">
+                            <p class="text-description">Remember your new password</p>
+                        </div>
 
-                    <div class="container p-0 text-start mt-3">
-                        <p class="h6">Email</p>
-                        <input type="text" class="form-control" th:field="*{email}" th:placeholder="${signUpRequest?.getEmail()}" aria-label="Email"
-                               aria-describedby="basic-addon1">
-                        <p class="text-description">Change your e-mail and receive a letter to the new address</p>
+                        <div class="container p-0 text-start mt-3">
+                            <p class="h6">Email</p>
+                            <input type="text" class="form-control" th:field="*{email}"
+                                   th:placeholder="${signUpRequest?.getEmail()}" aria-label="Email"
+                                   aria-describedby="basic-addon1">
+                            <p class="text-description">Change your e-mail and receive a letter to the new address</p>
+                        </div>
                     </div>
-                </div>
                 </form>
-<!--                <div class="col-3">-->
-<!--                    <p class="h6 text-start mt-3">Profile picture</p>-->
-<!--                    <img id="profile-icon" th:src="@{/image/developers/Hapon.png}">-->
-<!--                </div>-->
+                <!--                <div class="col-3">-->
+                <!--                    <p class="h6 text-start mt-3">Profile picture</p>-->
+                <!--                    <img id="profile-icon" th:src="@{/image/developers/Hapon.png}">-->
+                <!--                </div>-->
             </div>
 
             <div class="container d-flex align-items-stretch justify-content-center p-0">
@@ -352,13 +372,14 @@
 <div class="container-fluid p-3 pb-2 setting-dialog" th:fragment="settingFragment">
 
     <!-- Modal -->
-    <div class="modal fade" style="margin-top: 12%" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" style="margin-top: 12%" id="staticBackdrop" data-bs-backdrop="static"
+         data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-<!--                    <h1 class="modal-title fs-5" id="staticBackdropLabel">IP Address</h1>-->
-<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                    <!--                    <h1 class="modal-title fs-5" id="staticBackdropLabel">IP Address</h1>-->
+                    <!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
                 </div>
                 <div class="modal-body">
                     <div class="input-group">
@@ -370,33 +391,35 @@
                 </div>
             </div>
         </div>
-<!--    </div>-->
+        <!--    </div>-->
 
-<!--    <div class="container w-25 justify-content-center">-->
+        <!--    <div class="container w-25 justify-content-center">-->
         <div class="setting-form container shadow rounded-3 p-2">
-<!--            <p class="h2 setting-title">Setting</p>-->
+            <!--            <p class="h2 setting-title">Setting</p>-->
             <div>
-                    <text class="h5">Address service</text>
-                    <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="">
-                    <button type="button" class="btn mt-3 ms-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">IP Address</button>
-                    <div class="tooltip">?
-                        <span class="tooltiptext">If you don't have connection try change IP service. Maybe it's problem from our side</span>
-                    </div>
-<!--                    <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from our side</p>-->
+                <text class="h5">Address service</text>
+                <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="">
+                <button type="button" class="btn mt-3 ms-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">IP
+                    Address
+                </button>
+                <div class="tooltip">?
+                    <span class="tooltiptext">If you don't have connection try change IP service. Maybe it's problem from our side</span>
+                </div>
+                <!--                    <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from our side</p>-->
             </div>
             <div class="setting-dialog-key">
-                    <p class="">Length key </p>
-                    <select class="form-select mt-2" aria-label="Length key">
-                        <option value="1">128</option>
-                        <option value="2">192</option>
-                        <option value="3">256</option>
-                    </select>
-                    <p class="text-description mt-3"> The longest key will be the strongest</p>
+                <p class="">Length key </p>
+                <select class="form-select mt-2" aria-label="Length key">
+                    <option value="1">128</option>
+                    <option value="2">192</option>
+                    <option value="3">256</option>
+                </select>
+                <p class="text-description mt-3"> The longest key will be the strongest</p>
             </div>
             <div class="container d-flex align-items-stretch p-0 justify-content-center">
                 <div class="container p-0 text-start mt-4" style="display: flex; align-items: center;">
-<!--                    <p class="h5">Generate new keys</p>-->
-<!--                    <div class="setting-line"></div>-->
+                    <!--                    <p class="h5">Generate new keys</p>-->
+                    <!--                    <div class="setting-line"></div>-->
                     <text class="h6 mt-2">Current key </text>
                     <textarea
                             class=""
@@ -408,60 +431,61 @@
                             data-popper-placement="top"
                             title="Click to copy"
                             readonly
-                            >{Key}</textarea>
+                    >{Key}</textarea>
                     <button type="submit" class="btn mt-2 ms-0" style="margin: 0% 1% 0% 1%;">Generate Keys</button>
                     <div class="tooltip">?
                         <span class="tooltiptext">If you will change your keys then older keys will invalid</span>
                     </div>
                 </div>
             </div>
-            <script th:src="@{/image/js/setting.js}" ></script>
+            <script th:src="@{/image/js/setting.js}"></script>
             <div style="text-align: center;">
                 <p class="" style="margin-bottom: 0px;">Encryption mode</p>
                 <div style="display: flex; align-items: center; justify-content: center">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1" checked>
-                                <label class="form-check-label" for="radioEncryption1">
-                                    ECB
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption2">
-                                <label class="form-check-label" for="radioEncryption2">
-                                    CBC
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption3">
-                                <label class="form-check-label" for="radioEncryption3">
-                                    PCBC
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">
-                                <label class="form-check-label" for="radioEncryption4">
-                                    CFB
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption5">
-                                <label class="form-check-label" for="radioEncryption5">
-                                    OFB
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption6">
-                                <label class="form-check-label" for="radioEncryption6">
-                                    CTR
-                                </label>
-                            </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1"
+                               checked>
+                        <label class="form-check-label" for="radioEncryption1">
+                            ECB
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption2">
+                        <label class="form-check-label" for="radioEncryption2">
+                            CBC
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption3">
+                        <label class="form-check-label" for="radioEncryption3">
+                            PCBC
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">
+                        <label class="form-check-label" for="radioEncryption4">
+                            CFB
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption5">
+                        <label class="form-check-label" for="radioEncryption5">
+                            OFB
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption6">
+                        <label class="form-check-label" for="radioEncryption6">
+                            CTR
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="">
                 <div style="display: flex; align-items: center; justify-content: center">
                     <p class="h5">Number of picture </p>
-                        <input type="number" id="typeNumber" value="1" style=" width: 15%; margin: 0% 1% 0% 1%;">
-                        <!-- Замість '1' поставити метод що витягує нинішнє значення -->
+                    <input type="number" id="typeNumber" value="1" style=" width: 15%; margin: 0% 1% 0% 1%;">
+                    <!-- Замість '1' поставити метод що витягує нинішнє значення -->
                     <div class="tooltip">?
                         <span class="tooltiptext">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</span>
                     </div>
