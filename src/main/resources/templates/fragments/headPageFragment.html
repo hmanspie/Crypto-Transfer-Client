@@ -310,7 +310,7 @@
         <div class="profile-top-line"></div>
         <div class="container text-center p-0 profile-container">
             <div class="row">
-                <form th:object="${updateProfileRequest}" th:action="@{/updateProfile}" th:method="post">
+                <form th:object="${updateProfileRequest}" th:action="@{/headPage/updateProfile}" th:method="post">
                     <div class="col-8">
                         <div class="container p-0 text-start mt-3">
                             <p class="h6">Login</p>
@@ -353,16 +353,15 @@
                                    aria-describedby="basic-addon1">
                             <p class="text-description">Change your e-mail and receive a letter to the new address</p>
                         </div>
+                        <div class="container d-flex align-items-stretch justify-content-center p-0">
+                            <button type="submit" class="btn" id="apply-setting-btn">Save</button>
+                        </div>
                     </div>
                 </form>
                 <!--                <div class="col-3">-->
                 <!--                    <p class="h6 text-start mt-3">Profile picture</p>-->
                 <!--                    <img id="profile-icon" th:src="@{/image/developers/Hapon.png}">-->
                 <!--                </div>-->
-            </div>
-
-            <div class="container d-flex align-items-stretch justify-content-center p-0">
-                <button type="submit" class="btn" id="apply-setting-btn">Save</button>
             </div>
 
         </div>

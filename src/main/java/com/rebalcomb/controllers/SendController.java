@@ -1,8 +1,6 @@
 package com.rebalcomb.controllers;
 
-import com.rebalcomb.mapper.BlockMapper;
 import com.rebalcomb.mapper.MessageRequestMapper;
-import com.rebalcomb.model.dto.SecretBlock;
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.service.MessageService;
@@ -43,12 +41,8 @@ public class SendController {
             logger.error("Address not found!");
             return model;
         }
-        SecretBlock secretBlock =
-                BlockMapper.mapBlockRequest(MessageRequestMapper.
-                        mapMessageRequest(messageRequest, principal.getName()),
-                                userService.findSecretByUsername(principal.getName()));
-
-        if(messageService.sendMessage(secretBlock)){
+        MessageRequest messageRequestNew = MessageRequestMapper.mapMessageRequest(messageRequest, principal.getName());
+        if(messageService.sendMessage(messageRequestNew)){
             Message message = messageService.findTopByOrderByIdDesc();
             message.setIs_send(true);
             messageService.save(message);

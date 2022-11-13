@@ -1,70 +1,45 @@
 package com.rebalcomb.crypto;
 
-import com.rebalcomb.model.dto.KeyPair;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.util.Base64;
+
 
 @Setter
 @Getter
-@EqualsAndHashCode
 public class RSAUtil {
-    public static KeyPair KEY_PAIR;
-    private final static BigInteger bitCount = new BigInteger("64");
-    private BigInteger p;
-    private BigInteger q;
-    private BigInteger module;
-    private BigInteger eulerNumber;
-    private BigInteger publicKey;
-    private BigInteger privateKey;
 
-    public RSAUtil(){
-        p = getRandomPrimaryNumber();
-        q = getRandomPrimaryNumber();
-        module = getCulcModule();
-        eulerNumber = getEulerNumber();
-        publicKey = genPublicKey();
-        privateKey = genPrivateKey();
+    private PrivateKey privateKey;
+    private PublicKey publicKey;
+
+    public RSAUtil() throws NoSuchAlgorithmException {
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(1024);
+        KeyPair pair = keyGen.generateKeyPair();
+        this.privateKey = pair.getPrivate();
+        this.publicKey = pair.getPublic();
     }
 
-    private BigInteger getRandomPrimaryNumber() {
-        return BigInteger.probablePrime(bitCount.intValue(), new SecureRandom());
+    public static String encrypt(String message, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        Cipher encryptCipher = Cipher.getInstance("RSA");
+        encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] secretMessageBytes = message.getBytes(StandardCharsets.UTF_8);
+        byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
+        return Base64.getEncoder().encodeToString(encryptedMessageBytes);
     }
 
-    private BigInteger getCulcModule() {
-        return p.multiply(q);
+    public static String decrypt(String encryptedMessage, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        Cipher decryptCipher = Cipher.getInstance("RSA");
+        decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] decryptedMessageBytes = decryptCipher.doFinal(Base64.getDecoder().decode(encryptedMessage));
+        return new String(decryptedMessageBytes, StandardCharsets.UTF_8);
     }
 
-    private BigInteger getEulerNumber() {
-        BigInteger bigInteger = BigInteger.ONE;
-        bigInteger = bigInteger.multiply(p.subtract(BigInteger.ONE));
-        bigInteger = bigInteger.multiply(q.subtract(BigInteger.ONE));
-        return bigInteger;
-    }
-
-    private BigInteger genPublicKey() {
-        BigInteger exponent;
-        while (true) {
-            exponent = BigInteger.probablePrime(bitCount.intValue(),  new SecureRandom());
-            if (exponent.gcd(eulerNumber).equals(BigInteger.ONE))
-                break;
-        }
-        return exponent;
-    }
-    private BigInteger genPrivateKey() {
-        return publicKey.modInverse(eulerNumber);
-    }
-
-    public static String encrypt(String value, BigInteger publicKey, BigInteger module) {
-        BigInteger M = new BigInteger(value);
-        return M.modPow(publicKey, module).toString();
-    }
-
-    public static String decrypt(String value, BigInteger privateKey, BigInteger module) {
-        BigInteger C = new BigInteger(value);
-        return C.modPow(privateKey, module).toString();
-    }
 }

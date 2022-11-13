@@ -1,19 +1,27 @@
 package com.rebalcomb.model.dto;
 
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import javax.validation.constraints.NotBlank;
-import java.math.BigInteger;
+import java.security.PublicKey;
 
 @Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class KeyPair {
+public class UpdateUserRequest {
 
     @NotBlank
-    private BigInteger publicKey;
+    private String serverId;
 
     @NotBlank
-    private BigInteger module;
+    private String publicKey;
+
+    @NotBlank
+    private String regTime;
+
 }

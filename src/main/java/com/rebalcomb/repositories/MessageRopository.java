@@ -1,4 +1,4 @@
-package com.rebalcomb.repository;
+package com.rebalcomb.repositories;
 
 import com.rebalcomb.model.entity.Message;
 import org.springframework.data.jpa.repository.JpaRepository;

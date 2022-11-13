@@ -2,7 +2,9 @@ package com.rebalcomb.controllers;
 
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.entity.Message;
+import com.rebalcomb.model.entity.enums.Role;
 import com.rebalcomb.service.MessageService;
+import com.rebalcomb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +23,26 @@ public class MessageController {
 
     private Logger logger = LoggerFactory.getLogger(MessageController.class);
     private final MessageService messageService;
+    private  final UserService userService;
     @Autowired
-    public MessageController(MessageService messageService) {
+    public MessageController(MessageService messageService, UserService userService) {
         this.messageService = messageService;
+        this.userService = userService;
     }
     @GetMapping(value = "/findAll")
     public Flux<Message> findAll() {
         return messageService.findAll();
     }
+
     @GetMapping
-    public ModelAndView headPage(ModelAndView model){
-        model.addObject("headPageValue", "main");
-        model.setViewName("headPage");
-        return model;
+    public ModelAndView headPage(ModelAndView model, Principal principal){
+        if(userService.isAdmin(principal.getName()).equals(Role.USER)){
+            model.addObject("headPageValue", "main");
+            model.setViewName("headPage");
+        }else {
+            model.addObject("headPageValue", "admin");
+            model.setViewName("adminPanel");
+        } return model;
     }
 
     @GetMapping("/home")
