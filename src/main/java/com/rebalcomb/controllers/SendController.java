@@ -3,6 +3,8 @@ package com.rebalcomb.controllers;
 import com.rebalcomb.mapper.MessageRequestMapper;
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.entity.Message;
+import com.rebalcomb.model.entity.enums.TypeLog;
+import com.rebalcomb.service.LogService;
 import com.rebalcomb.service.MessageService;
 import com.rebalcomb.service.UserService;
 import org.slf4j.Logger;
@@ -22,13 +24,15 @@ public class SendController {
     private final Logger logger = LoggerFactory.getLogger(SendController.class);
     private final MessageService messageService;
     private final UserService userService;
+    private final LogService logService;
 
     public static String INFO;
 
     @Autowired
-    public SendController(MessageService messageService, UserService userService) {
+    public SendController(MessageService messageService, UserService userService, LogService logService) {
         this.messageService = messageService;
         this.userService = userService;
+        this.logService = logService;
     }
 
     @PostMapping("/sendNewMessage")
@@ -51,6 +55,7 @@ public class SendController {
             model.addObject("headPageValue", "outcoming");
             model.setViewName("headPage");
             logger.info("Message sent successfully!");
+            logService.create(TypeLog.MESSAGE, "Write message TO: '" + messageRequest.getUser_to()+ "' | FROM: '" + messageRequest.getUser_from() + "' | TITLE: '" + messageRequest.getTitle());
             return model;
         }else{
             model.addObject("isSend", false);
