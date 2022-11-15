@@ -1,0 +1,37 @@
+<div th:fragment="writeFragment">
+    <main id="main">
+        <div class="overlay"></div>
+        <header class="header">
+            <h1 class="page-title"><a class="sidebar-toggle-btn trigger-toggle-sidebar"><span class="line"></span><span
+                    class="line"></span><span class="line"></span><span class="line line-angle1"></span><span
+                    class="line line-angle2"></span></a>Write<a><span
+                    class="icon glyphicon glyphicon-chevron-down"></span></a></h1>
+        </header>
+        <form class="write-fragment-container" id="write-form" th:action="@{/sendNewMessage}" th:method="post"
+              th:object="${messageRequest}">
+
+            <input class="base-input-style" placeholder="Username" autocomplete="off" name="username"
+                   type="text" th:field="*{user_to}" required>
+            <span class="" id="btn-plus" onclick="addField()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-plus-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </span>
+
+            <div class="username-input-container" id="destination"></div>
+
+            <div>
+                <input type="text" placeholder="Title" class="base-input-style title-input-style" aria-label="Username"
+                       aria-describedby="basic-addon1" th:field="*{title}" required>
+            </div>
+
+            <textarea class="write-text-area" placeholder="Text" aria-label="Message" th:field="*{bodyMessage}"
+                      required></textarea>
+
+            <button type="submit" class="btn">Send</button>
+        </form>
+        <script th:src="@{/image/js/headPage-writeFragment-username-input.js}"></script>
+    </main>
+</div>

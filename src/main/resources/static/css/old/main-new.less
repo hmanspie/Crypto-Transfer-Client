@@ -1,25 +1,26 @@
-@accent-color: #61c7b3;
+@accent-color: #61C7B3;
 
-@color-light-grey: #efefef;
+@color-light-grey: #EFEFEF;
 @color-dark-grey: #888;
-@color-red: #d23b3d;
-@color-orange: #e2a917;
-@color-blue: #1bc3e1;
-@color-green: #9ae14f;
+@color-red: #D23B3D;
+@color-orange: #E2A917;
+@color-blue: #1BC3E1;
+@color-green: #9AE14F;
 
-@sidebar-background: #f8f8f8;
-@sidebar-text-color: #abb4be;
+@sidebar-background: #1D2127;
+@sidebar-text-color: #ABB4BE;
 @sidebar-dark-text-color: #465162;
 
 @sidebar-width: 300px;
 @sidebar-padding: 50px;
+
 
 * {
   box-sizing: border-box;
 }
 
 body {
-  background: #fff;
+  background: #FFF;
   font-family: Roboto, sans-serif;
   font-weight: 400;
   line-height: 1.5em;
@@ -39,24 +40,25 @@ p {
 a {
   color: @accent-color;
   text-decoration: none;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
 
   &:hover {
     color: darken(@accent-color, 20%);
-    transition-duration: 0.05s;
+    transition-duration: .05s;
     text-decoration: none;
   }
 }
+
 
 .circle-icon {
   width: 30px;
   height: 30px;
   text-align: center;
   line-height: 28px;
-  border: 2px solid #b4bbc1;
+  border: 2px solid #B4BBC1;
   border-radius: 100px;
   font-size: 14px;
-  color: #b4bbc1;
+  color: #B4BBC1;
   cursor: pointer;
   display: block;
   float: left;
@@ -69,8 +71,8 @@ a {
   }
 
   &:hover {
-    color: #57636c;
-    border-color: #57636c;
+    color: #57636C;
+    border-color: #57636C;
   }
 
   &.red {
@@ -78,11 +80,12 @@ a {
     border-color: @color-red;
 
     &:hover {
-      color: #791c1e;
-      border-color: #791c1e;
+      color: #791C1E;
+      border-color: #791C1E;
     }
   }
 }
+
 
 .checkbox-wrapper {
   cursor: pointer;
@@ -90,7 +93,7 @@ a {
   width: 20px;
   position: relative;
   display: inline-block;
-  box-shadow: inset 0 0 0 1px #a3adb2;
+  box-shadow: inset 0 0 0 1px #A3ADB2;
   border-radius: 1px;
 
   input {
@@ -109,19 +112,23 @@ a {
     right: 0;
     bottom: 0;
     cursor: pointer;
-    background: #a3adb2;
+    background: #A3ADB2;
     opacity: 0;
-    transition-duration: 0.05s;
+    transition-duration: .05s;
 
     &:hover {
-      background: darken(#a3adb2, 5%);
-      opacity: 0.5;
+      background: darken(#A3ADB2, 5%);
+      opacity: .5;
     }
     &:active {
-      background: darken(#a3adb2, 10%);
+      background: darken(#A3ADB2, 10%);
     }
   }
 }
+
+
+
+
 
 #sidebar {
   position: fixed;
@@ -130,16 +137,11 @@ a {
   height: 100%;
   width: @sidebar-width;
   background: @sidebar-background;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
   z-index: 5;
 
-  &,
-  & a {
+  &, & a {
     color: @sidebar-text-color;
-  }
-
-  .sidebar-logo{
-    height: 85px;
   }
 
   .logo-container {
@@ -164,14 +166,13 @@ a {
   }
 
   .compose-button {
-    border-radius: 10px;
+    border-radius: 100px;
     padding: 13px 20px;
     text-align: center;
     font-weight: 500;
     text-transform: uppercase;
-    color: black;
-    border: 2px solid #dddddd;
-    background: #dddddd;
+    color: @accent-color;
+    border: 2px solid @accent-color;
     display: block;
     margin: 0 @sidebar-padding 30px @sidebar-padding;
     cursor: pointer;
@@ -185,25 +186,26 @@ a {
   .menu-segment {
     padding: 0 @sidebar-padding 0 (@sidebar-padding+20px);
 
-    ul,
-    li {
+    ul, li {
       margin: 0;
       padding: 0;
     }
 
     .ball {
       &.pink {
-        border-color: #ea4c89;
+        border-color: #EA4C89;
       }
       &.green {
-        border-color: #9ae14f;
+        border-color: #9AE14F;
       }
       &.blue {
-        border-color: #1bc3e1;
+        border-color: #1BC3E1;
       }
     }
 
+
     li {
+
       &.title {
         text-transform: uppercase;
         font-weight: 600;
@@ -215,11 +217,8 @@ a {
         }
       }
 
-      &.active a,
-      &.active a:hover {
-        border-top-right-radius: 30px;
-        border-bottom-right-radius: 30px;
-        background: #dddddd; //#272B31;
+      &.active a, &.active a:hover {
+        background: lighten(@sidebar-background, 5%);//#272B31;
       }
 
       a {
@@ -228,8 +227,6 @@ a {
         padding: 10px @sidebar-padding 10px (@sidebar-padding + 20px);
 
         &:hover {
-          border-top-right-radius: 30px;
-          border-bottom-right-radius: 30px;
           background: lighten(@sidebar-background, 2%);
         }
       }
@@ -237,8 +234,7 @@ a {
       .italic-link {
         margin-left: -30px;
 
-        &,
-        &:hover {
+        &, &:hover {
           background: transparent;
         }
         font-style: italic;
@@ -250,9 +246,9 @@ a {
       }
     }
 
+
     // Different part styling
-    .labels,
-    .chat {
+    .labels, .chat {
       li a span {
         display: block;
         border: 5px solid red;
@@ -276,30 +272,35 @@ a {
   .separator {
     margin: 30px 35px;
     height: 1px;
-    background: #2d3138;
+    background: #2D3138;
   }
 
   .bottom-padding {
     height: 100px;
   }
 
+
+
   & > .nano-pane {
-    background: #f8f8f8;
+    background: transparent;
 
     .nano-slider {
-      background: #f8f8f8;
+      background: rgba(255,255,255,.1);
     }
   }
 }
 
+
 #main {
+  position: fixed;
   top: 0;
   left: @sidebar-width;
   bottom: 0;
   right: 0;
   z-index: 4;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
   padding-left: 4px;
+  box-shadow: inset 4px 0 0 @color-light-grey, inset 5px 0 0 darken(@color-light-grey, 5%);
 
   .overlay {
     position: absolute;
@@ -307,7 +308,7 @@ a {
     left: -10px; // To compensate for slide-in animation white leaking
     right: 0;
     bottom: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0,0,0,.4);
     z-index: 5;
     opacity: 0;
     transition-duration: 0s;
@@ -317,7 +318,7 @@ a {
     .show-main-overlay & {
       opacity: 1;
       bottom: 0;
-      transition-duration: 0.5s;
+      transition-duration: .5s;
     }
   }
 
@@ -337,8 +338,8 @@ a {
         position: relative;
         display: block;
         cursor: pointer;
-        transition-duration: 0.3s;
-        transition-delay: 0.5s;
+        transition-duration: .3s;
+        transition-delay: .5s;
         opacity: 0;
         margin-right: 0;
 
@@ -351,9 +352,10 @@ a {
           display: block;
           background: @color-dark-grey;
           margin-bottom: 4px;
-          transition-duration: 0.5s;
-          transition-delay: 0.5s;
+          transition-duration: .5s;
+          transition-delay: .5s;
         }
+
 
         .show-sidebar & .line-angle1 {
           transform: rotate(-120deg);
@@ -395,9 +397,9 @@ a {
       height: 40px;
       position: relative;
 
-      input,
-      .icon {
-        transition-duration: 0.3s;
+
+      input, .icon {
+        transition-duration: .3s;
       }
 
       input {
@@ -417,7 +419,7 @@ a {
         background: transparent;
         border: 2px solid @color-light-grey;
         border-radius: 5px;
-        transition-timing-function: cubic-bezier(0.3, 1.5, 0.6, 1);
+        transition-timing-function: cubic-bezier(.3, 1.5, .6, 1);
 
         &:focus {
           color: #333;
@@ -442,10 +444,11 @@ a {
         line-height: 40px;
         z-index: 1;
         cursor: pointer;
-        opacity: 0.5;
+        opacity: .5;
       }
     }
   }
+
 
   .action-bar {
     padding: 20px 60px;
@@ -457,6 +460,7 @@ a {
       margin-right: 10px;
     }
   }
+
 
   // Ugly hack because i can't get the damn thing to work!
   #main-nano-wrapper {
@@ -475,22 +479,18 @@ a {
       height: 50px;
       line-height: 50px;
       cursor: default;
-      transition-duration: 0.3s;
+      transition-duration: .3s;
 
-      &:hover,
-      &.active,
-      &.selected {
+      &:hover, &.active, &.selected {
         background: @color-light-grey;
-        transition-duration: 0.05s;
+        transition-duration: .05s;
       }
 
-      &.active,
-      &.active:hover {
+      &.active, &.active:hover {
         box-shadow: inset 5px 0 0 @accent-color;
       }
 
       &.unread {
-        width: 76%;
         font-weight: 600;
         color: #555;
       }
@@ -513,9 +513,7 @@ a {
       .col-1 {
         width: 400px;
 
-        .star-toggle,
-        .checkbox-wrapper,
-        .dot {
+        .star-toggle, .checkbox-wrapper, .dot {
           display: block;
           float: left;
         }
@@ -523,6 +521,7 @@ a {
         .dot {
           border: 4px solid transparent;
           border-radius: 100px;
+          margin: 22px 26px 0;
           height: 0;
           width: 0;
           line-height: 0;
@@ -543,6 +542,7 @@ a {
           top: 0;
           left: 140px;
           right: 0;
+
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
@@ -555,8 +555,7 @@ a {
         right: 0;
         bottom: 0;
 
-        .subject,
-        .date {
+        .subject, .date {
           position: absolute;
           top: 0;
         }
@@ -577,48 +576,48 @@ a {
       }
 
       /*
-			.col-1 {
-				width: 140px;
-				text-align: right;
-				padding-right: 37px;
-				padding-top: 15px;
+      .col-1 {
+          width: 140px;
+          text-align: right;
+          padding-right: 37px;
+          padding-top: 15px;
 
-				.checkbox-wrapper, .icon, .dot {
-					float: right;
-					display: block;
-				}
+          .checkbox-wrapper, .icon, .dot {
+              float: right;
+              display: block;
+          }
 
-				.icon {
-					margin-left: 10px;
-					font-size: 20px;
-				}
+          .icon {
+              margin-left: 10px;
+              font-size: 20px;
+          }
 
-				.dot {
-					border: 5px solid transparent;
-					border-radius: 100px;
-					margin-right: 24px;
-					margin-top: 5px;
-				}
-			}
-			.col-2 {
-				width: 270px;
-			}
-			.col-3 {
-				position: absolute;
-				top: 0;
-				left: 390px; // Covers previous cols
-				right: 120px;
+          .dot {
+              border: 5px solid transparent;
+              border-radius: 100px;
+              margin-right: 24px;
+              margin-top: 5px;
+          }
+      }
+      .col-2 {
+          width: 270px;
+      }
+      .col-3 {
+          position: absolute;
+          top: 0;
+          left: 390px; // Covers previous cols
+          right: 120px;
 
-				.grey {
-					opacity: .7;
-				}
-			}
-			.col-4 {
-				width: 120px;
-				padding-left: 20px;
-				float: right;
-			}
-			*/
+          .grey {
+              opacity: .7;
+          }
+      }
+      .col-4 {
+          width: 120px;
+          padding-left: 20px;
+          float: right;
+      }
+      */
     }
   }
 
@@ -629,6 +628,8 @@ a {
   }
 }
 
+
+
 #message {
   position: fixed;
   top: 0;
@@ -637,12 +638,12 @@ a {
   width: 40%;
   z-index: 5;
   transform: translateX(200%);
-  transition-duration: 0.5s;
+  transition-duration: .5s;
   padding: 50px 30px;
   background: @color-light-grey;
 
   .show-message & {
-    transition-duration: 0.3s;
+    transition-duration: .3s;
   }
 
   .header {
@@ -666,6 +667,7 @@ a {
     }
   }
 
+
   // Ugly hack because i (again) can't get nanoscroll to work correctly
   #message-nano-wrapper {
     position: absolute;
@@ -682,12 +684,13 @@ a {
 
     li {
       padding: 25px;
-      border: 1px solid rgba(0, 0, 0, 0.15);
-      background: #fff;
+      border: 1px solid rgba(0,0,0,.15);
+      background: #FFF;
       margin: 0 0 30px 0;
       position: relative;
 
       &:hover .details .left {
+
         .arrow {
           background: @accent-color;
           border: 0px solid @accent-color;
@@ -701,7 +704,7 @@ a {
 
       .details {
         padding-bottom: 20px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(0,0,0,.1);
         margin-bottom: 30px;
         overflow: hidden;
 
@@ -709,19 +712,19 @@ a {
           float: left;
           font-weight: 600;
           color: @color-dark-grey;
-          transition-duration: 0.3s;
+          transition-duration: .3s;
 
           .arrow {
             display: inline-block;
             position: relative;
             height: 2px;
             width: 20px;
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(0,0,0,.15);
             vertical-align: top;
             margin-top: 12px;
             margin: 12px 20px 0 15px;
-            border: 0px solid rgba(0, 0, 0, 0.15);
-            transition-duration: 0.3s;
+            border: 0px solid rgba(0,0,0,.15);
+            transition-duration: .3s;
 
             &:after {
               position: absolute;
@@ -732,7 +735,7 @@ a {
               border: inherit;
               border-width: 7px;
               border-style: solid;
-              content: "";
+              content: '';
               border-right: 0;
               border-top-color: transparent;
               border-bottom-color: transparent;
@@ -748,6 +751,7 @@ a {
         }
       }
 
+
       .message {
         margin-bottom: 40px;
 
@@ -762,8 +766,8 @@ a {
           border-color: @color-red;
 
           &:hover {
-            color: #791c1e;
-            border-color: #791c1e;
+            color: #791C1E;
+            border-color: #791C1E;
           }
         }
       }
@@ -772,11 +776,11 @@ a {
         position: absolute;
         bottom: 0;
         right: 0;
-        border: 0px solid #dddfe1;
+        border: 0px solid #DDDFE1;
         border-top-width: 1px;
         border-left-width: 1px;
         padding: 8px 10px;
-        transition-duration: 0.3s;
+        transition-duration: .3s;
 
         a {
           margin-right: 10px;
@@ -790,6 +794,7 @@ a {
   }
 }
 
+
 .show-message #message {
   transform: none;
 }
@@ -797,13 +802,22 @@ a {
   margin-right: 40%;
 }
 
+
+
+
+
+
+
 @media only screen and (min-width: 1499px) {
+
   #main .overlay {
     display: none;
   }
+
 }
 
 @media only screen and (max-width: 1500px) {
+
   .show-message {
     #main {
       margin-right: 0;
@@ -813,9 +827,11 @@ a {
       width: 50%;
     }
   }
+
 }
 
 @media only screen and (max-width: 1024px) {
+
   #sidebar {
     transform: translateX(-100%);
   }
@@ -831,6 +847,8 @@ a {
     }
   }
 
+
+
   .show-sidebar {
     #sidebar {
       transform: none;
@@ -841,6 +859,9 @@ a {
     }
   }
 
+
+
+
   .show-message {
     #main {
       margin-right: 0;
@@ -850,7 +871,9 @@ a {
       width: 80%;
     }
   }
+
 }
+
 
 @media only screen and (max-width: 600px) {
   #main .header {
@@ -860,8 +883,7 @@ a {
       margin-bottom: -110px;
       margin-top: 70px;
 
-      input,
-      input:focus {
+      input, input:focus {
         width: 100%;
       }
     }
@@ -877,6 +899,7 @@ a {
     bottom: 0;
     height: auto;
   }
+
 
   #main .message-list li {
     .col-1 {
@@ -903,24 +926,29 @@ a {
   }
 }
 
+
+
+
+
+
 /**
  * Nano scroll stuff
 */
 
 .nano {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+  position : relative;
+  width    : 100%;
+  height   : 100%;
+  overflow : hidden;
 }
 .nano > .nano-content {
-  position: absolute;
-  overflow: scroll;
-  overflow-x: hidden;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position      : absolute;
+  overflow      : scroll;
+  overflow-x    : hidden;
+  top           : 0;
+  right         : 0;
+  bottom        : 0;
+  left          : 0;
 }
 .nano > .nano-content:focus {
   outline: none;
@@ -932,46 +960,43 @@ a {
   visibility: visible;
 }
 .nano > .nano-pane {
-  background: rgba(117, 117, 117, 0.2);
-  position: absolute;
-  width: 8px;
-  right: 8px;
-  top: 8px;
-  bottom: 8px;
-  visibility: hidden\9; /* Target only IE7 and IE8 with this hack */
-  opacity: 0.01;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
+  background : rgba(117, 117, 117, .2);
+  position   : absolute;
+  width      : 8px;
+  right      : 8px;
+  top        : 8px;
+  bottom     : 8px;
+  visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : .01;
+  -moz-border-radius    : 5px;
+  -webkit-border-radius : 5px;
+  border-radius         : 5px;
+  -webkit-transition    : .3s;
+  -moz-transition       : .3s;
+  -o-transition         : .3s;
+  transition            : .3s;
 }
 .nano > .nano-pane > .nano-slider {
   background: #444;
-  background: #c7c7c7;
-  position: relative;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
-  -webkit-transition-property: background;
-  -moz-transition-property: background;
-  -o-transition-property: background;
-  transition-property: background;
+  background: #C7C7C7;
+  position              : relative;
+  -moz-border-radius    : 3px;
+  -webkit-border-radius : 3px;
+  border-radius         : 3px;
+  -webkit-transition    : .3s;
+  -moz-transition       : .3s;
+  -o-transition         : .3s;
+  transition            : .3s;
+  -webkit-transition-property    : background;
+  -moz-transition-property       : background;
+  -o-transition-property         : background;
+  transition-property            : background;
 }
-.nano > .nano-pane:hover > .nano-slider,
-.nano > .nano-pane.active > .nano-slider {
-  background: #a6a6a6;
+.nano > .nano-pane:hover > .nano-slider, .nano > .nano-pane.active > .nano-slider {
+  background: #A6A6A6;
 }
 
-.nano:hover > .nano-pane,
-.nano-pane.active,
-.nano-pane.flashed {
-  visibility: visible\9; /* Target only IE7 and IE8 with this hack */
-  opacity: 0.99;
+.nano:hover > .nano-pane, .nano-pane.active, .nano-pane.flashed {
+  visibility : visible\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : 0.99;
 }

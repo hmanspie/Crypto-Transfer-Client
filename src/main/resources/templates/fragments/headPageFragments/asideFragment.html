@@ -1,0 +1,38 @@
+<aside id="sidebar" class="nano" th:fragment="asideFragment">
+    <div class="nano-content">
+        <div class="logo-container"><img class="rounded mx-auto d-block sidebar-logo" th:src="@{/image/logo/light-grey-logo.png}" alt="Logotype">
+        </div><a th:href="@{/headPage/write}" class="compose-button">Write</a>
+        <menu class="menu-segment">
+            <ul>
+                <li class="active"><a th:href="@{/headPage/incoming}">Incoming</a></li>    <!-- <span> (43)</span> -->
+                <li><a th:href="@{/headPage/outcoming}">Outcoming</a></li>
+                <li><a th:href="@{/headPage/profile}">Profile</a></li>
+                <li><a th:href="@{/headPage/setting}">Settings</a></li>
+                <li> <form action="/logout" method="POST"><button style="border-color: transparent; background-color: transparent; font-size: 16px; width: 100%; margin: 0px; padding: 0px; text-align: left;" type="submit"><a>Logout</a></button></form></li>
+            </ul>
+        </menu>
+        <div class="separator"></div>
+        <div class="menu-segment">
+            <ul class="labels">
+                <li class="title">Labels <span class="icon">+</span></li>
+                <li><a href="#">Important <span class="ball red"></span></a></li>
+                <li><a href="#">Non-urgent <span class="ball green"></span></a></li>
+                <li><a href="#">Telegrams <span class="ball blue"></span></a></li>
+            </ul>
+        </div>
+        <div class="separator"></div>
+        <div class="menu-segment">
+            <ul class="chat">
+                <li class="title">Chat <span class="icon">+</span></li>
+                <li><a href="#"><span class="ball green"></span>Yurii Hapon</a></li>
+                <li><a href="#"><span class="ball green"></span>Vladyslav Kalych</a></li>
+                <li><a href="#"><span class="ball blue"></span>Volodymyr Neshcheret</a></li>
+                <li><a href="#"><span class="ball blue"></span>Danylo Moskalets</a></li>
+                <li><a href="#"><span class="ball blue"></span>Anton Samoliuk</a></li>
+                <li><a href="#"><span class="ball blue"></span>Oleksandr Bratchyk</a></li>
+                <li><a href="#" class="italic-link">See offline list</a></li>
+            </ul>
+        </div>
+        <div class="bottom-padding"></div>
+    </div>
+</aside>

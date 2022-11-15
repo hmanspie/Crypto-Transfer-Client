@@ -1,0 +1,162 @@
+/* ======== TEXT STYLE ========*/
+
+/* Font */
+.text-style{
+    font-family: 'Monserrat', sans-serif;
+}
+
+/* All text style */
+.text-form {
+    background: #9eb19d;            /* #b7b7b7 - silver */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ======== ANIMATION ========*/
+
+/* Animation, when fragments switched */
+.box {
+    animation: 3s show ease;
+}
+
+/* ======== HEADER ========*/
+
+/* logotype */
+.logo{
+    margin-top: 5%;
+    height: 130px;
+}
+
+/* ======== BODY ========*/
+
+/* title */
+.head-text{
+    margin-top: 70px;
+    font-size: 25px;
+    text-align: center;
+}
+
+/* input block for writing data (login, password, etc.)*/
+.input-block{
+    margin-top: 70px;
+}
+
+.input-block h2{
+    color: black;
+    margin-top: 20px;
+    margin-left: 40%;
+    font-size: 15px;
+}
+
+.input-block input {
+    margin-left: 40%;
+    width: 20%;
+
+    font-size: 15px;
+    outline: none;
+    color: black;
+    border-width:  0 0 1px 0;
+    border-color: #547d42;
+}
+.input-block input:hover {
+    border-color: #334c28;
+}
+
+/* 'Forgot password?' text */
+.forgot-text{
+    text-decoration: none;
+    color: #9eb19d;
+    margin-top: 20px;
+    margin-left: 55%;
+    font-size: 12px;
+    display: table;
+}
+
+.forgot-text:hover{
+    color: black;
+}
+
+/* sign in(out) button */
+
+.button-sign{
+    outline: none;
+    width: 11.5%;
+    height: 50px;
+    margin-top: 30px;
+    margin-left: 44.25%;
+    border-radius: 30px;
+    font-size: 20px;
+    min-height: auto;
+    min-width: 10%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-width:  0;
+    background: #547d42;
+    color: white;
+}
+.button-sign:hover {
+    background: black;
+    color: grey;
+}
+.button-sign:active {
+    border-width: 1px;
+    border-color: grey;
+}
+
+/* divider 'OR' style */
+.dividerOr{
+    margin-top: 30px;
+}
+
+/* link to sign up */
+.link-to-sign-box{
+    margin-top:1%;
+    text-align: center;
+}
+
+.link-to-sign-box text{
+    color: #696969;
+    font-size: 12px;
+}
+
+.link-to-sign-box a{
+    color: #696969;
+    font-size: 13px;
+}
+
+.link-to-sign-box a:hover{
+    color:black;
+}
+
+/* =========================== */
+
+/* ERROR */
+.error-text{
+    background: #9d2e2e;
+}
+
+.info-text{
+    background: green;
+}
+
+.notification{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+/* =============================== */
+
+/* ХЛАМ */
+/*@keyframes show {*/
+/*    from { opacity: 0; }*/
+/*    to { opacity: 1; }*/
+/*}*/
+
+
+

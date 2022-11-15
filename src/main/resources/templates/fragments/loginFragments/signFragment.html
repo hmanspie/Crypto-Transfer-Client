@@ -1,0 +1,73 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="signInFragment">
+    <div class="box text-style">
+        <form th:action="@{/login}" th:method="post">>
+            <div>
+                <h3 class="text-form head-text">Welcome to CryptoMail</h3>
+            </div>
+            <div class="input-block">
+                <h2 class="text-form">Login</h2>
+                <div>
+                    <input autocomplete="off" name="username" type="text" id="username"
+                           required>
+                </div>
+                <h2 class="text-form">Password</h2>
+                <div>
+                    <input autocomplete="off" name="password" type="password" id="password"
+                           required>
+                </div>
+            </div>
+            <a th:href="@{/goToForgortPasswordForm}" class="forgot-text">Forgot password?</a>
+            <button class="button-sign" type="submit">Sign in</button>
+            <img class="mx-auto d-block dividerOr" th:src="@{/image/devider/devider-or.jpg}" alt="or">
+            <div class="link-to-sign-box">
+                <text>New in CryptoMail?</text>
+                <a th:href="@{/goToSignUpForm}">Create Account</a>
+            </div>
+        </form>
+    </div>
+</th:block>
+
+<th:block xmlns:th="http://www.thymeleaf.org"  th:fragment="signUpFragment">
+    <div class="box text-style">
+        <form th:object="${signUpRequest}" th:action="@{/registered}" th:method="post">
+            <div>
+                <h3 class="text-form head-text">Sign Up in CryptoChat</h3>
+            </div>
+            <div class="input-block">
+                <h2 class="text-form">Login</h2>
+                <div>
+                    <input autocomplete="off" name="login" type="text" id="login"
+                           th:field="*{username}" required>
+                </div>
+                <h2 class="text-form">Email</h2>
+                <div>
+                    <input autocomplete="off" name="email" type="email" id="email"
+                           th:field="*{email}" required>
+                </div>
+                <h2 class="text-form">Full name</h2>
+                <div>
+                    <input autocomplete="off" name="fullName" type="text" id="fullName"
+                           th:field="*{fullName}" required>
+                </div>
+                <h2 class="text-form">Password</h2>
+                <div>
+                    <input name="password" autocomplete="off" type="password" id="password"
+                           th:field="*{password}" minlength="8" maxlength="35" required>
+                </div>
+                <h2 class="text-form">Repeat Password</h2>
+                <div>
+                    <input name="passwordRepeat" autocomplete="off" type="password"
+                           id="passwordRepeat"
+                           th:field="*{confirmPassword}" minlength="8" maxlength="35" required>
+                </div>
+            </div>
+            <button class="button-sign" type="submit" >Sign up</button>
+        </form>
+        <form th:action="@{/goToSignInForm}" th:method="get">
+            <div class="link-to-sign-box">
+                <text>Already have an account? </text>
+                <a th:href="@{/goToSignInForm}">Sign in</a>
+            </div>
+        </form>
+    </div>
+</th:block>
