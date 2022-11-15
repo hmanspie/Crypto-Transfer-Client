@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="title" content="Login">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/old/main-copy.css}"/>
+<!--    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/profile.css}"/>-->
+    <link rel="stylesheet/less" type="text/css" th:href="@{/css/old/main-new.less}"/>
+    <script src="https://cdn.jsdelivr.net/npm/less" ></script>
+    <link rel="icon" type="image/x-icon" th:href="@{/image/favicon/icon.ico}">
+    <title>CryptoMail - Head Page</title>
+</head>
+<body class="container-fluid p-0" id="body">
+<div th:insert="~{fragments/sideBarFragment :: 'sidebarFragment'}"></div>
+<div class="container-fluid m-0 p-0 w-100 main-container">
+    <div class="container-fluid m-0 p-0 w-100">
+        <th:secretBlock th:if="${headPageValue} == 'home'">
+            <div th:insert="~{fragments/headPageFragment :: 'homeFragment'}"></div>
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'write'">
+            <div th:insert="~{fragments/headPageFragment :: 'writeFragment'}"></div>
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'incoming'">
+            <div th:insert="~{fragments/headPageFragment :: 'incomingFragment'}"></div>
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'outcoming'">
+            <div th:insert="~{fragments/headPageFragment :: 'outcomingFragment'}"></div>
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'messageShow'">
+            <div th:insert="~{fragments/headPageFragment :: 'messageFragment'}"></div>
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'profile'">
+            <div th:insert="~{fragments/headPageFragment :: 'profileFragment'}"></div>
+        </th:secretBlock>
+        <th:secretBlock th:if="${headPageValue} == 'setting'">
+            <div th:insert="~{fragments/headPageFragment :: 'settingFragment'}"></div>
+        </th:secretBlock>
+    </div>
+</div>
+</body>
+</html>

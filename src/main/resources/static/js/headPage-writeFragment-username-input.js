@@ -1,5 +1,5 @@
 let countOfFields = 1;
-let maxFieldLimit = 5;
+let maxFieldLimit = 6;
 
 let id = 1;
 
@@ -15,18 +15,17 @@ function addField() {
     }
     countOfFields++;
     let div = document.createElement("div");
-    div.className = "input-group mb-3";
+    div.className = "username-input-container";
     div.id = "name" + id;
     id++;
 
     div.innerHTML =
-        "<span class=\"input-group-text\">To</span>\n" +
-        "            <input type=\"text\" class=\"form-control\" placeholder=\"Username\" aria-label=\"Username\"\n" +
-        "                   aria-describedby=\"basic-addon1\" th:field=\"*{to}\" required>\n";
+        "            <input class=\"base-input-style\" placeholder=\"Username\" autocomplete=\"off\" name=\"username\"" +
+        "                       type=\"text\" th:field=\"*{user_to}\" required>";
 
     let iconMinus = document.createElement("span");
 
-    iconMinus.className = "input-group-text";
+    iconMinus.className = "";
     iconMinus.id = "btn-minus"
     iconMinus.onclick = () => removeField(div.id)
     iconMinus.innerHTML = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-dash-circle\" viewBox=\"0 0 16 16\">\n" +

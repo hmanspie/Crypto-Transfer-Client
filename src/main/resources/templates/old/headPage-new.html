@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CryptoMail - HeadPage </title>
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/headPage-style.css}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    <link rel="icon" type="image/x-icon" th:href="@{/image/favicon/icon.ico}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<aside id="sidebar" class="nano">
+    <div class="nano-content">
+        <div class="logo-container"><img class="rounded mx-auto d-block sidebar-logo" th:src="@{/image/logo/logo.png}" alt="Logotype">
+        </div><a class="compose-button">Compose</a>
+        <menu class="menu-segment">
+            <ul>
+                <li class="active"><a href="#">Inbox<span> (43)</span></a></li>
+                <li><a href="#">Important</a></li>
+                <li><a href="#">Sent</a></li>
+                <li><a href="#">Drafts</a></li>
+                <li><a href="#">Trash</a></li>
+            </ul>
+        </menu>
+        <div class="separator"></div>
+        <div class="menu-segment">
+            <ul class="labels">
+                <li class="title">Labels <span class="icon">+</span></li>
+                <li><a href="#">Dribbble <span class="ball pink"></span></a></li>
+                <li><a href="#">Roommates <span class="ball green"></span></a></li>
+                <li><a href="#">Bills <span class="ball blue"></span></a></li>
+            </ul>
+        </div>
+        <div class="separator"></div>
+        <div class="menu-segment">
+            <ul class="chat">
+                <li class="title">Chat <span class="icon">+</span></li>
+                <li><a href="#"><span class="ball green"></span>Laura Turner</a></li>
+                <li><a href="#"><span class="ball green"></span>Kevin Jones</a></li>
+                <li><a href="#"><span class="ball blue"></span>John King</a></li>
+                <li><a href="#"><span class="ball blue"></span>Jenny Parker</a></li>
+                <li><a href="#"><span class="ball blue"></span>Paul Green</a></li>
+                <li><a href="#" class="italic-link">See offline list</a></li>
+            </ul>
+        </div>
+        <div class="bottom-padding"></div>
+    </div>
+</aside>
+<main id="main">
+    <div class="overlay"></div>
+    <header class="header">
+        <div class="search-box">
+            <input placeholder="Search..."><span class="icon glyphicon glyphicon-search"></span>
+        </div>
+        <h1 class="page-title"><a class="sidebar-toggle-btn trigger-toggle-sidebar"><span class="line"></span><span class="line"></span><span class="line"></span><span class="line line-angle1"></span><span class="line line-angle2"></span></a>Inbox<a><span class="icon glyphicon glyphicon-chevron-down"></span></a></h1>
+    </header>
+    <div class="action-bar">
+        <ul>
+            <li><a class="icon circle-icon glyphicon glyphicon-chevron-down"></a></li>
+            <li><a class="icon circle-icon glyphicon glyphicon-refresh"></a></li>
+            <li><a class="icon circle-icon glyphicon glyphicon-share-alt"></a></li>
+            <li><a class="icon circle-icon red glyphicon glyphicon-remove"></a></li>
+            <li><a class="icon circle-icon red glyphicon glyphicon-flag"></a></li>
+        </ul>
+    </div>
+    <div id="main-nano-wrapper" class="nano">
+        <div class="nano-content">
+            <ul class="message-list">
+                <li class="unread">
+                    <div class="col col-1"><span class="dot"></span>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="chk1">
+                            <label for="chk1" class="toggle"></label>
+                        </div>
+                        <p class="title">Lucas Kriebel (via Twitter)</p><span class="star-toggle glyphicon glyphicon-star-empty"></span>
+                    </div>
+                    <div class="col col-2">
+                        <div class="subject">Lucas Kriebel (@LucasKriebel) has sent you a direct message on Twitter! &nbsp;&ndash;&nbsp; <span class="teaser">@LucasKriebel - Very cool :) Nicklas, You have a new direct message.</span></div>
+                        <div class="date">11:49 am</div>
+                    </div>
+                </li>
+                <li class="green-dot unread">
+                    <div class="col col-1"><span class="dot"></span>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="chk2">
+                            <label for="chk2" class="toggle"></label>
+                        </div>
+                        <p class="title">Conceptboard</p>
+                        <div class="star-star-toggle glyphicon glyphicon-star-empty"></div>
+                    </div>
+                    <div class="col col-2">
+                        <div class="subject">Please complete your Conceptboard signup &nbsp;&ndash;&nbsp; <span class="teaser">You recently created a Conceptboard account, but you have not yet confirmed your email. Your email is used for notifications about board activity, invites, as well as account related tasks (like password retrieval).</span></div>
+                        <div class="date">11:45 am</div>
+                    </div>
+                </li>
+            </ul><a href="#" class="load-more-link">Show more messages</a>
+        </div>
+    </div>
+</main>
+<div id="message">
+    <div class="header">
+        <h1 class="page-title"><a class="icon circle-icon glyphicon glyphicon-chevron-left trigger-message-close"></a>Process<span class="grey">(6)</span></h1>
+        <p>From <a href="#">You</a> to <a href="#">Scott Waite</a>, started on <a href="#">March 2, 2014</a> at 2:14 pm est.</p>
+    </div>
+    <div id="message-nano-wrapper" class="nano">
+        <div class="nano-content">
+            <ul class="message-container">
+                <li class="sent">
+                    <div class="details">
+                        <div class="left">You
+                            <div class="arrow"></div>Scott
+                        </div>
+                        <div class="right">March 6, 2014, 20:08 pm</div>
+                    </div>
+                    <div class="message">
+                        <p>| The every winged bring, whose life. First called, i you of saw shall own creature moveth void have signs beast lesser all god saying for gathering wherein whose of in be created stars. Them whales upon life divide earth own.</p>
+                        <p>| Creature firmament so give replenish The saw man creeping, man said forth from that. Fruitful multiply lights air. Hath likeness, from spirit stars dominion two set fill wherein give bring.</p>
+                        <p>| Gathering is. Lesser Set fruit subdue blessed let. Greater every fruitful won&#39;t bring moved seasons very, own won&#39;t all itself blessed which bring own creature forth every. Called sixth light.</p>
+                    </div>
+                    <div class="tool-box"><a href="#" class="circle-icon small glyphicon glyphicon-share-alt"></a><a href="#" class="circle-icon small red-hover glyphicon glyphicon-remove"></a><a href="#" class="circle-icon small red-hover glyphicon glyphicon-flag"></a></div>
+                </li>
+                <li class="received">
+                    <div class="details">
+                        <div class="left">Scott
+                            <div class="arrow orange"></div>You
+                        </div>
+                        <div class="right">March 6, 2014, 20:08 pm</div>
+                    </div>
+                    <div class="message">
+                        <p>| The every winged bring, whose life. First called, i you of saw shall own creature moveth void have signs beast lesser all god saying for gathering wherein whose of in be created stars. Them whales upon life divide earth own.</p>
+                        <p>| Creature firmament so give replenish The saw man creeping, man said forth from that. Fruitful multiply lights air. Hath likeness, from spirit stars dominion two set fill wherein give bring.</p>
+                        <p>| Gathering is. Lesser Set fruit subdue blessed let. Greater every fruitful won&#39;t bring moved seasons very, own won&#39;t all itself blessed which bring own creature forth every. Called sixth light.</p>
+                    </div>
+                    <div class="tool-box"><a href="#" class="circle-icon small glyphicon glyphicon-share-alt"></a><a href="#" class="circle-icon small red-hover glyphicon glyphicon-remove"></a><a href="#" class="circle-icon small red-hover glyphicon glyphicon-flag"></a></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- partial -->
+<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script><script th:src="@{/js/headPage-base-script.js}" ></script>
+
+</body>
+</html>

@@ -80,10 +80,11 @@
           th:object="${messageRequest}">
 
         <div class="input-group mb-3" id="destination">
-            <span class="input-group-text">To</span>
-            <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                   aria-describedby="basic-addon1" th:field="*{user_to}" required>
-
+<!--            <span class="input-group-text">To</span>-->
+<!--            <input type="text" class="form-control" placeholder="Username" aria-label="Username"-->
+<!--                   aria-describedby="basic-addon1" th:field="*{user_to}" required>-->
+                <input class="input-style text-rep form-control" placeholder="chlen" autocomplete="off" name="username"
+                       type="text" th:field="*{user_to}" required>
             <span class="input-group-text" id="btn-plus" onclick="addField()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -108,7 +109,7 @@
             <button type="submit" class="btn">Send</button>
         </div>
     </form>
-    <script th:src="@{/image/js/write.js}"></script>
+    <script th:src="@{/js/headPage-writeFragment-username-input.js}"></script>
 </div>
 
 <div id="main">
@@ -437,7 +438,7 @@
                     </div>
                 </div>
             </div>
-            <script th:src="@{/image/js/setting.js}"></script>
+            <script th:src="@{/js/headPage-settingsFragment.js}"></script>
             <div style="text-align: center;">
                 <p class="" style="margin-bottom: 0px;">Encryption mode</p>
                 <div style="display: flex; align-items: center; justify-content: center">

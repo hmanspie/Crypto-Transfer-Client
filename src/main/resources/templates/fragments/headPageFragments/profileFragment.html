@@ -1,0 +1,64 @@
+<div th:fragment="profileFragment">
+    <main id="main">
+        <div class="overlay"></div>
+        <header class="header">
+            <h1 class="page-title"><a class="sidebar-toggle-btn trigger-toggle-sidebar"><span class="line"></span><span
+                    class="line"></span><span class="line"></span><span class="line line-angle1"></span><span
+                    class="line line-angle2"></span></a>Profile<a><span
+                    class="icon glyphicon glyphicon-chevron-down"></span></a></h1>
+        </header>
+
+        <div class="container-fluid mt-4 ms-2">
+            <form th:object="${updateProfileRequest}" th:action="@{/updateProfile}" th:method="post">
+                <div class="col-8">
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h5">Login</p>
+                        <input type="text" class="form-control w-50 mt-3" th:field="*{username}"
+                               th:placeholder="${signUpRequest?.getUsername()}" aria-label="Login"
+                               aria-describedby="basic-addon1">
+                        <p class="text-description mt-3">Don't forget your email if you don't want to recover your
+                            email</p>
+                    </div>
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h5">Fullname</p>
+                        <input type="text" class="form-control w-50 mt-3" th:field="*{fullName}"
+                               th:placeholder="${signUpRequest?.getFullName()}" aria-label="Fullname"
+                               aria-describedby="basic-addon1">
+                        <p class="text-description mt-3">You can remove it at any time.</p>
+                    </div>
+
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h5">Old password</p>
+                        <input type="password" class="form-control w-50 mt-3" th:field="*{password}"
+                               aria-label="Password"
+                               aria-describedby="basic-addon1">
+                        <p class="text-description mt-3">We will use the old password to be sure about you</p>
+                    </div>
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h5">New password</p>
+                        <input type="password" class="form-control w-50 mt-3" th:field="*{confirmPassword}"
+                               aria-label="Password"
+                               aria-describedby="basic-addon1">
+                        <p class="text-description mt-3">Remember your new password</p>
+                    </div>
+
+                    <div class="container p-0 text-start mt-3">
+                        <p class="h5">Email</p>
+                        <input type="text" class="form-control w-50 mt-3" th:field="*{email}"
+                               th:placeholder="${signUpRequest?.getEmail()}" aria-label="Email"
+                               aria-describedby="basic-addon1">
+                        <p class="text-description mt-3">Change your e-mail and receive a letter to the new
+                            address</p>
+                    </div>
+                </div>
+
+                <div class="container d-flex justify-content-center">
+                    <button type="submit" class="btn w-25" id="apply-setting-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>

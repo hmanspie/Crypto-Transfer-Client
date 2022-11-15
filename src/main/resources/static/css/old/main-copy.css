@@ -76,6 +76,29 @@
     /*Do more darkly*/
 }
 
+.text-rep:-webkit-autofill{
+    transition: all 5000s ease-in-out 0s;
+}
+.input-style {
+    border-width:  0 0 1px 0;
+    font-size: 15px;
+    width: 20%;
+    color: black;
+    background-color: transparent;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to right, #d9d9d9, #d9d9d9);
+}
+
+.input-style:hover {
+    border-image-source: linear-gradient(to right, #696969, #696969);
+}
+.input-style:focus {
+    outline: none;
+    color: black;
+    border-width:  0 0 1px 0;
+    border-image-source: linear-gradient(to right, #696969, #696969);
+}
+
 /* Write Page */
 
 /* Setting Page*/
