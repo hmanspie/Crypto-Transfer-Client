@@ -1,25 +1,28 @@
 package com.rebalcomb.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.crypto.AESUtil;
 import com.rebalcomb.crypto.Hiding;
 import com.rebalcomb.io.File;
 import com.rebalcomb.mapper.MessageMapper;
-import com.rebalcomb.model.dto.SecretBlock;
+import com.rebalcomb.model.dto.Block;
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.model.entity.User;
-import com.rebalcomb.repository.MessageRopository;
+import com.rebalcomb.repositories.MessageRopository;
 import io.rsocket.transport.netty.client.TcpClientTransport;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+
 import java.io.*;
-import java.time.LocalDateTime;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +34,9 @@ public class MessageService {
     private final MessageRopository messageRepository;
     public static final String IMAGES = "images.txt";
     private RSocketRequester requester;
+    private Thread threadIncoming;
     private final RSocketRequester.Builder builder;
+    private final Logger logger = LogManager.getLogger(MessageService.class);
 
     @Autowired
     public MessageService(UserService userService, MessageRopository messageRepository, RSocketRequester.Builder builder) {
@@ -39,8 +44,11 @@ public class MessageService {
         this.messageRepository = messageRepository;
         this.builder = builder;
         this.requester = this.builder
-                                .transport(TcpClientTransport
-                                        .create("localhost", 7000));
+                .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
+                        .doBeforeRetry(l -> logger.warn("Retrying " + (l.totalRetriesInARow() + 1) + " connected to remote server!"))
+                                .doAfterRetry(l -> logger.warn("No connection setup with the remote server!"))))
+                                        .transport(TcpClientTransport
+                                                .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
         incomingListener();
     }
     public Flux<Message> findAll(){
@@ -50,17 +58,17 @@ public class MessageService {
         return flux;
     }
 
-    public Mono<Boolean> send(SecretBlock secretBlock) {
+    public Mono<Boolean> send(Block block) {
         return this.requester
                 .route("message.send")
-                .data(secretBlock)
+                .data(block)
                 .retrieveMono(Boolean.class);
     }
-    public Flux<MessageRequest> getIncoming(String serverId) {
+    public Flux<Block> getIncoming(String serverId) {
         return this.requester
                 .route("message.getIncoming")
                 .data(serverId)
-                .retrieveFlux(MessageRequest.class);
+                .retrieveFlux(Block.class);
     }
 
     public List<Message> findAllByRecipient(String username) {
@@ -71,45 +79,44 @@ public class MessageService {
         return findAllByUsernameFrom(username);
     }
 
-    public SecretBlock encryptMessage(SecretBlock secretBlock){
-        String hiding = new Hiding().generateHidingMassage(AESUtil.encrypt(secretBlock.getMessageRequest().getBodyMessage(), userService.findSecretByUsername(secretBlock.getMessageRequest().getUser_from())));
-        secretBlock.getMessageRequest().setBodyMessage(hiding);
-        return secretBlock;
+    public String encryptMessage(MessageRequest messageRequest){
+        return new Hiding().generateHidingMassage(AESUtil.encrypt(messageRequest, userService.findSecretByUsername(messageRequest.getUser_from())));
     }
-    public Message decryptMessage(Message message) {
-        String secret = userService.findSecretByUsername(message.getUser_to());
-        String hidingMessage = new Hiding().getOpenMassageForHidingMassage(message.getBody());
-        message.setBody(AESUtil.decrypt(hidingMessage, secret));
-        return message;
+    public Message decryptMessage(Block block) {
+        String hidingMessage = new Hiding().getOpenMassageForHidingMassage(block.getMessage());
+        MessageRequest messageRequest = AESUtil.decrypt(hidingMessage, userService.findSecretByUsername(block.getFrom()));
+        return MessageMapper.mapMessage(messageRequest);
     }
 
-    public void saveMessage(MessageRequest messageRequest){
-        Message message = MessageMapper.mapMessage(messageRequest);
-        save(decryptMessage(message));
+    public void saveMessage(Block block){
+        save(decryptMessage(block));
     }
 
-    public void incomingListener(){
-        Thread threadIncoming = new Thread(() -> {
-            try {
-                do {
-                    List<MessageRequest> messageRequests = getIncoming("1").collectList().block();
-                    if(messageRequests != null)
-                    for (MessageRequest messageRequest : messageRequests)
-                        saveMessage(messageRequest);
+    public void incomingListener() {
+        threadIncoming = new Thread(() -> {
+            do {
+                try {
                     Thread.sleep(5000);
+                    List<Block> blockList = getIncoming(ServerUtil.SERVER_ID).collectList().block();
+                    if (blockList != null)
+                        for (Block block : blockList)
+                            saveMessage(block);
+                } catch (Exception e) {
+                    logger.error(e);
                 }
-                while (true);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            } while (true);
         });
         threadIncoming.start();
     }
 
-    public Boolean sendMessage(SecretBlock secretBlock) {
-        Optional<User> to = userService.findByUsername(secretBlock.getMessageRequest().getUser_to());
+    public Boolean sendMessage(MessageRequest messageRequest) {
+        Optional<User> to = userService.findByUsername(messageRequest.getUser_to());
         if (to.isPresent()) {
-            return send(encryptMessage(secretBlock)).block();
+            Block block = new Block();
+            block.setFrom(messageRequest.getUser_from());
+            block.setTo(messageRequest.getUser_to());
+            block.setMessage(encryptMessage(messageRequest));
+            return send(block).block();
         }
         return false;
     }

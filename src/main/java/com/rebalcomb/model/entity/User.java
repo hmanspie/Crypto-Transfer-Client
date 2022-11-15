@@ -5,6 +5,7 @@ import com.rebalcomb.model.entity.enums.Status;
 import lombok.*;
 import org.hibernate.Hibernate;
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -41,6 +42,8 @@ public class User {
     @Column(nullable = false, length = 255)
     private String secret;
 
+    @Column(nullable = false)
+    private Timestamp regTime;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

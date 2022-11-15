@@ -12,7 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -35,7 +41,7 @@ public class UserController {
 
     @PostMapping("/registered")
     public ModelAndView registered(@Valid @ModelAttribute SignUpRequest signUpRequest,
-                                                        ModelAndView model) throws InterruptedException, ExecutionException, DuplicateAccountException {
+                                                        ModelAndView model) throws InterruptedException, ExecutionException, DuplicateAccountException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         model.setViewName("login");
         if (!userService.validatePassword(signUpRequest)) {
             model.addObject("isError", true);
@@ -73,8 +79,9 @@ public class UserController {
     }
 
     @GetMapping("/goToForgortPasswordForm")
-    public String getViewForForgortPassword(Model model) {
-        return "forgort";
+    public ModelAndView getViewForForgortPassword(ModelAndView model) {
+        model.setViewName("email");
+        return null;
     }
 
     @GetMapping("/email")
@@ -101,7 +108,7 @@ public class UserController {
         return model;
     }
 
-    @PostMapping("/updateProfile")
+    @PostMapping("/headPage/updateProfile")
     public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
                                                                                     ModelAndView model) {
         if (!userService.validatePassword(updateProfileRequest)) {
@@ -114,7 +121,6 @@ public class UserController {
             model.addObject("isError", false);
             model.addObject("info", INFO);
             model.addObject("signUnRequest", updateProfileRequest);
-
         } else{
             model.addObject("isError", true);
             model.addObject("error", INFO);
