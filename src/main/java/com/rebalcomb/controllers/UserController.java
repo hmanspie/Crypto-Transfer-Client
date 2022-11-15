@@ -94,21 +94,7 @@ public class UserController {
         return "logout";
     }
 
-    @GetMapping("/headPage/profile")
-    public ModelAndView profile(ModelAndView model, Principal principal){
-        Optional<User> user = userService.findByUsername(principal.getName());
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(user.get().getUsername());
-        signUpRequest.setEmail(user.get().getEmail());
-        signUpRequest.setFullName(user.get().getFullName());
-        model.addObject("headPageValue", "profile");
-        model.addObject("signUpRequest", signUpRequest);
-        model.addObject("updateProfileRequest", new SignUpRequest());
-        model.setViewName("headPage");
-        return model;
-    }
-
-    @PostMapping("/headPage/updateProfile")
+    @PostMapping("/updateProfile")
     public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
                                                                                     ModelAndView model) {
         if (!userService.validatePassword(updateProfileRequest)) {

@@ -7,130 +7,88 @@
                     class="line line-angle2"></span></a>Settings<a><span
                     class="icon glyphicon glyphicon-chevron-down"></span></a></h1>
         </header>
-        <!-- Modal -->
-        <div class="modal fade" style="margin-top: 12%" id="staticBackdrop" data-bs-backdrop="static"
-             data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!--                    <h1 class="modal-title fs-5" id="staticBackdropLabel">IP Address</h1>-->
-                        <!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-                    </div>
-                    <div class="modal-body">
-                        <div class="input-group">
-                            <span class="input-group-text">IP:Port</span>
-                            <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="">
-                            <input type="text" aria-label="Port Service" placeholder="8081" class="">
-                            <button type="button" class="btn">Change</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--    </div>-->
 
-            <!--    <div class="container w-25 justify-content-center">-->
-            <div class="setting-form container shadow rounded-3 p-2">
-                <!--            <p class="h2 setting-title">Setting</p>-->
-                <div>
-                    <text class="h5">Address service</text>
-                    <input type="text" aria-label="Address Service" placeholder="192.168.43.206" class="">
-                    <button type="button" class="btn mt-3 ms-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        IP
-                        Address
-                    </button>
-                    <div class="tooltip">?
-                        <span class="tooltiptext">If you don't have connection try change IP service. Maybe it's problem from our side</span>
-                    </div>
-                    <!--                    <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from our side</p>-->
-                </div>
-                <div class="setting-dialog-key">
-                    <p class="">Length key </p>
-                    <select class="form-select mt-2" aria-label="Length key">
-                        <option value="1">128</option>
-                        <option value="2">192</option>
-                        <option value="3">256</option>
-                    </select>
-                    <p class="text-description mt-3"> The longest key will be the strongest</p>
-                </div>
-                <div class="container d-flex align-items-stretch p-0 justify-content-center">
-                    <div class="container p-0 text-start mt-4" style="display: flex; align-items: center;">
-                        <!--                    <p class="h5">Generate new keys</p>-->
-                        <!--                    <div class="setting-line"></div>-->
-                        <text class="h6 mt-2">Current key </text>
-                        <textarea
-                                class=""
-                                style="height: 22px; width: 33%;"
-                                id="private-key"
-                                onclick="copyToClipboard(this.id)"
-                                aria-label="With textarea"
-                                data-bs-toggle="tooltip"
-                                data-popper-placement="top"
-                                title="Click to copy"
-                                readonly
-                        >{Key}</textarea>
-                        <button type="submit" class="btn mt-2 ms-0" style="margin: 0% 1% 0% 1%;">Generate Keys</button>
-                        <div class="tooltip">?
-                            <span class="tooltiptext">If you will change your keys then older keys will invalid</span>
-                        </div>
-                    </div>
-                </div>
-                <script th:src="@{/image/js/old/setting.js}"></script>
-                <div style="text-align: center;">
-                    <p class="" style="margin-bottom: 0px;">Encryption mode</p>
-                    <div style="display: flex; align-items: center; justify-content: center">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1"
-                                   checked>
-                            <label class="form-check-label" for="radioEncryption1">
-                                ECB
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption2">
-                            <label class="form-check-label" for="radioEncryption2">
-                                CBC
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption3">
-                            <label class="form-check-label" for="radioEncryption3">
-                                PCBC
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">
-                            <label class="form-check-label" for="radioEncryption4">
-                                CFB
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption5">
-                            <label class="form-check-label" for="radioEncryption5">
-                                OFB
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption6">
-                            <label class="form-check-label" for="radioEncryption6">
-                                CTR
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div style="display: flex; align-items: center; justify-content: center">
-                        <p class="h5">Number of picture </p>
-                        <input type="number" id="typeNumber" value="1" style=" width: 15%; margin: 0% 1% 0% 1%;">
-                        <!-- Замість '1' поставити метод що витягує нинішнє значення -->
-                        <div class="tooltip">?
-                            <span class="tooltiptext">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn mt-2 ms-0" style="width: 100%">Save</button>
-                </div>
+        <div class="container-fluid mt-4 ms-2">
+            <form>
+                <text class="h5">Address service</text>
+                <input class="form-control w-25 mt-3" type="text" aria-label="Address Service"
+                       placeholder="192.168.43.206">
+                <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from
+                    our side</p>
 
-            </div>
+                <p class="h5">Length key</p>
+                <select class="form-select w-25 mt-3" aria-label="Length key">
+                    <option value="1">128</option>
+                    <option value="2">192</option>
+                    <option value="3">256</option>
+                </select>
+                <p class="text-description mt-3">The longest key will be the strongest</p>
+
+                <text class="h5">Current key</text>
+                <textarea
+                        class="form-control w-50 mt-3"
+                        id="private-key"
+                        onclick="copyToClipboard(this.id)"
+                        aria-label="With textarea"
+                        data-bs-toggle="tooltip"
+                        data-popper-placement="top"
+                        title="Click to copy"
+                        readonly
+                >{Key}</textarea>
+                <button type="submit" class="btn mt-2 ms-0">Generate Keys</button>
+                <p class="text-description mt-3">If you will change your keys then older keys will invalid</p>
+                <script th:src="@{/js/headPage-settingsFragment.js}"></script>
+
+                <p class="h5" >Encryption mode</p>
+                <div class="container-fluid">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1"
+                               checked>
+                        <label class="form-check-label" for="radioEncryption1">
+                            ECB
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption2">
+                        <label class="form-check-label" for="radioEncryption2">
+                            CBC
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption3">
+                        <label class="form-check-label" for="radioEncryption3">
+                            PCBC
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">
+                        <label class="form-check-label" for="radioEncryption4">
+                            CFB
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption5">
+                        <label class="form-check-label" for="radioEncryption5">
+                            OFB
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption6">
+                        <label class="form-check-label" for="radioEncryption6">
+                            CTR
+                        </label>
+                    </div>
+                </div>
+                <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>
+
+                <p class="h5">Number of picture</p>
+                <input class="form-control w-25" type="number" id="typeNumber" value="1">
+                <!-- Замість '1' поставити метод що витягує нинішнє значення -->
+                <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>
+                <div class="container-fluid d-flex justify-content-center">
+                    <button type="submit" class="btn w-25">Apply</button>
+                </div>
+            </form>
         </div>
     </main>
 </div>
