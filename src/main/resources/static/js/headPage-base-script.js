@@ -44,6 +44,13 @@ jQuery(document).ready(function($) {
         cols.hideOverlay();
     });
 
+    // When you click on tab in aside, hol it
+
+    // $('#sidebar .menu-segment li').on('click', function() {
+    //     var item = $(this);
+    //     item.addClass('active');
+    // });
+
 
     // When you click on a message, show it
 
