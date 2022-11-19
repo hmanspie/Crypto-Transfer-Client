@@ -15,7 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import reactor.core.publisher.Flux;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -107,19 +113,35 @@ public class MessageController {
 
     @GetMapping("/profile")
     public ModelAndView profile(ModelAndView model, Principal principal){
-        Optional<User> user = userService.findByUsername(principal.getName());
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(user.get().getUsername());
-        signUpRequest.setEmail(user.get().getEmail());
-        signUpRequest.setFullName(user.get().getFullName());
         model.addObject("headPageValue", "profile");
-        model.addObject("signUpRequest", signUpRequest);
+        model.addObject("signUpRequest", getData(principal.getName()));
         model.addObject("isAdmin", isAdmin(principal));
         model.addObject("updateProfileRequest", new SignUpRequest());
         model.setViewName("headPage");
         return model;
     }
 
+    public SignUpRequest getData(String username){
+        Optional<User> user = userService.findByUsername(username);
+        SignUpRequest signUpRequest = new SignUpRequest();
+        signUpRequest.setUsername(user.get().getUsername());
+        signUpRequest.setEmail(user.get().getEmail());
+        signUpRequest.setFullName(user.get().getFullName());
+        return signUpRequest;
+    }
+    @GetMapping("/changeSecretKey")
+    public ModelAndView changeSecretKey(ModelAndView model, Principal principal) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        if(userService.changeSecretKey(principal.getName())){
+            model.addObject("info", "Secret key changed successfully!");
+        } else
+            model.addObject("info", "Secret key not changed!");
+        model.addObject("signUpRequest", getData(principal.getName()));
+        model.addObject("key", userService.findSecretByUsername(principal.getName()));
+        model.addObject("updateProfileRequest", new SignUpRequest());
+        model.addObject("headPageValue", "profile");
+        model.setViewName("headPage");
+        return model;
+    }
     /**
      * Check admin role in current user
      * @param principal

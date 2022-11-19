@@ -5,6 +5,7 @@ import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.controllers.UserController;
 import com.rebalcomb.crypto.RSAUtil;
 import com.rebalcomb.mapper.UserMapper;
+import com.rebalcomb.model.dto.ChangeSecretRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
 import com.rebalcomb.model.dto.UpdateRequest;
 import com.rebalcomb.model.entity.User;
@@ -14,6 +15,7 @@ import io.rsocket.transport.netty.client.TcpClientTransport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.object.UpdatableSqlQuery;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import reactor.util.retry.Retry;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
@@ -144,6 +147,13 @@ public class UserService {
                 .retrieveMono(User.class);
     }
 
+    public Mono<Boolean> changeSecret(ChangeSecretRequest changeSecretRequest) {
+        return this.requester
+                .route("user.changeSecret")
+                .data(changeSecretRequest)
+                .retrieveMono(Boolean.class);
+    }
+
     public String getLastDataTimeReg() {
         Timestamp timestamp = new Timestamp(0);
         for (User user : userRepository.findAll()) {
@@ -153,6 +163,19 @@ public class UserService {
         timestamp.setTime(timestamp.getTime() + 1);
         return timestamp.toString();
     }
+
+    public Boolean changeSecretKey(String username) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = userRepository.findByUsername(username).get();
+        String newSecretKey = BigInteger.probablePrime(256, new SecureRandom()).toString();
+        user.setSecret(newSecretKey);
+        ChangeSecretRequest changeSecretRequest = new ChangeSecretRequest();
+        changeSecretRequest.setServerID(ServerUtil.SERVER_ID);
+        changeSecretRequest.setSecretKey(RSAUtil.encrypt(newSecretKey, ServerUtil.PUBLIC_KEY));
+        changeSecretRequest.setUsername(username);
+        changeSecretRequest.setRegTime(Timestamp.valueOf(LocalDateTime.now().format(formatter)));
+        return changeSecret(changeSecretRequest).block();
+    }
+
     public void updateEncryptMode() {
         threadUpdateEncryptMode = new Thread(() -> {
             ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
@@ -171,6 +194,7 @@ public class UserService {
         });
         threadUpdateEncryptMode.start();
     }
+
     public void updateIV() {
         threadUpdateIV = new Thread(() -> {
             UpdateRequest updateRequest = generateKeyPair();

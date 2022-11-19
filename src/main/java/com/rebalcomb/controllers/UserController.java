@@ -99,21 +99,17 @@ public class UserController {
     public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest, ModelAndView model) {
 
         if (!userService.validatePassword(updateProfileRequest)) {
-            model.addObject("error", "Confirm password doesn't match!");
+            model.addObject("info", "Confirm password doesn't match!");
             model.addObject("headPageValue", "profile");
             model.addObject("updateProfileRequest", new SignUpRequest());
             model.setViewName("headPage");
             return model;
         }
         if (userService.updateProfile(updateProfileRequest)) {
-            model.addObject("isError", false);
-            model.addObject("info", INFO);
+            model.addObject("info", "User data has been successfully changed!");
             model.addObject("headPageValue", "profile");
             model.addObject("updateProfileRequest", new SignUpRequest());
             model.setViewName("headPage");
-        } else{
-            model.addObject("isError", true);
-            model.addObject("error", INFO);
         }
         return model;
     }
