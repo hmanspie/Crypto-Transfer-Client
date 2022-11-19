@@ -916,8 +916,10 @@ input:focus {
 }
 
 .profile-fragment-btn-container{
-    padding-top: 25px;
+    /*padding-top: 25px;*/
     align-items: end;
-    width: 15%;
+    width: 50%;
+    min-height: 10px;
+    height: 20px;
 }
 

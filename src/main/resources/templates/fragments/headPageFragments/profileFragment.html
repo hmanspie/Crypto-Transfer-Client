@@ -53,26 +53,29 @@
                         <p class="text-description mt-3">Change your e-mail and receive a letter to the new
                             address</p>
                     </div>
-
-                    <div class="container p-0 text-start mt-3">
-                        <text class="h5">Current key</text>
-                        <textarea
-                                class="form-control w-50 mt-3"
-                                id="private-key"
-                                onclick="copyToClipboard(this.id)"
-                                aria-label="With textarea"
-                                data-bs-toggle="tooltip"
-                                data-popper-placement="top"
-                                title="Click to copy"
-                                readonly
-                        >{Key}</textarea>
-                        <button type="submit" class="btn mt-2 ms-0">Generate Keys</button>
-                        <p class="text-description mt-3">If you will change your keys then older keys will invalid</p>
-                        <script th:src="@{/js/headPage-profileFragment.js}"></script>
+                    <div class="profile-fragment-btn-container">
+                        <button type="submit" class="sexy-btn" id="apply-setting-btn">Save</button>
                     </div>
                 </div>
-                <div class="profile-fragment-btn-container">
-                    <button type="submit" class="sexy-btn" id="apply-setting-btn">Save</button>
+            </form>
+            <form th:object="${updateProfileRequest}" th:action="@{/updateProfile}" th:method="post">
+                <div class="container p-0 text-start mt-3">
+                    <text class="h5">Current key</text>
+                    <textarea
+                            class="form-control w-50 mt-3"
+                            id="private-key"
+                            onclick="copyToClipboard(this.id)"
+                            aria-label="With textarea"
+                            data-bs-toggle="tooltip"
+                            data-popper-placement="top"
+                            title="Click to copy"
+                            readonly
+                    >{Key}</textarea>
+                    <div class="profile-fragment-btn-container">
+                        <button type="submit" class="sexy-btn">Generate Keys</button>
+                    </div>
+                    <p class="text-description mt-3">If you will change your keys then older keys will invalid</p>
+                    <script th:src="@{/js/headPage-profileFragment.js}"></script>
                 </div>
             </form>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
