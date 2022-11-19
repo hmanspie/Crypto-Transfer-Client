@@ -891,7 +891,7 @@ input:focus {
     font-weight: 600;
     line-height: normal;
     margin: 0;
-    min-height: 60px;
+    /*min-height: 60px;*/
     min-width: 0;
     outline: none;
     padding: 16px 24px;
@@ -916,10 +916,21 @@ input:focus {
 }
 
 .profile-fragment-btn-container{
-    /*padding-top: 25px;*/
     align-items: end;
     width: 50%;
-    min-height: 10px;
-    height: 20px;
 }
+
+.profile-fragment-btn{
+    padding: 10px;
+}
+
+.profile-fragment-generate-btn-container{
+    padding-top: 20px;
+    width: 20%;
+}
+
+.profile-fragment-generate-conatiner{
+    padding-top: 10px;
+}
+
 
