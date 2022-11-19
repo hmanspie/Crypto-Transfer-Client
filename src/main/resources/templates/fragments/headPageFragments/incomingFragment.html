@@ -23,7 +23,8 @@
             <div class="nano-content">
                 <th:block th:each="message : ${messages}">
                     <ul class="message-list">
-                        <li class="unread">
+                        <li class="unread"
+                            th:onclick="openMessage([[${message?.getUser_from()}]], [[${message?.getUser_to()}]], [[${message?.getTitle()}]], [[${message?.getBody()}]],[[${message?.getDate_time()}]])">
                             <div class="col col-1"><span class="dot"></span>
                                 <div class="checkbox-wrapper">
                                     <input type="checkbox" id="chk1">
@@ -33,72 +34,110 @@
                                         class="star-toggle glyphicon glyphicon-star-empty"></span>
                             </div>
                             <div class="col col-2">
-                                <div class="subject"><text th:text="${message?.getTitle()}"></text>
-                                    &nbsp;&ndash;&nbsp; <span class="teaser" th:text="${message?.getBody()}"></span>
+                                <div class="subject">
+                                    <text th:text="${message?.getTitle()}"></text>
+                                    &nbsp;&ndash;&nbsp;<span class="teaser" th:text="${message?.getBody()}"></span>
                                 </div>
                                 <div class="date" th:text="${message?.getDate_time()}"></div>
                             </div>
                         </li>
-
-                        <!--                    =========================================-->
-                        <!--                    =========  SECOND MESSAGE ============-->
-                        <!--                    =========================================-->
-
-                        <!--                    <li class="green-dot unread">-->
-                        <!--                        <div class="col col-1"><span class="dot"></span>-->
-                        <!--                            <div class="checkbox-wrapper">-->
-                        <!--                                <input type="checkbox" id="chk2">-->
-                        <!--                                <label for="chk2" class="toggle"></label>-->
-                        <!--                            </div>-->
-                        <!--                            <p class="title">Conceptboard</p>-->
-                        <!--                            <div class="star-star-toggle glyphicon glyphicon-star-empty"></div>-->
-                        <!--                        </div>-->
-                        <!--                        <div class="col col-2">-->
-                        <!--                            <div class="subject">Please complete your Conceptboard signup &nbsp;&ndash;&nbsp; <span-->
-                        <!--                                    class="teaser">You recently created a Conceptboard account, but you have not yet confirmed your email. Your email is used for notifications about board activity, invites, as well as account related tasks (like password retrieval).</span>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="date">11:45 am</div>-->
-                        <!--                        </div>-->
-                        <!--                    </li>-->
-
                     </ul>
                 </th:block>
                 <a href="#" class="load-more-link">Show more messages</a>
             </div>
         </div>
+
+        <script th:inline="javascript">
+            function openMessage(from, to, title, body, time) {
+                time = time.substring(0, 10) + " " +  time.substring(11, 19);
+
+                let fromHTML = document.getElementById("from");
+                fromHTML.innerText = from;
+
+                let toHTML = document.getElementById("to");
+                toHTML.innerText = to;
+
+                let titleHTML = document.getElementById("title");
+                titleHTML.innerText = title;
+
+                let bodyHTML = document.getElementById("body");
+                bodyHTML.innerText = body;
+
+                let timeHTML = document.getElementById("time");
+                timeHTML.innerText = time;
+
+                let fromHeaderHTML = document.getElementById("from-header");
+                fromHeaderHTML.innerText = from;
+
+                let toHeaderHTML = document.getElementById("to-header");
+                toHeaderHTML.innerText = to;
+
+                let timeHeaderHTML = document.getElementById("time-header");
+                timeHeaderHTML.innerText = time;
+            }
+
+        </script>
+
+        <script th:inline="javascript">
+            let newMessages = [[${newMessages}]];
+            let from = [[${message?.getFrom()}]];
+
+            function notifyMe() {
+                if (!("Notification" in window)) {
+                    alert("This browser does not support desktop notification");
+                } else if (Notification.permission === "granted") {
+                    let notification = new Notification(from);
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission(function (permission) {
+                        if (permission === "granted") {
+                            let notification = new Notification("Notification");
+                        }
+                    });
+                }
+            }
+
+            if (newMessages) {
+                setTimeout(() => notifyMe(), 0);
+            }
+
+            // setInterval(() => location.reload(), 5000);
+        </script>
+
     </main>
 
     <div id="message">
         <div class="header">
             <h1 class="page-title"><a
                     class="icon circle-icon glyphicon glyphicon-chevron-left trigger-message-close"></a>Message
-<!--                <span-->
-<!--                    class="grey">(6)</span>-->
+                <!--                <span-->
+                <!--                    class="grey">(6)</span>-->
             </h1>
-            <p>From <a href="#">You</a> to <a href="#">Scott Waite</a>, started on <a href="#">March 2, 2014</a> at 2:14
-                pm est.</p>
+            <p>From <a href="#" id="from-header" >You</a> to <a href="#" id="to-header">Scott Waite</a>, started on <a href="#" id="time-header">March 2, 2014 at 2:14 pm est. </a></p>
         </div>
         <div id="message-nano-wrapper" class="nano">
             <div class="nano-content">
                 <ul class="message-container">
                     <li class="sent">
                         <div class="details">
-                            <div class="left">You
+                            <div class="left"><span id="from">You</span>
                                 <div class="arrow"></div>
-                                Scott
+                                <span id="to">Scott</span>
                             </div>
-                            <div class="right">March 6, 2014, 20:08 pm</div>
+                            <div class="right" id="time">March 6, 2014, 20:08 pm</div>
                         </div>
                         <div class="message">
-                            <p>| The every winged bring, whose life. First called, i you of saw shall own creature
+                            <p id="title">Title</p>
+                            <p id="body">The every winged bring, whose life. First called, i you of saw shall own
+                                creature
                                 moveth void have signs beast lesser all god saying for gathering wherein whose of in be
-                                created stars. Them whales upon life divide earth own.</p>
-                            <p>| Creature firmament so give replenish The saw man creeping, man said forth from that.
+                                created stars. Them whales upon life divide earth own.
+                                Creature firmament so give replenish The saw man creeping, man said forth from that.
                                 Fruitful multiply lights air. Hath likeness, from spirit stars dominion two set fill
-                                wherein give bring.</p>
-                            <p>| Gathering is. Lesser Set fruit subdue blessed let. Greater every fruitful won&#39;t
+                                wherein give bring.
+                                Gathering is. Lesser Set fruit subdue blessed let. Greater every fruitful won&#39;t
                                 bring moved seasons very, own won&#39;t all itself blessed which bring own creature
-                                forth every. Called sixth light.</p>
+                                forth every. Called sixth light.
+                            </p>
                         </div>
                         <div class="tool-box"><a href="#" class="circle-icon small glyphicon glyphicon-share-alt"></a><a
                                 href="#" class="circle-icon small red-hover glyphicon glyphicon-remove"></a><a href="#"
@@ -106,34 +145,34 @@
                         </div>
                     </li>
 
-<!--                    ================================================-->
-<!--                    ============== RECIEVED MESSAGE ================-->
-<!--                    ================================================-->
+                    <!--                    ================================================-->
+                    <!--                    ============== RECIEVED MESSAGE ================-->
+                    <!--                    ================================================-->
 
-<!--                    <li class="received">-->
-<!--                        <div class="details">-->
-<!--                            <div class="left">Scott-->
-<!--                                <div class="arrow orange"></div>-->
-<!--                                You-->
-<!--                            </div>-->
-<!--                            <div class="right">March 6, 2014, 20:08 pm</div>-->
-<!--                        </div>-->
-<!--                        <div class="message">-->
-<!--                            <p>| The every winged bring, whose life. First called, i you of saw shall own creature-->
-<!--                                moveth void have signs beast lesser all god saying for gathering wherein whose of in be-->
-<!--                                created stars. Them whales upon life divide earth own.</p>-->
-<!--                            <p>| Creature firmament so give replenish The saw man creeping, man said forth from that.-->
-<!--                                Fruitful multiply lights air. Hath likeness, from spirit stars dominion two set fill-->
-<!--                                wherein give bring.</p>-->
-<!--                            <p>| Gathering is. Lesser Set fruit subdue blessed let. Greater every fruitful won&#39;t-->
-<!--                                bring moved seasons very, own won&#39;t all itself blessed which bring own creature-->
-<!--                                forth every. Called sixth light.</p>-->
-<!--                        </div>-->
-<!--                        <div class="tool-box"><a href="#" class="circle-icon small glyphicon glyphicon-share-alt"></a><a-->
-<!--                                href="#" class="circle-icon small red-hover glyphicon glyphicon-remove"></a><a href="#"-->
-<!--                                                                                                               class="circle-icon small red-hover glyphicon glyphicon-flag"></a>-->
-<!--                        </div>-->
-<!--                    </li>-->
+                    <!--                    <li class="received">-->
+                    <!--                        <div class="details">-->
+                    <!--                            <div class="left">Scott-->
+                    <!--                                <div class="arrow orange"></div>-->
+                    <!--                                You-->
+                    <!--                            </div>-->
+                    <!--                            <div class="right">March 6, 2014, 20:08 pm</div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="message">-->
+                    <!--                            <p>| The every winged bring, whose life. First called, i you of saw shall own creature-->
+                    <!--                                moveth void have signs beast lesser all god saying for gathering wherein whose of in be-->
+                    <!--                                created stars. Them whales upon life divide earth own.</p>-->
+                    <!--                            <p>| Creature firmament so give replenish The saw man creeping, man said forth from that.-->
+                    <!--                                Fruitful multiply lights air. Hath likeness, from spirit stars dominion two set fill-->
+                    <!--                                wherein give bring.</p>-->
+                    <!--                            <p>| Gathering is. Lesser Set fruit subdue blessed let. Greater every fruitful won&#39;t-->
+                    <!--                                bring moved seasons very, own won&#39;t all itself blessed which bring own creature-->
+                    <!--                                forth every. Called sixth light.</p>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="tool-box"><a href="#" class="circle-icon small glyphicon glyphicon-share-alt"></a><a-->
+                    <!--                                href="#" class="circle-icon small red-hover glyphicon glyphicon-remove"></a><a href="#"-->
+                    <!--                                                                                                               class="circle-icon small red-hover glyphicon glyphicon-flag"></a>-->
+                    <!--                        </div>-->
+                    <!--                    </li>-->
 
                 </ul>
             </div>

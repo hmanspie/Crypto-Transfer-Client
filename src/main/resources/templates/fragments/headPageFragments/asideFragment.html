@@ -8,6 +8,7 @@
                 <li><a th:href="@{/headPage/outcoming}">Outcoming</a></li>
                 <li><a th:href="@{/headPage/profile}">Profile</a></li>
                 <li th:if="${isAdmin} == true" ><a th:href="@{/headPage/setting}">Settings</a></li>
+                <li th:if="${isAdmin} == true" ><a th:href="@{/headPage/users}">Users</a></li>
                 <li> <form action="/logout" method="POST"><button style="border-color: transparent; background-color: transparent; font-size: 16px; width: 100%; margin: 0px; padding: 0px; text-align: left;" type="submit"><a>Logout</a></button></form></li>
             </ul>
         </menu>

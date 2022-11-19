@@ -89,6 +89,8 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public List<User> findAll(){ return userRepository.findAll(); }
+
     public Mono<String> getPublicKey(String serverId) {
         Mono<String> mono = this.requester
                 .route("server.getPublicKey")

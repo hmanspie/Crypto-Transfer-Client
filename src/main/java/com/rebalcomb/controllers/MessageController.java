@@ -89,8 +89,17 @@ public class MessageController {
     }
 
     @GetMapping("/setting")
-    public ModelAndView admin(ModelAndView model, Principal principal){
+    public ModelAndView setting(ModelAndView model, Principal principal){
         model.addObject("headPageValue", "setting");
+        model.addObject("isAdmin", isAdmin(principal));
+        model.setViewName("headPage");
+        return model;
+    }
+
+    @GetMapping("/users")
+    public ModelAndView users(ModelAndView model, Principal principal){
+        model.addObject("headPageValue", "users");
+        model.addObject("users", userService.findAll());
         model.addObject("isAdmin", isAdmin(principal));
         model.setViewName("headPage");
         return model;
