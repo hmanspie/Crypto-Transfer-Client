@@ -1,4 +1,4 @@
-* {
+*, *::before, *::after {
     box-sizing: border-box;
 }
 body {
@@ -233,6 +233,8 @@ a:hover {
     transition-duration: 0.3s;
     padding-left: 4px;
     box-shadow: inset 4px 0 0 #EFEFEF, inset 5px 0 0 #e2e2e2;
+    overflow:auto;
+    overflow-x:hidden;
 }
 #main .overlay {
     position: absolute;
@@ -817,6 +819,10 @@ a:hover {
 }
 
 /* =========================== OWN STYLES =========================== */
+
+.nano a{
+    text-decoration: none;
+}
 
 .sidebar-logo{
     height: 100px;

@@ -6,17 +6,17 @@ public class EmailHandler {
     //TODO: Треба первіряти verificationCode з тим, що укаже користувач
     private static String verificationCode;
 
-    /**
-     * @
-     * @param email
-     * @return vereficated
-     */
-    public void isVereficated(String email)
+
+    public boolean isVereficated(String userCode)
     {
-        boolean verificated = false;
+        //boolean verificated = false;
+        return userCode.equals(verificationCode);
+    }
+
+    public void send(String email) {
         SecureRandom random = new SecureRandom();
         String code = String.valueOf(random.nextInt(999999));
-        this.verificationCode = code;
+        verificationCode = code;
 
         TLSEmail tlsEmail = new TLSEmail();
         tlsEmail.answerToEmail(email, code);

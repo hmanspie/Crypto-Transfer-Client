@@ -33,11 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/goToSignUpForm").permitAll()
-                .antMatchers("/goToSignInForm").permitAll()
-                .antMatchers("/goToForgortPasswordForm").permitAll()
-                .antMatchers("/registered").permitAll()
+                .antMatchers("/resources/**", "/goToSignUpForm", "/goToSignInForm", "/goToForgortPasswordForm", "/registered").permitAll()
+                .antMatchers("/headPage/setting").hasAuthority("write")
                 .anyRequest()
                 .authenticated()
                 .and()
