@@ -1,5 +1,6 @@
 package com.rebalcomb.controllers;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.rebalcomb.exceptions.DuplicateAccountException;
 import com.rebalcomb.model.dto.SignInRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
@@ -108,19 +109,22 @@ public class UserController {
         return model;
     }
 
-    @PostMapping("/headPage/updateProfile")
-    public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
-                                                                                    ModelAndView model) {
+    @PostMapping("/updateProfile")
+    public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest, ModelAndView model, Principal principal) {
+
         if (!userService.validatePassword(updateProfileRequest)) {
             model.addObject("error", "Confirm password doesn't match!");
             model.addObject("headPageValue", "profile");
+            model.addObject("updateProfileRequest", new SignUpRequest());
             model.setViewName("headPage");
             return model;
         }
         if (userService.updateProfile(updateProfileRequest)) {
             model.addObject("isError", false);
             model.addObject("info", INFO);
-            model.addObject("signUnRequest", updateProfileRequest);
+            model.addObject("headPageValue", "profile");
+            model.addObject("updateProfileRequest", new SignUpRequest());
+            model.setViewName("headPage");
         } else{
             model.addObject("isError", true);
             model.addObject("error", INFO);

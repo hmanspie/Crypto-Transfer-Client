@@ -53,10 +53,13 @@
                                 <p class="h6">Email</p>
                                 <input type="text" class="form-control" th:field="*{email}"
                                        th:placeholder="${signUpRequest?.getEmail()}" aria-label="Email"
-                                       aria-describedby="basic-addon1">
+                                       aria-describedby="basic-addon1"> </input>
                                 <p class="text-description">Change your e-mail and receive a letter to the new
                                     address</p>
                             </div>
+                        </div>
+                        <div class="container d-flex align-items-stretch justify-content-center p-0">
+                            <button type="submit" class="btn" id="apply-setting-btn">Save</button>
                         </div>
                     </form>
                     <!--                <div class="col-3">-->
@@ -64,11 +67,6 @@
                     <!--                    <img id="profile-icon" th:src="@{/image/developers/Hapon.png}">-->
                     <!--                </div>-->
                 </div>
-
-                <div class="container d-flex align-items-stretch justify-content-center p-0">
-                    <button type="submit" class="btn" id="apply-setting-btn">Save</button>
-                </div>
-
             </div>
         </div>
     </main>
