@@ -105,6 +105,21 @@ public class MessageController {
         return model;
     }
 
+    @GetMapping("/profile")
+    public ModelAndView profile(ModelAndView model, Principal principal){
+        Optional<User> user = userService.findByUsername(principal.getName());
+        SignUpRequest signUpRequest = new SignUpRequest();
+        signUpRequest.setUsername(user.get().getUsername());
+        signUpRequest.setEmail(user.get().getEmail());
+        signUpRequest.setFullName(user.get().getFullName());
+        model.addObject("headPageValue", "profile");
+        model.addObject("signUpRequest", signUpRequest);
+        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("updateProfileRequest", new SignUpRequest());
+        model.setViewName("headPage");
+        return model;
+    }
+
     /**
      * Check admin role in current user
      * @param principal

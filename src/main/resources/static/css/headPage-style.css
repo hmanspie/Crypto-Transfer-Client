@@ -589,6 +589,7 @@ a:hover {
     margin-bottom: 30px;
     overflow: hidden;
 }
+
 #message .message-container li .details .left {
     float: left;
     font-weight: 600;
@@ -627,7 +628,7 @@ a:hover {
     float: right;
     color: #999;
 }
-#message .message-container li .message {
+#message .message-container li .message, .certificate {
     margin-bottom: 40px;
 }
 #message .message-container li .message p:last-child {

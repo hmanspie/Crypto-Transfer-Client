@@ -19,12 +19,13 @@
                 <li><a class="icon circle-icon red glyphicon glyphicon-flag"></a></li>
             </ul>
         </div>
+
         <div id="main-nano-wrapper" class="nano">
             <div class="nano-content">
                 <th:block th:each="message : ${messages}">
                     <ul class="message-list">
                         <li class="unread"
-                            th:onclick="openMessage([[${message?.getUser_from()}]], [[${message?.getUser_to()}]], [[${message?.getTitle()}]], [[${message?.getBody()}]],[[${message?.getDate_time()}]])">
+                            th:onclick="openMessage([[${message?.getUser_from()}]], [[${message?.getUser_to()}]], [[${message?.getTitle()}]], [[${message?.getBody()}]],[[${message?.getDate_time()}]], [[${message?.getHash()}]])">
                             <div class="col col-1"><span class="dot"></span>
                                 <div class="checkbox-wrapper">
                                     <input type="checkbox" id="chk1">
@@ -48,8 +49,9 @@
         </div>
 
         <script th:inline="javascript">
-            function openMessage(from, to, title, body, time) {
-                time = time.substring(0, 10) + " " +  time.substring(11, 19);
+
+            function openMessage(from, to, title, body, time, hash) {
+                time = time.substring(0, 10) + " " + time.substring(11, 19);
 
                 let fromHTML = document.getElementById("from");
                 fromHTML.innerText = from;
@@ -74,6 +76,23 @@
 
                 let timeHeaderHTML = document.getElementById("time-header");
                 timeHeaderHTML.innerText = time;
+
+                let hashHTML = document.getElementById("hash");
+                hashHTML.innerText = hash;
+
+                console.log(hash);
+
+            }
+
+            function openCertificate(){
+                let certificate = document.getElementById("certificate");
+
+                if (certificate.style.visibility === "visible"){
+                    certificate.style.visibility = "hidden";
+                    return;
+                }
+
+                certificate.style.visibility = "visible";
             }
 
         </script>
@@ -86,7 +105,8 @@
                 <!--                <span-->
                 <!--                    class="grey">(6)</span>-->
             </h1>
-            <p>From <a href="#" id="from-header" >You</a> to <a href="#" id="to-header">Scott Waite</a>, started on <a href="#" id="time-header">March 2, 2014 at 2:14 pm est. </a></p>
+            <p>From <a href="#" id="from-header">You</a> to <a href="#" id="to-header">Scott Waite</a>, started on <a
+                    href="#" id="time-header">March 2, 2014 at 2:14 pm est. </a></p>
         </div>
         <div id="message-nano-wrapper" class="nano">
             <div class="nano-content">
@@ -112,9 +132,19 @@
                                 bring moved seasons very, own won&#39;t all itself blessed which bring own creature
                                 forth every. Called sixth light.</p>
                         </div>
+                        <a href="#" onclick="openCertificate()" >Certificate</a>
                         <div class="tool-box"><a href="#" class="circle-icon small glyphicon glyphicon-share-alt"></a><a
                                 href="#" class="circle-icon small red-hover glyphicon glyphicon-remove"></a><a href="#"
                                                                                                                class="circle-icon small red-hover glyphicon glyphicon-flag"></a>
+                        </div>
+                    </li>
+
+                    <li id="certificate" style="visibility: hidden" >
+                        <div class="details">
+                            <div class="left"><p>Certificate</p></div>
+                        </div>
+                        <div>
+                            <span style="font-weight: bold" >Hash: </span><span id="hash" style="word-break: break-all">96ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852547</span>
                         </div>
                     </li>
 
@@ -150,4 +180,5 @@
                 </ul>
             </div>
         </div>
+    </div>
 </div>

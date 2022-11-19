@@ -49,7 +49,7 @@
 
         <script th:inline="javascript">
             function openMessage(from, to, title, body, time) {
-                time = time.substring(0, 10) + " " +  time.substring(11, 19);
+                time = time.substring(0, 10) + " " + time.substring(11, 19);
 
                 let fromHTML = document.getElementById("from");
                 fromHTML.innerText = from;
@@ -112,7 +112,8 @@
                 <!--                <span-->
                 <!--                    class="grey">(6)</span>-->
             </h1>
-            <p>From <a href="#" id="from-header" >You</a> to <a href="#" id="to-header">Scott Waite</a>, started on <a href="#" id="time-header">March 2, 2014 at 2:14 pm est. </a></p>
+            <p>From <a href="#" id="from-header">You</a> to <a href="#" id="to-header">Scott Waite</a>, started on <a
+                    href="#" id="time-header">March 2, 2014 at 2:14 pm est. </a></p>
         </div>
         <div id="message-nano-wrapper" class="nano">
             <div class="nano-content">
