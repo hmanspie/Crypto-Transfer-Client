@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 255)
     private String fullName;
 
     @Column(nullable = false, unique = true, length = 255)
@@ -33,10 +33,10 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 255)
     private Role role;
 
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 255)
     private Status status;
 
     @Column(nullable = false, length = 255)

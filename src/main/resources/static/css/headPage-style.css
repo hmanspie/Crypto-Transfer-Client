@@ -170,6 +170,7 @@ a:hover {
 #sidebar .menu-segment li.active a:hover {
     background: #282d36;
 }
+
 #sidebar .menu-segment li a {
     display: block;
     margin: 0 -50px 0 -70px;
@@ -178,6 +179,7 @@ a:hover {
 #sidebar .menu-segment li a:hover {
     background: #21262d;
 }
+
 #sidebar .menu-segment li .italic-link {
     margin-left: -30px;
     font-style: italic;
@@ -589,6 +591,7 @@ a:hover {
     margin-bottom: 30px;
     overflow: hidden;
 }
+
 #message .message-container li .details .left {
     float: left;
     font-weight: 600;
@@ -627,7 +630,7 @@ a:hover {
     float: right;
     color: #999;
 }
-#message .message-container li .message {
+#message .message-container li .message, .certificate {
     margin-bottom: 40px;
 }
 #message .message-container li .message p:last-child {
@@ -861,7 +864,7 @@ input:focus {
 .write-fragment-container textarea{
     margin-top: 7px;
     width: 100%;
-    height: 650px;
+    height: 40em;              /*650px*/
     border: none;
     resize: none;
 }
@@ -871,17 +874,67 @@ input:focus {
 }
 
 .write-fragment-container button{
-    margin-top: 7px;
-    width: 100%;           /*200px*/
-    height: 50px;
-    border-radius: 30px;
-    background-color: white;
-    color: black;
-    border: 2px solid #e7e7e7;
+    width: 15%;
 }
 
-.write-fragment-container button:hover {
-    background-color: #e7e7e7;
+.sexy-btn {
+    appearance: none;
+    background-color: #000000;
+    border: 2px solid #1A1A1A;
+    border-radius: 15px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0;
+    /*min-height: 60px;*/
+    min-width: 0;
+    outline: none;
+    padding: 16px 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 100%;
+    will-change: transform;
+}
+
+.sexy-btn:hover{
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.sexy-btn:active{
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+.profile-fragment-btn-container{
+    align-items: end;
+    width: 50%;
+}
+
+.profile-fragment-btn{
+    padding: 10px;
+}
+
+.profile-fragment-generate-btn-container{
+    padding-top: 20px;
+    width: 20%;
+}
+
+.profile-fragment-generate-conatiner{
+    padding-top: 10px;
+}
+
+.profile-fragment-info-box{
+    text-align: center;
 }
 
 
