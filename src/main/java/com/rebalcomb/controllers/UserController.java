@@ -110,7 +110,7 @@ public class UserController {
     }
 
     @PostMapping("/updateProfile")
-    public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest, ModelAndView model, Principal principal) {
+    public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest, ModelAndView model) {
 
         if (!userService.validatePassword(updateProfileRequest)) {
             model.addObject("error", "Confirm password doesn't match!");
