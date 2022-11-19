@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
-import java.security.PublicKey;
 
 @Data
 @Setter
@@ -13,7 +12,7 @@ import java.security.PublicKey;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateUserRequest {
+public class UpdateRequest {
 
     @NotBlank
     private String serverId;

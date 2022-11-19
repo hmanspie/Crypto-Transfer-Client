@@ -89,24 +89,18 @@ public class MessageController {
     }
 
     @GetMapping("/setting")
-    public ModelAndView admin(ModelAndView model, Principal principal){
+    public ModelAndView setting(ModelAndView model, Principal principal){
         model.addObject("headPageValue", "setting");
         model.addObject("isAdmin", isAdmin(principal));
         model.setViewName("headPage");
         return model;
     }
 
-    @GetMapping("/profile")
-    public ModelAndView profile(ModelAndView model, Principal principal){
-        Optional<User> user = userService.findByUsername(principal.getName());
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(user.get().getUsername());
-        signUpRequest.setEmail(user.get().getEmail());
-        signUpRequest.setFullName(user.get().getFullName());
-        model.addObject("headPageValue", "profile");
+    @GetMapping("/users")
+    public ModelAndView users(ModelAndView model, Principal principal){
+        model.addObject("headPageValue", "users");
+        model.addObject("users", userService.findAll());
         model.addObject("isAdmin", isAdmin(principal));
-        model.addObject("signUpRequest", signUpRequest);
-        model.addObject("updateProfileRequest", new SignUpRequest());
         model.setViewName("headPage");
         return model;
     }

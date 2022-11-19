@@ -22,4 +22,7 @@ public class Block {
 
     @NotBlank
     private String message;
+
+    @NotBlank
+    private String hash;
 }

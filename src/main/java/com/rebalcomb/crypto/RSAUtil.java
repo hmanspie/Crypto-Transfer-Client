@@ -42,4 +42,18 @@ public class RSAUtil {
         return new String(decryptedMessageBytes, StandardCharsets.UTF_8);
     }
 
+    public static byte [] encrypt(byte [] secretMessageBytes, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        Cipher encryptCipher = Cipher.getInstance("RSA");
+        encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
+        return encryptedMessageBytes;
+    }
+
+    public static byte [] decrypt(byte [] encryptedMessage, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        Cipher decryptCipher = Cipher.getInstance("RSA");
+        decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] decryptedMessageBytes = decryptCipher.doFinal(encryptedMessage);
+        return decryptedMessageBytes;
+    }
+
 }
