@@ -1,45 +1,45 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 
     var cols = {},
 
         messageIsOpen = false;
 
-    cols.showOverlay = function() {
+    cols.showOverlay = function () {
         $('body').addClass('show-main-overlay');
     };
-    cols.hideOverlay = function() {
+    cols.hideOverlay = function () {
         $('body').removeClass('show-main-overlay');
     };
 
 
-    cols.showMessage = function() {
+    cols.showMessage = function () {
         $('body').addClass('show-message');
         messageIsOpen = true;
     };
-    cols.hideMessage = function() {
+    cols.hideMessage = function () {
         $('body').removeClass('show-message');
         $('#main .message-list li').removeClass('active');
         messageIsOpen = false;
     };
 
 
-    cols.showSidebar = function() {
+    cols.showSidebar = function () {
         $('body').addClass('show-sidebar');
     };
-    cols.hideSidebar = function() {
+    cols.hideSidebar = function () {
         $('body').removeClass('show-sidebar');
     };
 
 
     // Show sidebar when trigger is clicked
 
-    $('.trigger-toggle-sidebar').on('click', function() {
+    $('.trigger-toggle-sidebar').on('click', function () {
         cols.showSidebar();
         cols.showOverlay();
     });
 
 
-    $('.trigger-message-close').on('click', function() {
+    $('.trigger-message-close').on('click', function () {
         cols.hideMessage();
         cols.hideOverlay();
     });
@@ -54,21 +54,21 @@ jQuery(document).ready(function($) {
 
     // When you click on a message, show it
 
-    $('#main .message-list li').on('click', function(e) {
+    $('#main .message-list li').on('click', function (e) {
         var item = $(this),
             target = $(e.target);
 
-        if(target.is('label')) {
+        if (target.is('label')) {
             item.toggleClass('selected');
         } else {
-            if(messageIsOpen && item.is('.active')) {
+            if (messageIsOpen && item.is('.active')) {
                 cols.hideMessage();
                 cols.hideOverlay();
             } else {
-                if(messageIsOpen) {
+                if (messageIsOpen) {
                     cols.hideMessage();
                     item.addClass('active');
-                    setTimeout(function() {
+                    setTimeout(function () {
                         cols.showMessage();
                     }, 300);
                 } else {
@@ -83,25 +83,22 @@ jQuery(document).ready(function($) {
 
     // This will prevent click from triggering twice when clicking checkbox/label
 
-    $('input[type=checkbox]').on('click', function(e) {
+    $('input[type=checkbox]').on('click', function (e) {
         e.stopImmediatePropagation();
     });
 
 
-
     // When you click the overlay, close everything
 
-    $('#main > .overlay').on('click', function() {
+    $('#main > .overlay').on('click', function () {
         cols.hideOverlay();
         cols.hideMessage();
         cols.hideSidebar();
     });
 
 
-
     // Enable sexy scrollbars
     $('.nano').nanoScroller();
-
 
 
     // Disable links
@@ -111,11 +108,10 @@ jQuery(document).ready(function($) {
     // });
 
 
-
     // Search box responsive stuff
 
-    $('.search-box input').on('focus', function() {
-        if($(window).width() <= 1360) {
+    $('.search-box input').on('focus', function () {
+        if ($(window).width() <= 1360) {
             cols.hideMessage();
         }
     });
@@ -123,14 +119,15 @@ jQuery(document).ready(function($) {
 });
 
 
-
-
 /*! nanoScrollerJS - v0.8.0 - 2014
 * https://jamesflorentino.github.com/nanoScrollerJS/
 * Copyright (c) 2014 James Florentino; Licensed MIT */
-(function($, window, document) {
+(function ($, window, document) {
     "use strict";
-    var BROWSER_IS_IE7, BROWSER_SCROLLBAR_WIDTH, DOMSCROLL, DOWN, DRAG, KEYDOWN, KEYUP, MOUSEDOWN, MOUSEMOVE, MOUSEUP, MOUSEWHEEL, NanoScroll, PANEDOWN, RESIZE, SCROLL, SCROLLBAR, TOUCHMOVE, UP, WHEEL, cAF, defaults, getBrowserScrollbarWidth, hasTransform, isFFWithBuggyScrollbar, rAF, transform, _elementStyle, _prefixStyle, _vendor;
+    var BROWSER_IS_IE7, BROWSER_SCROLLBAR_WIDTH, DOMSCROLL, DOWN, DRAG, KEYDOWN, KEYUP, MOUSEDOWN, MOUSEMOVE, MOUSEUP,
+        MOUSEWHEEL, NanoScroll, PANEDOWN, RESIZE, SCROLL, SCROLLBAR, TOUCHMOVE, UP, WHEEL, cAF, defaults,
+        getBrowserScrollbarWidth, hasTransform, isFFWithBuggyScrollbar, rAF, transform, _elementStyle, _prefixStyle,
+        _vendor;
     defaults = {
 
         /**
@@ -392,7 +389,7 @@ jQuery(document).ready(function($) {
     rAF = window.requestAnimationFrame;
     cAF = window.cancelAnimationFrame;
     _elementStyle = document.createElement('div').style;
-    _vendor = (function() {
+    _vendor = (function () {
         var i, transform, vendor, vendors, _i, _len;
         vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'];
         for (i = _i = 0, _len = vendors.length; _i < _len; i = ++_i) {
@@ -404,7 +401,7 @@ jQuery(document).ready(function($) {
         }
         return false;
     })();
-    _prefixStyle = function(style) {
+    _prefixStyle = function (style) {
         if (_vendor === false) {
             return false;
         }
@@ -423,7 +420,7 @@ jQuery(document).ready(function($) {
      @static
      @private
      */
-    getBrowserScrollbarWidth = function() {
+    getBrowserScrollbarWidth = function () {
         var outer, outerStyle, scrollbarWidth;
         outer = document.createElement('div');
         outerStyle = outer.style;
@@ -437,7 +434,7 @@ jQuery(document).ready(function($) {
         document.body.removeChild(outer);
         return scrollbarWidth;
     };
-    isFFWithBuggyScrollbar = function() {
+    isFFWithBuggyScrollbar = function () {
         var isOSXFF, ua, version;
         ua = window.navigator.userAgent;
         isOSXFF = /(?=.+Mac OS X)(?=.+Firefox)/.test(ua);
@@ -457,7 +454,7 @@ jQuery(document).ready(function($) {
      @param options {Object} nanoScroller's options
      @constructor
      */
-    NanoScroll = (function() {
+    NanoScroll = (function () {
         function NanoScroll(el, options) {
             this.el = el;
             this.options = options;
@@ -488,7 +485,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.preventScrolling = function(e, direction) {
+        NanoScroll.prototype.preventScrolling = function (e, direction) {
             if (!this.isActive) {
                 return;
             }
@@ -513,7 +510,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.nativeScrolling = function() {
+        NanoScroll.prototype.nativeScrolling = function () {
             this.$content.css({
                 WebkitOverflowScrolling: 'touch'
             });
@@ -529,7 +526,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.updateScrollValues = function() {
+        NanoScroll.prototype.updateScrollValues = function () {
             var content;
             content = this.content;
             this.maxScrollTop = content.scrollHeight - content.clientHeight;
@@ -549,7 +546,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.setOnScrollStyles = function() {
+        NanoScroll.prototype.setOnScrollStyles = function () {
             var cssValue;
             if (hasTransform) {
                 cssValue = {};
@@ -561,8 +558,8 @@ jQuery(document).ready(function($) {
             }
             if (rAF) {
                 if (!this.scrollRAF) {
-                    this.scrollRAF = rAF((function(_this) {
-                        return function() {
+                    this.scrollRAF = rAF((function (_this) {
+                        return function () {
                             _this.scrollRAF = null;
                             _this.slider.css(cssValue);
                         };
@@ -580,10 +577,10 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.createEvents = function() {
+        NanoScroll.prototype.createEvents = function () {
             this.events = {
-                down: (function(_this) {
-                    return function(e) {
+                down: (function (_this) {
+                    return function (e) {
                         _this.isBeingDragged = true;
                         _this.offsetY = e.pageY - _this.slider.offset().top;
                         _this.pane.addClass('active');
@@ -591,8 +588,8 @@ jQuery(document).ready(function($) {
                         return false;
                     };
                 })(this),
-                drag: (function(_this) {
-                    return function(e) {
+                drag: (function (_this) {
+                    return function (e) {
                         _this.sliderY = e.pageY - _this.$el.offset().top - _this.offsetY;
                         _this.scroll();
                         if (_this.contentScrollTop >= _this.maxScrollTop && _this.prevScrollTop !== _this.maxScrollTop) {
@@ -603,29 +600,29 @@ jQuery(document).ready(function($) {
                         return false;
                     };
                 })(this),
-                up: (function(_this) {
-                    return function(e) {
+                up: (function (_this) {
+                    return function (e) {
                         _this.isBeingDragged = false;
                         _this.pane.removeClass('active');
                         _this.doc.unbind(MOUSEMOVE, _this.events[DRAG]).unbind(MOUSEUP, _this.events[UP]);
                         return false;
                     };
                 })(this),
-                resize: (function(_this) {
-                    return function(e) {
+                resize: (function (_this) {
+                    return function (e) {
                         _this.reset();
                     };
                 })(this),
-                panedown: (function(_this) {
-                    return function(e) {
+                panedown: (function (_this) {
+                    return function (e) {
                         _this.sliderY = (e.offsetY || e.originalEvent.layerY) - (_this.sliderHeight * 0.5);
                         _this.scroll();
                         _this.events.down(e);
                         return false;
                     };
                 })(this),
-                scroll: (function(_this) {
-                    return function(e) {
+                scroll: (function (_this) {
+                    return function (e) {
                         _this.updateScrollValues();
                         if (_this.isBeingDragged) {
                             return;
@@ -654,8 +651,8 @@ jQuery(document).ready(function($) {
                         }
                     };
                 })(this),
-                wheel: (function(_this) {
-                    return function(e) {
+                wheel: (function (_this) {
+                    return function (e) {
                         var delta;
                         if (e == null) {
                             return;
@@ -678,7 +675,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.addEvents = function() {
+        NanoScroll.prototype.addEvents = function () {
             var events;
             this.removeEvents();
             events = this.events;
@@ -699,7 +696,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.removeEvents = function() {
+        NanoScroll.prototype.removeEvents = function () {
             var events;
             events = this.events;
             this.win.unbind(RESIZE, events[RESIZE]);
@@ -718,7 +715,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.generate = function() {
+        NanoScroll.prototype.generate = function () {
             var contentClass, cssRule, currentPadding, options, paneClass, sliderClass;
             options = this.options;
             paneClass = options.paneClass, sliderClass = options.sliderClass, contentClass = options.contentClass;
@@ -751,7 +748,7 @@ jQuery(document).ready(function($) {
          @private
          */
 
-        NanoScroll.prototype.restore = function() {
+        NanoScroll.prototype.restore = function () {
             this.stopped = false;
             if (!this.iOSNativeScrolling) {
                 this.pane.show();
@@ -768,8 +765,9 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller();
          */
 
-        NanoScroll.prototype.reset = function() {
-            var content, contentHeight, contentPosition, contentStyle, contentStyleOverflowY, paneBottom, paneHeight, paneOuterHeight, paneTop, parentMaxHeight, right, sliderHeight;
+        NanoScroll.prototype.reset = function () {
+            var content, contentHeight, contentPosition, contentStyle, contentStyleOverflowY, paneBottom, paneHeight,
+                paneOuterHeight, paneTop, parentMaxHeight, right, sliderHeight;
             if (this.iOSNativeScrolling) {
                 this.contentHeight = this.content.scrollHeight;
                 return;
@@ -849,7 +847,7 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller({ scroll: 'top' });
          */
 
-        NanoScroll.prototype.scroll = function() {
+        NanoScroll.prototype.scroll = function () {
             if (!this.isActive) {
                 return;
             }
@@ -873,7 +871,7 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller({ scrollBottom: value });
          */
 
-        NanoScroll.prototype.scrollBottom = function(offsetY) {
+        NanoScroll.prototype.scrollBottom = function (offsetY) {
             if (!this.isActive) {
                 return;
             }
@@ -892,7 +890,7 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller({ scrollTop: value });
          */
 
-        NanoScroll.prototype.scrollTop = function(offsetY) {
+        NanoScroll.prototype.scrollTop = function (offsetY) {
             if (!this.isActive) {
                 return;
             }
@@ -911,7 +909,7 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller({ scrollTo: $('#a_node') });
          */
 
-        NanoScroll.prototype.scrollTo = function(node) {
+        NanoScroll.prototype.scrollTo = function (node) {
             if (!this.isActive) {
                 return;
             }
@@ -929,7 +927,7 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller({ stop: true });
          */
 
-        NanoScroll.prototype.stop = function() {
+        NanoScroll.prototype.stop = function () {
             if (cAF && this.scrollRAF) {
                 cAF(this.scrollRAF);
                 this.scrollRAF = null;
@@ -951,7 +949,7 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller({ destroy: true });
          */
 
-        NanoScroll.prototype.destroy = function() {
+        NanoScroll.prototype.destroy = function () {
             if (!this.stopped) {
                 this.stop();
             }
@@ -981,7 +979,7 @@ jQuery(document).ready(function($) {
          $(".nano").nanoScroller({ flash: true });
          */
 
-        NanoScroll.prototype.flash = function() {
+        NanoScroll.prototype.flash = function () {
             if (this.iOSNativeScrolling) {
                 return;
             }
@@ -990,8 +988,8 @@ jQuery(document).ready(function($) {
             }
             this.reset();
             this.pane.addClass('flashed');
-            setTimeout((function(_this) {
-                return function() {
+            setTimeout((function (_this) {
+                return function () {
                     _this.pane.removeClass('flashed');
                 };
             })(this), this.options.flashDelay);
@@ -1001,8 +999,8 @@ jQuery(document).ready(function($) {
         return NanoScroll;
 
     })();
-    $.fn.nanoScroller = function(settings) {
-        return this.each(function() {
+    $.fn.nanoScroller = function (settings) {
+        return this.each(function () {
             var options, scrollbar;
             if (!(scrollbar = this.nanoscroller)) {
                 options = $.extend({}, defaults, settings);

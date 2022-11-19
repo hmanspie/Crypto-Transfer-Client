@@ -33,21 +33,6 @@
                 </select>
                 <p class="text-description mt-3">The longest key will be the strongest</p>
 
-                <text class="h5">Current key</text>
-                <textarea
-                        class="form-control w-50 mt-3"
-                        id="private-key"
-                        onclick="copyToClipboard(this.id)"
-                        aria-label="With textarea"
-                        data-bs-toggle="tooltip"
-                        data-popper-placement="top"
-                        title="Click to copy"
-                        readonly
-                >{Key}</textarea>
-                <button type="submit" class="btn mt-2 ms-0">Generate Keys</button>
-                <p class="text-description mt-3">If you will change your keys then older keys will invalid</p>
-                <script th:src="@{/js/headPage-settingsFragment.js}"></script>
-
 <!--                <p class="h5" >Encryption mode</p>-->
 <!--                <div class="container-fluid">-->
 <!--                    <div class="form-check">-->
