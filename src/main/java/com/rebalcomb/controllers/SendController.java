@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.concurrent.ExecutionException;
 
@@ -36,7 +37,7 @@ public class SendController {
     }
 
     @PostMapping("/sendNewMessage")
-    public ModelAndView login(ModelAndView model, @Valid @ModelAttribute MessageRequest messageRequest, Principal principal) throws InterruptedException, IOException, ExecutionException {
+    public ModelAndView login(ModelAndView model, @Valid @ModelAttribute MessageRequest messageRequest, Principal principal) throws InterruptedException, IOException, ExecutionException, NoSuchAlgorithmException {
         if(messageRequest.getUser_to().equals(principal.getName())){
             model.addObject("isSend", false);
             model.addObject("headPageValue", "write");

@@ -5,8 +5,9 @@ import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.controllers.UserController;
 import com.rebalcomb.crypto.RSAUtil;
 import com.rebalcomb.mapper.UserMapper;
+import com.rebalcomb.model.dto.ChangeSecretRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
-import com.rebalcomb.model.dto.UpdateUserRequest;
+import com.rebalcomb.model.dto.UpdateRequest;
 import com.rebalcomb.model.entity.User;
 import com.rebalcomb.model.entity.enums.Role;
 import com.rebalcomb.repositories.UserRepository;
@@ -14,6 +15,7 @@ import io.rsocket.transport.netty.client.TcpClientTransport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.object.UpdatableSqlQuery;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +26,15 @@ import reactor.util.retry.Retry;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -39,22 +44,27 @@ public class UserService {
 
     private final UserRepository userRepository;
     private RSocketRequester requester;
-
     private Thread threadUpdateUsers;
+    private Thread threadUpdateSalt;
+    private Thread threadUpdateEncryptMode;
+    private RSAUtil rsaUtil;
+    private Thread threadUpdateIV;
     private final RSocketRequester.Builder builder;
     private final Logger logger = LogManager.getLogger(UserService.class);
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
-    public UserService(UserRepository userRepository , RSocketRequester.Builder builder) {
+    public UserService(UserRepository userRepository, RSocketRequester.Builder builder) throws NoSuchAlgorithmException {
+        rsaUtil  = new RSAUtil();
         this.builder = builder;
         this.requester = this.builder
                 .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
                         .doBeforeRetry(l -> logger.warn("Waiting for connection to remote server!"))))
-                                        .transport(TcpClientTransport
-                                                .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
+                .transport(TcpClientTransport
+                        .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
         this.userRepository = userRepository;
 
-        if(ServerUtil.PUBLIC_KEY == null) {
+        if (ServerUtil.PUBLIC_KEY == null) {
             try {
                 getPublicKeyFromRemoteServer();
             } catch (NoSuchAlgorithmException e) {
@@ -64,6 +74,9 @@ public class UserService {
             }
         }
         updateUsersTable();
+        updateSalt();
+        updateIV();
+        updateEncryptMode();
     }
 
     public void getPublicKeyFromRemoteServer() throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -75,15 +88,41 @@ public class UserService {
         logger.info("Get public key: " + publicKeyBase64 + " successfully!");
     }
 
-    public Optional<User> findByUsername(String username){
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public List<User> findAll(){ return userRepository.findAll(); }
 
     public Mono<String> getPublicKey(String serverId) {
         Mono<String> mono = this.requester
                 .route("server.getPublicKey")
                 .data(serverId)
                 .retrieveMono(String.class);
+        return mono;
+    }
+
+    public Mono<String> getSalt(UpdateRequest updateRequest){
+        Mono<String> mono = this.requester
+                .route("server.getSalt")
+                .data(updateRequest)
+                .retrieveMono(String.class);
+        return mono;
+    }
+
+    public Mono<String> getEncryptMode(String serverID){
+        Mono<String> mono = this.requester
+                .route("server.getEncryptMode")
+                .data(serverID)
+                .retrieveMono(String.class);
+        return mono;
+    }
+
+    public Mono<byte []> getIV(UpdateRequest updateRequest){
+        Mono<byte []> mono = this.requester
+                .route("server.getIV")
+                .data(updateRequest)
+                .retrieveMono(byte [].class);
         return mono;
     }
 
@@ -94,20 +133,28 @@ public class UserService {
                 .retrieveMono(User.class);
     }
 
-    public Flux<User> updateUsers(UpdateUserRequest updateUserRequest) {
+    public Flux<User> updateUsers(UpdateRequest updateRequest) {
         return this.requester
                 .route("user.updateUsers")
-                .data(updateUserRequest)
+                .data(updateRequest)
                 .retrieveFlux(User.class);
     }
 
-        public Mono<Void> sendUpdateProfileToServer(User user) {
-        return  this.requester
+    public Mono<User> updateProfile(User user) {
+        return this.requester
                 .route("user.updateProfile")
                 .data(user)
-                .retrieveMono(Void.class);
+                .retrieveMono(User.class);
     }
-    public String getLastDataTimeReg(){
+
+    public Mono<Boolean> changeSecret(ChangeSecretRequest changeSecretRequest) {
+        return this.requester
+                .route("user.changeSecret")
+                .data(changeSecretRequest)
+                .retrieveMono(Boolean.class);
+    }
+
+    public String getLastDataTimeReg() {
         Timestamp timestamp = new Timestamp(0);
         for (User user : userRepository.findAll()) {
             if (user.getRegTime().after(timestamp))
@@ -116,26 +163,109 @@ public class UserService {
         timestamp.setTime(timestamp.getTime() + 1);
         return timestamp.toString();
     }
-    public void updateUsersTable() {
-        threadUpdateUsers = new Thread(() -> {
-            PrivateKey privateKey;
-            UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+
+    public Boolean changeSecretKey(String username) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = userRepository.findByUsername(username).get();
+        String newSecretKey = BigInteger.probablePrime(256, new SecureRandom()).toString();
+        user.setSecret(newSecretKey);
+        ChangeSecretRequest changeSecretRequest = new ChangeSecretRequest();
+        changeSecretRequest.setServerID(ServerUtil.SERVER_ID);
+        changeSecretRequest.setSecretKey(RSAUtil.encrypt(newSecretKey, ServerUtil.PUBLIC_KEY));
+        changeSecretRequest.setUsername(username);
+        changeSecretRequest.setRegTime(Timestamp.valueOf(LocalDateTime.now().format(formatter)));
+        return changeSecret(changeSecretRequest).block();
+    }
+
+    public void updateEncryptMode() {
+        threadUpdateEncryptMode = new Thread(() -> {
+            ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
+            logger.info(ServerUtil.SERVER_ID + " -> update encrypt mode: " + ServerUtil.ENCRYPT_MODE + " successfully!");
+            do {
+                try {
+                    Thread.sleep(1000);
+                    if(LocalDateTime.now().getSecond() == 0) {
+                        ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
+                        logger.info(ServerUtil.SERVER_ID + " -> update encrypt mode: " + ServerUtil.ENCRYPT_MODE + " successfully!");
+                    }
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            } while (true);
+        });
+        threadUpdateEncryptMode.start();
+    }
+
+    public void updateIV() {
+        threadUpdateIV = new Thread(() -> {
+            UpdateRequest updateRequest = generateKeyPair();
             try {
-                RSAUtil rsaUtil = new RSAUtil();
-                updateUserRequest.setServerId(ServerUtil.SERVER_ID);
-                updateUserRequest.setPublicKey(Base64.getEncoder().encodeToString(rsaUtil.getPublicKey().getEncoded()));
-                privateKey = rsaUtil.getPrivateKey();
-            } catch (NoSuchAlgorithmException e) {
+                ServerUtil.IV_VALUE = RSAUtil.decrypt(getIV(updateRequest).block(), rsaUtil.getPrivateKey());
+            } catch (NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                     NoSuchAlgorithmException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
+            logger.info(ServerUtil.SERVER_ID + " -> update IV: " + Arrays.toString(ServerUtil.IV_VALUE) + " successfully!");
+            do {
+                try {
+                    Thread.sleep(1000);
+                    if(LocalDateTime.now().getSecond() == 0) {
+                        try {
+                            ServerUtil.IV_VALUE = RSAUtil.decrypt(getIV(updateRequest).block(), rsaUtil.getPrivateKey());
+                        } catch (NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                                 NoSuchAlgorithmException | InvalidKeyException e) {
+                            throw new RuntimeException(e);
+                        }
+                        logger.info(ServerUtil.SERVER_ID + " -> update IV: " + Arrays.toString(ServerUtil.IV_VALUE) + " successfully!");
+                    }
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            } while (true);
+        });
+        threadUpdateIV.start();
+    }
+
+    public void updateSalt() {
+        threadUpdateSalt = new Thread(() -> {
+            UpdateRequest updateRequest = generateKeyPair();
+            try {
+                ServerUtil.SALT_VALUE = RSAUtil.decrypt(getSalt(updateRequest).block(), rsaUtil.getPrivateKey());
+            } catch (NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                     NoSuchAlgorithmException | InvalidKeyException e) {
+                throw new RuntimeException(e);
+            }
+            logger.info(ServerUtil.SERVER_ID + " -> update salt: " + ServerUtil.SALT_VALUE + " successfully!");
+            do {
+                try {
+                    Thread.sleep(1000);
+                    if(LocalDateTime.now().getSecond() == 0) {
+                        try {
+                            ServerUtil.SALT_VALUE = RSAUtil.decrypt(getSalt(updateRequest).block(), rsaUtil.getPrivateKey());
+                        } catch (NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                                 NoSuchAlgorithmException | InvalidKeyException e) {
+                            throw new RuntimeException(e);
+                        }
+                        logger.info(ServerUtil.SERVER_ID + " -> update salt: " + ServerUtil.SALT_VALUE + " successfully!");
+                    }
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            } while (true);
+        });
+        threadUpdateSalt.start();
+    }
+
+    public void updateUsersTable() {
+        threadUpdateUsers = new Thread(() -> {
+            UpdateRequest updateRequest = generateKeyPair();
             do {
                 try {
                     Thread.sleep(10000);
-                    updateUserRequest.setRegTime(getLastDataTimeReg());
-                    List<User> users = updateUsers(updateUserRequest).collectList().block();
+                    updateRequest.setRegTime(getLastDataTimeReg());
+                    List<User> users = updateUsers(updateRequest).collectList().block();
                     for (User user : users) {
-                        if (userRepository.findByUsername(user.getUsername()).isEmpty()){
-                            user.setSecret(RSAUtil.decrypt(user.getSecret(), privateKey));
+                        if (userRepository.findByUsername(user.getUsername()).isEmpty()) {
+                            user.setSecret(RSAUtil.decrypt(user.getSecret(), rsaUtil.getPrivateKey()));
                             userRepository.save(user);
                         }
                     }
@@ -147,7 +277,12 @@ public class UserService {
         });
         threadUpdateUsers.start();
     }
-
+    private UpdateRequest generateKeyPair(){
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.setServerId(ServerUtil.SERVER_ID);
+        updateRequest.setPublicKey(Base64.getEncoder().encodeToString(rsaUtil.getPublicKey().getEncoded()));
+        return updateRequest;
+    }
     public Boolean validatePassword(SignUpRequest request) {
         if (request.getPassword().equals(request.getConfirmPassword())) {
             return true;
@@ -161,7 +296,7 @@ public class UserService {
         String secret = user.getSecret();
         user.setSecret(RSAUtil.encrypt(secret, ServerUtil.PUBLIC_KEY));
         user = signUp(user).block();
-        if(user != null) {
+        if (user != null) {
             user.setSecret(secret);
             save(user);
             UserController.INFO = user.getFullName() + " is successfully registered!";
@@ -175,15 +310,15 @@ public class UserService {
         }
     }
 
-    public Boolean updateProfile(SignUpRequest updateProfileRequest){
+    public Boolean updateProfile(SignUpRequest updateProfileRequest) {
         Optional<User> user = userRepository.findByUsername(updateProfileRequest.getUsername());
-        if(user.isEmpty())
+        if (user.isEmpty())
             return false;
         user.get().setFullName(updateProfileRequest.getFullName());
         user.get().setEmail(updateProfileRequest.getEmail());
-        user.get().setPassword(BCrypt.withDefaults().hashToString(12, updateProfileRequest.getPassword().toCharArray()));
-        userRepository.save(user.get());
-        sendUpdateProfileToServer(user.get());
+        user.get().setPassword(BCrypt.withDefaults().hashToString(12, updateProfileRequest.getConfirmPassword().toCharArray()));
+        user.get().setRegTime(Timestamp.valueOf(LocalDateTime.now().format(formatter)));
+        updateProfile(user.get()).block();
         return true;
     }
 
@@ -191,19 +326,19 @@ public class UserService {
         return userRepository.isAdmin(username);
     }
 
-    public User save(User user){
+    public User save(User user) {
         return userRepository.save(user);
     }
 
-    public String findSecretByUsername(String username){
+    public String findSecretByUsername(String username) {
         return userRepository.findSecretByUsername(username);
     }
 
-    List<String> findAllUsername(){
+    List<String> findAllUsername() {
         return userRepository.findAllUsername();
     }
 
-    public void deleteByUsername(String username){
+    public void deleteByUsername(String username) {
         userRepository.deleteByUsername(username);
     }
 }

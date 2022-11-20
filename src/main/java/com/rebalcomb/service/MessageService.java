@@ -22,8 +22,12 @@ import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,7 +89,7 @@ public class MessageService {
     public Message decryptMessage(Block block) {
         String hidingMessage = new Hiding().getOpenMassageForHidingMassage(block.getMessage());
         MessageRequest messageRequest = AESUtil.decrypt(hidingMessage, userService.findSecretByUsername(block.getFrom()));
-        return MessageMapper.mapMessage(messageRequest);
+        return MessageMapper.mapMessage(messageRequest, block.getHash());
     }
 
     public void saveMessage(Block block){
@@ -109,13 +113,19 @@ public class MessageService {
         threadIncoming.start();
     }
 
-    public Boolean sendMessage(MessageRequest messageRequest) {
+    public Boolean sendMessage(MessageRequest messageRequest) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
         Optional<User> to = userService.findByUsername(messageRequest.getUser_to());
         if (to.isPresent()) {
             Block block = new Block();
             block.setFrom(messageRequest.getUser_from());
             block.setTo(messageRequest.getUser_to());
             block.setMessage(encryptMessage(messageRequest));
+            md.update(messageRequest.getBodyMessage().getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (int i = 0;i < md.digest().length; i++)
+                hexString.append(Integer.toHexString(0xFF & md.digest()[i]));
+            block.setHash(hexString.toString());
             return send(block).block();
         }
         return false;

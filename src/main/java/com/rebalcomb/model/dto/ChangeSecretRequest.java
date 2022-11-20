@@ -1,5 +1,6 @@
 package com.rebalcomb.model.dto;
 
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,22 +8,23 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
+import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Block {
+public class ChangeSecretRequest {
 
     @NotBlank
-    private String from;
+    private String serverID;
 
     @NotBlank
-    private String to;
+    private String secretKey;
 
     @NotBlank
-    private String message;
+    private String username;
 
     @NotBlank
-    private String hash;
+    private Timestamp regTime;
 }

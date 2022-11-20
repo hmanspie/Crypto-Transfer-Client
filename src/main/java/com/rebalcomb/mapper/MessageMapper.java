@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 public class MessageMapper {
 
-    public static Message mapMessage(MessageRequest request) {
+    public static Message mapMessage(MessageRequest request, String hash) {
         Message message = new Message();
         message.setUser_from(request.getUser_from());
         message.setUser_to(request.getUser_to());
@@ -14,6 +14,7 @@ public class MessageMapper {
         message.setBody(request.getBodyMessage());
         message.setDate_time(Timestamp.valueOf(request.getDateTime()));
         message.setIs_send(false);
+        message.setHash(hash);
         return message;
     }
 }

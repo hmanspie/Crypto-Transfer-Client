@@ -39,6 +39,9 @@ public class Message {
     @Column(nullable = false)
     private Boolean is_send;
 
+    @Column(nullable = false)
+    private String hash;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
