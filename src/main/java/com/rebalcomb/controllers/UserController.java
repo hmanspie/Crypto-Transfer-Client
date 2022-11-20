@@ -119,10 +119,6 @@ public class UserController {
             model.addObject("messageForUser", "Invalid verification code");
             model.addObject("headPageValue", "registration");
         }
-
-//        model.addObject("updatePassword", new UpdatePassword());
-//        model.addObject("updatePassword", new UpdatePassword());
-//        model.addObject("messageForUser", "");
         return model;
     }
 
@@ -138,10 +134,6 @@ public class UserController {
             model.addObject("checkCode", new CheckCode());
             model.addObject("messageForUser", "Invalid verification code");
         }
-//        model.setViewName("recoveryPassword");
-//        model.addObject("updatePassword", new UpdatePassword());
-//        model.addObject("updatePassword", new UpdatePassword());
-//        model.addObject("messageForUser", "");
         return model;
     }
 
@@ -153,6 +145,7 @@ public class UserController {
             User user = userService.findByEmail(email).get();
             user.setPassword(BCrypt.withDefaults().hashToString(12, password.getPassword().toCharArray()));
             userService.save(user);
+            userService.updateProfile(user);
         } else {
             model.setViewName("recoveryPassword");
             model.addObject("updatePassword", new UpdatePassword());
