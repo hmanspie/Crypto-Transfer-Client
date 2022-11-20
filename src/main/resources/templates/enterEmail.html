@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/email.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/old/main.css}"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/image/favicon/darkicon.ico}">
+</head>
+<body class="container-fluid p-0" id="body">
+<div class="container w-25 justify-content-center">
+    <form th:object="${emailRequest}" th:action="@{/sendCode}" th:method="post">
+        <div class="email-form container shadow rounded-3 p-2">
+            <p class="h2 email-title">Verification</p>
+            <div class="email-line"></div>
+            <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                <div class="container p-0 text-start mt-2">
+                    <p class="h5">Write your email</p>
+                    <input type="text" class="form-control mt-3" placeholder="Email"
+                           aria-label="Code"
+                           aria-describedby="basic-addon1"
+                           th:field="*{email}" required>
+                    <p class="text-description mt-3 mb-0">Example: Moskalets@gmail.com</p>
+                    <button type="submit" class="btn mt-1">Send</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

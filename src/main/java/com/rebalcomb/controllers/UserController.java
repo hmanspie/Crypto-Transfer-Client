@@ -1,8 +1,9 @@
 package com.rebalcomb.controllers;
 
+import com.rebalcomb.email.EmailHandler;
+import com.rebalcomb.email.TLSEmail;
 import com.rebalcomb.exceptions.DuplicateAccountException;
-import com.rebalcomb.model.dto.SignInRequest;
-import com.rebalcomb.model.dto.SignUpRequest;
+import com.rebalcomb.model.dto.*;
 import com.rebalcomb.model.entity.User;
 import com.rebalcomb.service.UserService;
 import org.slf4j.Logger;
@@ -29,32 +30,39 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     public static String INFO;
+
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public String getLoginPage() {
         return "login";
     }
 
     @PostMapping("/registered")
     public ModelAndView registered(@Valid @ModelAttribute SignUpRequest signUpRequest,
-                                                        ModelAndView model) throws InterruptedException, ExecutionException, DuplicateAccountException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        model.setViewName("login");
+                                   ModelAndView model) throws InterruptedException, ExecutionException, DuplicateAccountException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         if (!userService.validatePassword(signUpRequest)) {
+            model.setViewName("login");
             model.addObject("isError", true);
             model.addObject("error", "Confirm password doesn't match!");
             model.addObject("howForm", true);
             return model;
         }
         if (userService.signUp(signUpRequest)) {
-            model.addObject("isError", false);
-            model.addObject("info", INFO);
-            model.addObject("signInRequest", new SignInRequest());
-            model.addObject("howForm", false);
-        } else{
+            Thread thread = new Thread(() -> {
+                EmailHandler email = new EmailHandler();
+                email.send(EmailRequest.checkEmail);
+            });
+            thread.start();
+            model.setViewName("email");
+            model.addObject("checkCode", new CheckCode());
+            model.addObject("messageForUser", "");
+            model.addObject("headPageValue", "registration");
+        } else {
+            model.setViewName("login");
             model.addObject("isError", true);
             model.addObject("error", INFO);
             model.addObject("howForm", true);
@@ -80,23 +88,90 @@ public class UserController {
 
     @GetMapping("/goToForgortPasswordForm")
     public ModelAndView getViewForForgortPassword(ModelAndView model) {
+        model.setViewName("enterEmail");
+        model.addObject("emailRequest", new EmailRequest());
+        return model;
+    }
+
+    @PostMapping("/sendCode")
+    public ModelAndView sendCode(ModelAndView model, EmailRequest request) {
+        EmailRequest.checkEmail = request.getEmail();
+        Thread thread = new Thread(() -> {
+            EmailHandler email = new EmailHandler();
+            email.send(EmailRequest.checkEmail);
+        });
+        thread.start();
         model.setViewName("email");
-        return null;
+        model.addObject("checkCode", new CheckCode());
+        model.addObject("messageForUser", "");
+        model.addObject("headPageValue", "forgotPassword");
+        return model;
+    }
+
+    @PostMapping("/verificatedAccount")
+    public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) {
+        if (code.getCode().equals(EmailHandler.verificationCode)) {
+            model.setViewName("/login");
+        } else {
+            model.setViewName("email");
+            model.addObject("checkCode", new CheckCode());
+            model.addObject("messageForUser", "Invalid verification code");
+            model.addObject("headPageValue", "registration");
+        }
+
+//        model.addObject("updatePassword", new UpdatePassword());
+//        model.addObject("updatePassword", new UpdatePassword());
+//        model.addObject("messageForUser", "");
+        return model;
+    }
+
+    @PostMapping("/createNewPassword")
+    public ModelAndView createNewPassword(ModelAndView model, CheckCode code) {
+        if (code.getCode().equals(EmailHandler.verificationCode)) {
+            model.setViewName("recoveryPassword");
+            model.addObject("updatePassword", new UpdatePassword());
+            model.addObject("updatePassword", new UpdatePassword());
+            model.addObject("messageForUser", "");
+        } else {
+            model.setViewName("email");
+            model.addObject("checkCode", new CheckCode());
+            model.addObject("messageForUser", "Invalid verification code");
+        }
+//        model.setViewName("recoveryPassword");
+//        model.addObject("updatePassword", new UpdatePassword());
+//        model.addObject("updatePassword", new UpdatePassword());
+//        model.addObject("messageForUser", "");
+        return model;
+    }
+
+    @PostMapping("/updatePassword")
+    public ModelAndView updatePasswordInDataBase(ModelAndView model, UpdatePassword password) {
+        if (password.getPassword().equals(password.getConfirmationPassword())) {
+            String email = EmailRequest.checkEmail;
+            model.setViewName("login");
+            //TODO добавляй метод оновлення паролю в базі данних, аккаунт шукай по пошті
+        } else {
+            model.setViewName("recoveryPassword");
+            model.addObject("updatePassword", new UpdatePassword());
+            model.addObject("updatePassword", new UpdatePassword());
+            model.addObject("messageForUser", "Passwords do not match");
+        }
+        return model;
     }
 
     @GetMapping("/email")
-    public String email(){
+    public String email() {
         return "email";
     }
 
     @GetMapping("/logout")
-    public String logout(){
+    public String logout() {
         return "logout";
     }
 
     @PostMapping("/updateProfile")
     public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
-                                                                                    ModelAndView model) {
+                                      ModelAndView model) {
         if (!userService.validatePassword(updateProfileRequest)) {
             model.addObject("error", "Confirm password doesn't match!");
             model.addObject("headPageValue", "profile");
@@ -107,7 +182,7 @@ public class UserController {
             model.addObject("isError", false);
             model.addObject("info", INFO);
             model.addObject("signUnRequest", updateProfileRequest);
-        } else{
+        } else {
             model.addObject("isError", true);
             model.addObject("error", INFO);
         }

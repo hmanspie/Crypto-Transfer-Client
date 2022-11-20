@@ -10,22 +10,50 @@
     <link rel="icon" type="image/x-icon" th:href="@{/image/favicon/darkicon.ico}">
 </head>
 <body class="container-fluid p-0" id="body">
-<div class="container w-25 justify-content-center">
-  <div class="email-form container shadow rounded-3 p-2">
-    <p class="h2 email-title">Verification</p>
-      <div class="email-line"></div>
-      <div class="container d-flex align-items-stretch p-0 justify-content-center">
-          <div class="container p-0 text-start mt-2">
-              <p class="h5">Check your email</p>
-              <input type="text" class="form-control mt-3" placeholder="Code"
-                     aria-label="Code"
-                     aria-describedby="basic-addon1" required>
-              <p class="text-description mt-3 mb-0">Your email: MoskaletsPidor@gmail.com</p>
-              <button type="button" class="btn mt-1" >Send</button>
-          </div>
-      </div>
 
-  </div>
-</div>
+<th:secretBlock th:if="${headPageValue} == 'forgotPassword'">
+    <div class="container w-25 justify-content-center">
+        <form th:object="${checkCode}" th:action="@{/createNewPassword}" th:method="post">
+            <div class="email-form container shadow rounded-3 p-2">
+                <p class="h2 email-title">Verification</p>
+                <div class="email-line"></div>
+                <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                    <div class="container p-0 text-start mt-2">
+                        <p class="h5">Check your email</p>
+                        <input type="text" class="form-control mt-3" placeholder="Code"
+                               aria-label="Code"
+                               aria-describedby="basic-addon1"
+                               th:field="*{code}" required>
+                        <p class="text-description mt-3 mb-0" th:text="${messageForUser}"></p>
+                        <button type="send" class="btn mt-1">Send</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</th:secretBlock>
+
+<th:secretBlock th:if="${headPageValue} == 'registration'">
+    <div class="container w-25 justify-content-center">
+        <form th:object="${checkCode}" th:action="@{/verificatedAccount}" th:method="post">
+            <div class="email-form container shadow rounded-3 p-2">
+                <p class="h2 email-title">Verification</p>
+                <div class="email-line"></div>
+                <div class="container d-flex align-items-stretch p-0 justify-content-center">
+                    <div class="container p-0 text-start mt-2">
+                        <p class="h5">Check your email</p>
+                        <input type="text" class="form-control mt-3" placeholder="Code"
+                               aria-label="Code"
+                               aria-describedby="basic-addon1"
+                               th:field="*{code}" required>
+                        <p class="text-description mt-3 mb-0" th:text="${messageForUser}"></p>
+                        <button type="send" class="btn mt-1">Send</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</th:secretBlock>
+
 </body>
 </html>
