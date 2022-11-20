@@ -1,5 +1,6 @@
 package com.rebalcomb.controllers;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.rebalcomb.email.EmailHandler;
 import com.rebalcomb.email.TLSEmail;
 import com.rebalcomb.exceptions.DuplicateAccountException;
@@ -149,7 +150,9 @@ public class UserController {
         if (password.getPassword().equals(password.getConfirmationPassword())) {
             String email = EmailRequest.checkEmail;
             model.setViewName("login");
-            //TODO добавляй метод оновлення паролю в базі данних, аккаунт шукай по пошті
+            User user = userService.findByEmail(email).get();
+            user.setPassword(BCrypt.withDefaults().hashToString(12, password.getPassword().toCharArray()));
+            userService.save(user);
         } else {
             model.setViewName("recoveryPassword");
             model.addObject("updatePassword", new UpdatePassword());
