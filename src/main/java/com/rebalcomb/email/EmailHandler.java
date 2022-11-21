@@ -4,8 +4,7 @@ import java.security.SecureRandom;
 
 public class EmailHandler {
     //TODO: Треба первіряти verificationCode з тим, що укаже користувач
-    private static String verificationCode;
-
+    public static String verificationCode;
 
     public boolean isVereficated(String userCode)
     {

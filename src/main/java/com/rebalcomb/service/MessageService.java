@@ -2,6 +2,7 @@ package com.rebalcomb.service;
 
 import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.crypto.AESUtil;
+import com.rebalcomb.crypto.Hash;
 import com.rebalcomb.crypto.Hiding;
 import com.rebalcomb.io.File;
 import com.rebalcomb.mapper.MessageMapper;
@@ -114,18 +115,13 @@ public class MessageService {
     }
 
     public Boolean sendMessage(MessageRequest messageRequest) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
         Optional<User> to = userService.findByUsername(messageRequest.getUser_to());
         if (to.isPresent()) {
             Block block = new Block();
             block.setFrom(messageRequest.getUser_from());
             block.setTo(messageRequest.getUser_to());
             block.setMessage(encryptMessage(messageRequest));
-            md.update(messageRequest.getBodyMessage().getBytes());
-            StringBuilder hexString = new StringBuilder();
-            for (int i = 0;i < md.digest().length; i++)
-                hexString.append(Integer.toHexString(0xFF & md.digest()[i]));
-            block.setHash(hexString.toString());
+            block.setHash(Hash.getHashSHA(messageRequest.getBodyMessage()));
             return send(block).block();
         }
         return false;
