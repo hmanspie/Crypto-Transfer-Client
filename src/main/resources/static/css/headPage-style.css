@@ -921,12 +921,22 @@ input:focus {
 }
 
 .profile-fragment-btn{
+    margin-top: 10px;
+    margin-bottom: 10px;
     padding: 10px;
+}
+
+.profile-fragment-btn a{
+    color: white;
+    text-decoration: none;
+}
+
+.profile-fragment-btn a:hover{
+    color: white;
 }
 
 .profile-fragment-generate-btn-container{
     padding-top: 20px;
-    width: 20%;
 }
 
 .profile-fragment-generate-conatiner{
@@ -936,5 +946,6 @@ input:focus {
 .profile-fragment-info-box{
     text-align: center;
 }
+
 
 
