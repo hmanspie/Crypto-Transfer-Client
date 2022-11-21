@@ -83,7 +83,31 @@
                 console.log(hash);
 
             }
+        </script>
 
+        <script th:inline="javascript">
+            let newMessages = [[${newMessages}]];
+            let from = [[${message?.getFrom()}]];
+
+            function notifyMe() {
+                if (!("Notification" in window)) {
+                    alert("This browser does not support desktop notification");
+                } else if (Notification.permission === "granted") {
+                    let notification = new Notification(from);
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission(function (permission) {
+                        if (permission === "granted") {
+                            let notification = new Notification("Notification");
+                        }
+                    });
+                }
+            }
+
+            if (newMessages) {
+                setTimeout(() => notifyMe(), 0);
+            }
+
+            // setInterval(() => location.reload(), 5000);
             function openCertificate(){
                 let certificate = document.getElementById("certificate");
 
@@ -94,7 +118,6 @@
 
                 certificate.style.visibility = "visible";
             }
-
         </script>
 
     </main>
@@ -138,13 +161,19 @@
                                                                                                                class="circle-icon small red-hover glyphicon glyphicon-flag"></a>
                         </div>
                     </li>
-
                     <li id="certificate" style="visibility: hidden" >
-                        <div class="details">
-                            <div class="left"><p>Certificate</p></div>
+                        <div  class="details">
+                            <span style="font-weight: bold" >Hash: </span><span id="hash_2" style="word-break: break-all">96ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852545</span>
                         </div>
                         <div>
-                            <span style="font-weight: bold" >Hash: </span><span id="hash" style="word-break: break-all">96ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852547</span>
+                            <div class="left"><p style="font-size: 20px;font-weight: bold">Certificate</p></div>
+                            <p><span style="font-weight: bold" >Owner: </span><span id="user_from" style="word-break: break-all">Skott</span></p>
+                            <p><span style="font-weight: bold" >Public key: </span><span id="public_key" style="word-break: break-all">96ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852547</span></p>
+                            <p> <span style="font-weight: bold" >Public key length: </span><span id="public_key_length" style="word-break: break-all">256</span></p>
+                            <p>   <span style="font-weight: bold" >Secret key: </span><span id="secret_key" style="word-break: break-all">10ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852547</span></p>
+                            <p>     <span style="font-weight: bold" >Algorithm: </span><span id="algorithm" style="word-break: break-all">AES256</span></p>
+                            <p>    <span style="font-weight: bold" >Encryption mode: </span><span id="encryption_mode" style="word-break: break-all">cbc</span></p>
+                            <p>   <span style="font-weight: bold" >Time date: </span><span id="time_date" style="word-break: break-all">March 6, 2014, 20:08 pm</span></p>
                         </div>
                     </li>
 
