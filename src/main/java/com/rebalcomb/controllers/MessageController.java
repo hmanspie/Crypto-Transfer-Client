@@ -1,6 +1,8 @@
 package com.rebalcomb.controllers;
 
+import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.controllers.utils.Util;
+import com.rebalcomb.model.dto.ConnectionRequest;
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
 import com.rebalcomb.model.entity.Message;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import reactor.core.publisher.Flux;
@@ -96,6 +99,24 @@ public class MessageController {
     public ModelAndView setting(ModelAndView model, Principal principal){
         model.addObject("headPageValue", "setting");
         model.addObject("isAdmin", util.isAdmin(principal));
+        model.addObject("connectionRequest", new ConnectionRequest());
+        model.setViewName("headPage");
+        return model;
+    }
+
+    // todo пофіксити помилку якщо не коректні ip адреса і порт
+    // todo ошибка port out of range:70000
+    // todo Connection refused: no further information
+    // todo Failed to resolve '2141241' after 3 queries
+    // todo Connection timed out: no further information
+    // todo Зробити вивід помилки на сторінку
+    @PostMapping("/testConnection")
+    public ModelAndView testConnection(ModelAndView model, ConnectionRequest connectionRequest){
+        ServerUtil.REMOTE_SERVER_IP_ADDRESS = connectionRequest.getIpAddress();
+        ServerUtil.REMOTE_SERVER_PORT = Integer.valueOf(connectionRequest.getPort());
+        if(userService.connection().block())
+            userService.requesterInitialization();
+        model.addObject("headPageValue", "setting");
         model.setViewName("headPage");
         return model;
     }

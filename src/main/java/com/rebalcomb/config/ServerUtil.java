@@ -13,4 +13,6 @@ public class ServerUtil {
     public static String REMOTE_SERVER_IP_ADDRESS = "localhost";
     public static Integer REMOTE_SERVER_PORT = 7000;
 
+    public static Boolean IS_CONNECTION = false;
+
 }

@@ -9,15 +9,15 @@
         </header>
 
         <div class="container-fluid mt-4 ms-2">
-            <form>
+            <form th:object="${connectionRequest}" th:action="@{/headPage/testConnection}" th:method="post">
                 <div style="display: inline-flex;  flex-wrap: wrap; gap: 50px;">
                     <div style="width: 250px;">
                         <text class="h5">Address service</text>
-                        <input class="form-control" type="text" aria-label="Address service" placeholder="192.168.43.206" style="width: 250px;  margin: 20px 0 0 0;">
+                        <input class="form-control" type="text" aria-label="Address service" th:field="*{ipAddress}" placeholder="192.168.43.206" style="width: 250px;  margin: 20px 0 0 0;">
                     </div>
                     <div style="width: 250px;">
                         <text class="h5">Address service</text>
-                        <input class="form-control" type="text" aria-label="Port service" placeholder="8091" style="width: 250px;  margin: 20px 0 0 0;">
+                        <input class="form-control" type="text" aria-label="Port service" th:field="*{port}" placeholder="8091" style="width: 250px;  margin: 20px 0 0 0;">
                     </div>
                 </div>
                 <p >

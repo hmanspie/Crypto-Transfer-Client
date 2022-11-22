@@ -57,12 +57,24 @@ public class UserService {
     public UserService(UserRepository userRepository, RSocketRequester.Builder builder) throws NoSuchAlgorithmException {
         rsaUtil = new RSAUtil();
         this.builder = builder;
+        this.userRepository = userRepository;
         this.requester = this.builder
-                .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
-                        .doBeforeRetry(l -> logger.warn("Waiting for connection to remote server!"))))
                 .transport(TcpClientTransport
                         .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
-        this.userRepository = userRepository;
+    }
+
+    public void requesterInitialization(){
+        this.requester = this.builder
+                .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
+                    .doBeforeRetry(l ->{
+                        ServerUtil.IS_CONNECTION = false;
+                        logger.warn("Waiting for connection to remote server! " + ServerUtil.IS_CONNECTION);
+                    })
+                        .doAfterRetry(a -> {
+                            ServerUtil.IS_CONNECTION = true;
+                        })))
+                .transport(TcpClientTransport
+                        .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
 
         if (ServerUtil.PUBLIC_KEY == null) {
             try {
@@ -77,6 +89,16 @@ public class UserService {
         updateSalt();
         updateIV();
         updateEncryptMode();
+    }
+
+    public Mono<Boolean> connection() {
+        this.requester = this.builder
+                        .transport(TcpClientTransport
+                            .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
+        return this.requester
+                .route("server.connection")
+                .data(ServerUtil.SERVER_ID)
+                .retrieveMono(Boolean.class);
     }
 
     public void getPublicKeyFromRemoteServer() throws NoSuchAlgorithmException, InvalidKeySpecException {
