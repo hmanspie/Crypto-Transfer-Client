@@ -8,6 +8,7 @@ import com.rebalcomb.io.File;
 import com.rebalcomb.mapper.MessageMapper;
 import com.rebalcomb.model.dto.Block;
 import com.rebalcomb.model.dto.MessageRequest;
+import com.rebalcomb.model.entity.Certificate;
 import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.model.entity.User;
 import com.rebalcomb.repositories.MessageRopository;
@@ -23,12 +24,9 @@ import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +35,8 @@ import java.util.Optional;
 public class MessageService {
     private final UserService userService;
     private final MessageRopository messageRepository;
+
+    private final CertificateService certificateService;
     public static final String IMAGES = "images.txt";
     private RSocketRequester requester;
     private Thread threadIncoming;
@@ -44,9 +44,10 @@ public class MessageService {
     private final Logger logger = LogManager.getLogger(MessageService.class);
 
     @Autowired
-    public MessageService(UserService userService, MessageRopository messageRepository, RSocketRequester.Builder builder) {
+    public MessageService(UserService userService, MessageRopository messageRepository, CertificateService certificateService, RSocketRequester.Builder builder) {
         this.userService = userService;
         this.messageRepository = messageRepository;
+        this.certificateService = certificateService;
         this.builder = builder;
         this.requester = this.builder
                 .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
@@ -90,7 +91,11 @@ public class MessageService {
     public Message decryptMessage(Block block) {
         String hidingMessage = new Hiding().getOpenMassageForHidingMassage(block.getMessage());
         MessageRequest messageRequest = AESUtil.decrypt(hidingMessage, userService.findSecretByUsername(block.getFrom()));
-        return MessageMapper.mapMessage(messageRequest, block.getHash());
+        Message message = MessageMapper.mapMessage(messageRequest, block.getHash());
+        Certificate certificate = MessageMapper.mapCertifacate(messageRequest, userService.findSecretByUsername(messageRequest.getUser_from()));
+        certificate = certificateService.save(certificate);
+        message.setCertificate(certificate);
+        return message;
     }
 
     public void saveMessage(Block block){

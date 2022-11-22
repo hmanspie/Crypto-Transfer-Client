@@ -80,12 +80,12 @@ public class UserService {
     }
 
     public void getPublicKeyFromRemoteServer() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String publicKeyBase64 = getPublicKey(ServerUtil.SERVER_ID).block();
-        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyBase64);
+        ServerUtil.STR_PUBLIC_KEY = getPublicKey(ServerUtil.SERVER_ID).block();
+        byte[] publicKeyBytes = Base64.getDecoder().decode(ServerUtil.STR_PUBLIC_KEY);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
         ServerUtil.PUBLIC_KEY = keyFactory.generatePublic(publicKeySpec);
-        logger.info("Get public key: " + publicKeyBase64 + " successfully!");
+        logger.info("Get public key: " + ServerUtil.STR_PUBLIC_KEY + " successfully!");
     }
 
     public Optional<User> findByUsername(String username) {

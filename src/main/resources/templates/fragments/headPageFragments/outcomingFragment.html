@@ -50,7 +50,7 @@
 
         <script th:inline="javascript">
 
-            function openMessage(from, to, title, body, time, hash) {
+            function openMessage(from, to, title, body, time, hash, owner) {
                 time = time.substring(0, 10) + " " + time.substring(11, 19);
 
                 let fromHTML = document.getElementById("from");

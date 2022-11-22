@@ -1,6 +1,8 @@
 package com.rebalcomb.mapper;
 
+import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.model.dto.MessageRequest;
+import com.rebalcomb.model.entity.Certificate;
 import com.rebalcomb.model.entity.Message;
 import java.sql.Timestamp;
 
@@ -16,5 +18,18 @@ public class MessageMapper {
         message.setIs_send(false);
         message.setHash(hash);
         return message;
+    }
+
+    public static Certificate mapCertifacate(MessageRequest request, String secretKey){
+        Certificate certificate = new Certificate();
+        certificate.setOwner(request.getUser_from());
+        certificate.setPublicKey(ServerUtil.STR_PUBLIC_KEY);
+        certificate.setKeyLength(ServerUtil.STR_PUBLIC_KEY.length());
+        certificate.setSecretKey(secretKey);
+        certificate.setAlgorithm("AES-128");
+        certificate.setEncryptMode(ServerUtil.ENCRYPT_MODE);
+        certificate.setHashType("SHA-512");
+        certificate.setDateTime(Timestamp.valueOf(request.getDateTime()));
+        return certificate;
     }
 }

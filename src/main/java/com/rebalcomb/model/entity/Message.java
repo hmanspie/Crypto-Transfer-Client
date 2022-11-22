@@ -42,6 +42,9 @@ public class Message {
     @Column(nullable = false)
     private String hash;
 
+    @OneToOne
+    private Certificate certificate;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
