@@ -41,10 +41,16 @@
     <div th:insert="~{fragments/headPageFragments/settingsFragment :: 'settingsFragment'}"></div>
 </th:secretBlock>
 
-<!--=== SETTINGS TAB ====-->
+<!--=== USERS TAB ====-->
 <th:secretBlock th:if="${headPageValue} == 'users'">
     <div th:insert="~{fragments/headPageFragments/usersFragment :: 'usersFragment'}"></div>
 </th:secretBlock>
+
+<!--=== LOGS TAB ====-->
+<th:secretBlock th:if="${headPageValue} == 'logs'">
+    <div th:insert="~{fragments/headPageFragments/logsFragment :: 'logsFragment'}"></div>
+</th:secretBlock>
+
 
 
 </body>

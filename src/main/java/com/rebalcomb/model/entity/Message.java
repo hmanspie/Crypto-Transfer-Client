@@ -42,7 +42,7 @@ public class Message {
     @Column(nullable = false)
     private String hash;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Certificate certificate;
 
     @Override

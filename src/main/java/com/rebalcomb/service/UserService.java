@@ -55,7 +55,7 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository, RSocketRequester.Builder builder) throws NoSuchAlgorithmException {
-        rsaUtil  = new RSAUtil();
+        rsaUtil = new RSAUtil();
         this.builder = builder;
         this.requester = this.builder
                 .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
@@ -91,12 +91,18 @@ public class UserService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
 
-    public List<User> findAll(){ return userRepository.findAll(); }
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
     public Mono<String> getPublicKey(String serverId) {
         Mono<String> mono = this.requester
@@ -106,7 +112,7 @@ public class UserService {
         return mono;
     }
 
-    public Mono<String> getSalt(UpdateRequest updateRequest){
+    public Mono<String> getSalt(UpdateRequest updateRequest) {
         Mono<String> mono = this.requester
                 .route("server.getSalt")
                 .data(updateRequest)
@@ -114,7 +120,7 @@ public class UserService {
         return mono;
     }
 
-    public Mono<String> getEncryptMode(String serverID){
+    public Mono<String> getEncryptMode(String serverID) {
         Mono<String> mono = this.requester
                 .route("server.getEncryptMode")
                 .data(serverID)
@@ -122,11 +128,11 @@ public class UserService {
         return mono;
     }
 
-    public Mono<byte []> getIV(UpdateRequest updateRequest){
-        Mono<byte []> mono = this.requester
+    public Mono<byte[]> getIV(UpdateRequest updateRequest) {
+        Mono<byte[]> mono = this.requester
                 .route("server.getIV")
                 .data(updateRequest)
-                .retrieveMono(byte [].class);
+                .retrieveMono(byte[].class);
         return mono;
     }
 
@@ -187,7 +193,7 @@ public class UserService {
             do {
                 try {
                     Thread.sleep(1000);
-                    if(LocalDateTime.now().getSecond() == 0) {
+                    if (LocalDateTime.now().getSecond() == 0) {
                         ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
                         logger.info(ServerUtil.SERVER_ID + " -> update encrypt mode: " + ServerUtil.ENCRYPT_MODE + " successfully!");
                     }
@@ -212,7 +218,7 @@ public class UserService {
             do {
                 try {
                     Thread.sleep(1000);
-                    if(LocalDateTime.now().getSecond() == 0) {
+                    if (LocalDateTime.now().getSecond() == 0) {
                         try {
                             ServerUtil.IV_VALUE = RSAUtil.decrypt(getIV(updateRequest).block(), rsaUtil.getPrivateKey());
                         } catch (NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
@@ -242,7 +248,7 @@ public class UserService {
             do {
                 try {
                     Thread.sleep(1000);
-                    if(LocalDateTime.now().getSecond() == 0) {
+                    if (LocalDateTime.now().getSecond() == 0) {
                         try {
                             ServerUtil.SALT_VALUE = RSAUtil.decrypt(getSalt(updateRequest).block(), rsaUtil.getPrivateKey());
                         } catch (NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
@@ -281,12 +287,14 @@ public class UserService {
         });
         threadUpdateUsers.start();
     }
-    private UpdateRequest generateKeyPair(){
+
+    private UpdateRequest generateKeyPair() {
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.setServerId(ServerUtil.SERVER_ID);
         updateRequest.setPublicKey(Base64.getEncoder().encodeToString(rsaUtil.getPublicKey().getEncoded()));
         return updateRequest;
     }
+
     public Boolean validatePassword(SignUpRequest request) {
         if (request.getPassword().equals(request.getConfirmPassword())) {
             return true;
@@ -345,5 +353,10 @@ public class UserService {
     public void deleteByUsername(String username) {
         userRepository.deleteByUsername(username);
     }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
 }
 

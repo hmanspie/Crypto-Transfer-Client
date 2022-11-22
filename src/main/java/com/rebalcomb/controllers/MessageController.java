@@ -1,10 +1,11 @@
 package com.rebalcomb.controllers;
 
+import com.rebalcomb.controllers.utils.Util;
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
 import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.model.entity.User;
-import com.rebalcomb.model.entity.enums.Role;
+import com.rebalcomb.service.LogService;
 import com.rebalcomb.service.MessageService;
 import com.rebalcomb.service.UserService;
 import org.slf4j.Logger;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -33,11 +33,16 @@ public class MessageController {
 
     private Logger logger = LoggerFactory.getLogger(MessageController.class);
     private final MessageService messageService;
-    private  final UserService userService;
+    private final UserService userService;
+    private final LogService logService;
+    private final Util util;
+
     @Autowired
-    public MessageController(MessageService messageService, UserService userService) {
+    public MessageController(MessageService messageService, UserService userService, LogService logService, Util util) {
         this.messageService = messageService;
         this.userService = userService;
+        this.logService = logService;
+        this.util = util;
     }
     @GetMapping(value = "/findAll")
     public Flux<Message> findAll() {
@@ -46,7 +51,7 @@ public class MessageController {
 
     @GetMapping
     public ModelAndView headPage(ModelAndView model, Principal principal){
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "main");
         model.setViewName("headPage");
         return model;
@@ -54,7 +59,7 @@ public class MessageController {
 
     @GetMapping("/home")
     public ModelAndView home(ModelAndView model, Principal principal){
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "home");
         model.setViewName("headPage");
         return model;
@@ -63,7 +68,7 @@ public class MessageController {
     @GetMapping("/write")
     public ModelAndView write(ModelAndView model, Principal principal){
         model.addObject("headPageValue", "write");
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("messageRequest", new MessageRequest());
         model.setViewName("headPage");
         return model;
@@ -72,7 +77,7 @@ public class MessageController {
     @GetMapping("/incoming")
     public ModelAndView incoming(ModelAndView model, Principal principal) throws IOException, InterruptedException {
         model.addObject("messages",messageService.findAllByRecipient(principal.getName()));
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "incoming");
         model.setViewName("headPage");
         return model;
@@ -81,16 +86,8 @@ public class MessageController {
     @GetMapping("/outcoming")
     public ModelAndView outcoming(ModelAndView model, Principal principal) throws IOException {
         model.addObject("messages", messageService.findAllBySender(principal.getName()));
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "outcoming");
-        model.setViewName("headPage");
-        return model;
-    }
-
-    @GetMapping("/message/1")
-    public ModelAndView message(ModelAndView model, Principal principal){
-        model.addObject("headPageValue", "messageShow");
-        model.addObject("isAdmin", isAdmin(principal));
         model.setViewName("headPage");
         return model;
     }
@@ -98,7 +95,7 @@ public class MessageController {
     @GetMapping("/setting")
     public ModelAndView setting(ModelAndView model, Principal principal){
         model.addObject("headPageValue", "setting");
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.setViewName("headPage");
         return model;
     }
@@ -107,7 +104,16 @@ public class MessageController {
     public ModelAndView users(ModelAndView model, Principal principal){
         model.addObject("headPageValue", "users");
         model.addObject("users", userService.findAll());
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
+        model.setViewName("headPage");
+        return model;
+    }
+
+    @GetMapping("/logs")
+    public ModelAndView logs(ModelAndView model, Principal principal){
+        model.addObject("headPageValue", "logs");
+        model.addObject("logs", logService.findAll());
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.setViewName("headPage");
         return model;
     }
@@ -116,7 +122,7 @@ public class MessageController {
     public ModelAndView profile(ModelAndView model, Principal principal){
         model.addObject("headPageValue", "profile");
         model.addObject("signUpRequest", getData(principal.getName()));
-        model.addObject("isAdmin", isAdmin(principal));
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("updateProfileRequest", new SignUpRequest());
         model.setViewName("headPage");
         return model;
@@ -142,13 +148,5 @@ public class MessageController {
         model.addObject("headPageValue", "profile");
         model.setViewName("headPage");
         return model;
-    }
-    /**
-     * Check admin role in current user
-     * @param principal
-     * @return current user is admin
-     */
-    private boolean isAdmin(Principal principal){
-        return userService.isAdmin(principal.getName()).equals(Role.ADMIN);
     }
 }

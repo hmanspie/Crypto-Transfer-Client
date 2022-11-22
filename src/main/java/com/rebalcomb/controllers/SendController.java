@@ -1,5 +1,6 @@
 package com.rebalcomb.controllers;
 
+import com.rebalcomb.controllers.utils.Util;
 import com.rebalcomb.mapper.MessageRequestMapper;
 import com.rebalcomb.model.dto.MessageRequest;
 import com.rebalcomb.model.entity.Message;
@@ -27,13 +28,16 @@ public class SendController {
     private final UserService userService;
     private final LogService logService;
 
+    private final Util util;
+
     public static String INFO;
 
     @Autowired
-    public SendController(MessageService messageService, UserService userService, LogService logService) {
+    public SendController(MessageService messageService, UserService userService, LogService logService, Util util) {
         this.messageService = messageService;
         this.userService = userService;
         this.logService = logService;
+        this.util = util;
     }
 
     @PostMapping("/sendNewMessage")
@@ -41,6 +45,7 @@ public class SendController {
         if(messageRequest.getUser_to().equals(principal.getName())){
             model.addObject("isSend", false);
             model.addObject("headPageValue", "write");
+            model.addObject("isAdmin", util.isAdmin(principal));
             model.addObject("messageRequest", new MessageRequest());
             model.setViewName("headPage");
             logger.error("Address not found!");
@@ -54,14 +59,16 @@ public class SendController {
             model.addObject("isSend", true);
             model.addObject("messages", messageService.findAllBySender(principal.getName()));
             model.addObject("headPageValue", "outcoming");
+            model.addObject("isAdmin", util.isAdmin(principal));
             model.setViewName("headPage");
             logger.info("Message sent successfully!");
-            logService.create(TypeLog.MESSAGE, "Write message TO: '" + messageRequest.getUser_to()+ "' | FROM: '" + messageRequest.getUser_from() + "' | TITLE: '" + messageRequest.getTitle());
+            logService.create(TypeLog.MESSAGE, "To: '" + messageRequest.getUser_to()+ "' | From: '" + messageRequest.getUser_from() + "' | Title: '" + messageRequest.getTitle() + "'");
             return model;
         }else{
             model.addObject("isSend", false);
             model.addObject("headPageValue", "write");
             model.addObject("messageRequest", new MessageRequest());
+            model.addObject("isAdmin", util.isAdmin(principal));
             model.setViewName("headPage");
             logger.error("Address not found!");
             return model;

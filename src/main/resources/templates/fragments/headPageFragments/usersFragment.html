@@ -4,6 +4,8 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
     <main id="main">
         <div class="overlay"></div>
         <header class="header">
@@ -24,6 +26,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Started Time</th>
                 <th scope="col">&nbsp;</th>
+                <th scope="col">&nbsp;</th>
             </tr>
             </thead>
             <tbody>
@@ -32,22 +35,31 @@
                     <td th:text="${user.getEmail()}"></td>
                     <td th:text="${user.getFullName()}"></td>
                     <td th:text="${user.getUsername()}"></td>
-                    <td>
-                        <select class="form-select w-50" id="role" name="color">
-                            <option th:each="role : ${T(com.rebalcomb.model.entity.enums.Role).values()}"
-                                    th:value="${role}" th:text="${role}" th:selected="${role} == ${user.getRole()}"></option>
-                        </select>
-                    </td>
-                    <td id="status">
-                        <select class="form-select w-50" id="role" name="color">
-                            <option th:each="status : ${T(com.rebalcomb.model.entity.enums.Status).values()}"
-                                    th:value="${status}" th:text="${status}" th:selected="${status} == ${user.getStatus()}"></option>
-                        </select>
-                    </td>
-                    <td th:text="${user.getRegTime()}"></td>
-                    <td>
-
-                    </td>
+                    <form th:action="@{'/users/edit/' + ${user?.getId()}}" th:method="post">
+                        <td>
+                            <select class="form-select w-50" name="role" id="role">
+                                <option th:each="role : ${T(com.rebalcomb.model.entity.enums.Role).values()}"
+                                        th:value="${role}" th:text="${role}"
+                                        th:selected="${role} == ${user.getRole()}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select w-50" name="userStatus" id="userStatus">
+                                <option th:each="status : ${T(com.rebalcomb.model.entity.enums.Status).values()}"
+                                        th:value="${status}" th:text="${status}"
+                                        th:selected="${status} == ${user.getStatus()}"></option>
+                            </select>
+                        </td>
+                        <td th:text="${user.getRegTime()}"></td>
+                        <td>
+                            <input type="image" th:src="@{/image/icons/save.svg}"/>
+                        </td>
+                    </form>
+                    <form th:action="@{'/users/delete/' + ${user?.getId()}}">
+                        <td>
+                            <input type="image" th:src="@{/image/icons/delete.svg}"/>
+                        </td>
+                    </form>
                 </tr>
             </th:block>
             </tbody>

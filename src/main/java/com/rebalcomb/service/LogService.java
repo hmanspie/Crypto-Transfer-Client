@@ -27,7 +27,7 @@ public class LogService {
 
     public void create(TypeLog typeLog, String logInfo){
         Log log = new Log();
-        log.setType(TypeLog.SIGN_UP);
+        log.setType(typeLog);
         log.setDate_time(Timestamp.valueOf(LocalDateTime.now()));
         log.setInfo(logInfo);
         logRepository.save(log);
@@ -44,8 +44,5 @@ public class LogService {
     public void deleteById(Long id) {
         logRepository.deleteById(id);
     }
-
-
-
 
 }

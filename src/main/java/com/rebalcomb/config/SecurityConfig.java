@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/goToSignUpForm", "/goToSignInForm", "/goToForgortPasswordForm", "/registered",
                         "/sendCode", "/createNewPassword", "/updatePassword", "/verificatedAccount").permitAll()
-                .antMatchers("/headPage/setting").hasAuthority("write")
+                .antMatchers("/headPage/setting", "/headPage/users").hasAuthority("write")
                 .anyRequest()
                 .authenticated()
                 .and()

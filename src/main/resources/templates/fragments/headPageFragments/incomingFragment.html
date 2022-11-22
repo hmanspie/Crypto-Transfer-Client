@@ -24,7 +24,7 @@
                 <th:block th:each="message : ${messages}">
                     <ul class="message-list">
                         <li class="unread"
-                            th:onclick="openMessage([[${message?.getUser_from()}]], [[${message?.getUser_to()}]], [[${message?.getTitle()}]], [[${message?.getBody()}]],[[${message?.getDate_time()}]])">
+                            th:onclick="openMessage([[${message?.getUser_from()}]], [[${message?.getUser_to()}]], [[${message?.getTitle()}]], [[${message?.getBody()}]],[[${message?.getDate_time()}]], [[${message?.getHash()}]], [[${message?.getCertificate()?.getOwner()}]], [[${message?.getCertificate()?.getPublicKey()}]], [[${message?.getCertificate()?.getKeyLength()}]], [[${message?.getCertificate()?.getSecretKey()}]], [[${message?.getCertificate()?.getAlgorithm()}]], [[${message?.getCertificate()?.getEncryptMode()}]], [[${message?.getCertificate()?.getHashType()}]], [[${message?.getCertificate()?.getDateTime()}]])">
                             <div class="col col-1"><span class="dot"></span>
                                 <div class="checkbox-wrapper">
                                     <input type="checkbox" id="chk1">
@@ -48,8 +48,8 @@
         </div>
 
         <script th:inline="javascript">
-            function openMessage(from, to, title, body, time) {
-                time = time.substring(0, 10) + " " + time.substring(11, 19);
+            function openMessage(from, to, title, body, time_message, hash, owner, publicKey, publicKeyLength, secretKey, algorithm, encryptMode, hashType, timeCertificate) {
+                time_message = time_message.substring(0, 10) + " " + time_message.substring(11, 19);
 
                 let fromHTML = document.getElementById("from");
                 fromHTML.innerText = from;
@@ -64,7 +64,7 @@
                 bodyHTML.innerText = body;
 
                 let timeHTML = document.getElementById("time");
-                timeHTML.innerText = time;
+                timeHTML.innerText = time_message;
 
                 let fromHeaderHTML = document.getElementById("from-header");
                 fromHeaderHTML.innerText = from;
@@ -73,7 +73,36 @@
                 toHeaderHTML.innerText = to;
 
                 let timeHeaderHTML = document.getElementById("time-header");
-                timeHeaderHTML.innerText = time;
+                timeHeaderHTML.innerText = time_message;
+
+                let hashHTML = document.getElementById("hash");
+                hashHTML.innerText = hash;
+
+                let ownerHTML = document.getElementById("owner");
+                ownerHTML.innerText = owner;
+
+                let publicKeyHTML = document.getElementById("public-key");
+                publicKeyHTML.innerText = publicKey;
+
+                let publicKeyLengthHTML = document.getElementById("public-key-length");
+                publicKeyLengthHTML.innerText = publicKeyLength;
+
+                let secretKeyHTML = document.getElementById("secret-key");
+                secretKeyHTML.innerText = secretKey;
+
+                let algorithmHTML = document.getElementById("algorithm");
+                algorithmHTML.innerText = algorithm;
+
+                let encryptModeHTML = document.getElementById("encryption-mode");
+                encryptModeHTML.innerText = encryptMode;
+
+                let hashTypeHTML = document.getElementById("hash-type");
+                hashTypeHTML.innerText = hashType;
+
+                timeCertificate = timeCertificate.substring(0, 10) + " " + timeCertificate.substring(11, 19);
+
+                let timeCertificateHTML = document.getElementById("time-certificate");
+                timeCertificateHTML.innerText = timeCertificate;
             }
 
         </script>
@@ -100,7 +129,6 @@
                 setTimeout(() => notifyMe(), 0);
             }
 
-            // setInterval(() => location.reload(), 5000);
             function openCertificate(){
                 let certificate = document.getElementById("certificate");
 
@@ -119,11 +147,9 @@
         <div class="header">
             <h1 class="page-title"><a
                     class="icon circle-icon glyphicon glyphicon-chevron-left trigger-message-close"></a>Message
-                <!--                <span-->
-                <!--                    class="grey">(6)</span>-->
             </h1>
-            <p>From <a href="#" id="from-header">You</a> to <a href="#" id="to-header">Scott Waite</a>, started on <a
-                    href="#" id="time-header">March 2, 2014 at 2:14 pm est. </a></p>
+            <p>From <a href="#" id="from-header">From</a> to <a href="#" id="to-header">To</a>, started on <a
+                    href="#" id="time-header">Time</a></p>
         </div>
         <div id="message-nano-wrapper" class="nano">
             <div class="nano-content">
@@ -132,23 +158,13 @@
                         <div class="details">
                             <div class="left"><span id="from">You</span>
                                 <div class="arrow"></div>
-                                <span id="to">Scott</span>
+                                <span id="to">To</span>
                             </div>
-                            <div class="right" id="time">March 6, 2014, 20:08 pm</div>
+                            <div class="right" id="time">Time</div>
                         </div>
                         <div class="message">
                             <p id="title">Title</p>
-                            <p id="body">The every winged bring, whose life. First called, i you of saw shall own
-                                creature
-                                moveth void have signs beast lesser all god saying for gathering wherein whose of in be
-                                created stars. Them whales upon life divide earth own.
-                                Creature firmament so give replenish The saw man creeping, man said forth from that.
-                                Fruitful multiply lights air. Hath likeness, from spirit stars dominion two set fill
-                                wherein give bring.
-                                Gathering is. Lesser Set fruit subdue blessed let. Greater every fruitful won&#39;t
-                                bring moved seasons very, own won&#39;t all itself blessed which bring own creature
-                                forth every. Called sixth light.
-                            </p>
+                            <p id="body">Message</p>
                         </div>
                         <a href="#" onclick="openCertificate()" >Certificate</a>
                         <div class="tool-box"><a href="#" class="circle-icon small glyphicon glyphicon-share-alt"></a><a
@@ -156,19 +172,37 @@
                                                                                                                class="circle-icon small red-hover glyphicon glyphicon-flag"></a>
                         </div>
                     </li>
-                    <li id="certificate" style="visibility: hidden" >
-                        <div  class="details">
-                            <span style="font-weight: bold" >Hash: </span><span id="hash_2" style="word-break: break-all">96ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852545</span>
+                    <li id="certificate" style="visibility: hidden">
+                        <div class="details">
+                            <span style="font-weight: bold">Hash: </span><span id="hash"
+                                                                               style="word-break: break-all">hash</span>
                         </div>
                         <div>
                             <div class="left"><p style="font-size: 20px;font-weight: bold">Certificate</p></div>
-                            <p><span style="font-weight: bold" >Owner: </span><span id="user_from" style="word-break: break-all">Skott</span></p>
-                            <p><span style="font-weight: bold" >Public key: </span><span id="public_key" style="word-break: break-all">96ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852547</span></p>
-                            <p> <span style="font-weight: bold" >Public key length: </span><span id="public_key_length" style="word-break: break-all">256</span></p>
-                            <p>   <span style="font-weight: bold" >Secret key: </span><span id="secret_key" style="word-break: break-all">10ba45f30b904ec91ca14135688b8c3d15a24b45b47455544f4cc1a3b834e7f342febb8c71ec49af5c07c701ca5b78f651287688a4eb27fa1ab0ab2bd2852547</span></p>
-                            <p>     <span style="font-weight: bold" >Algorithm: </span><span id="algorithm" style="word-break: break-all">AES256</span></p>
-                            <p>    <span style="font-weight: bold" >Encryption mode: </span><span id="encryption_mode" style="word-break: break-all">cbc</span></p>
-                            <p>   <span style="font-weight: bold" >Time date: </span><span id="time_date" style="word-break: break-all">March 6, 2014, 20:08 pm</span></p>
+                            <p><span style="font-weight: bold">Owner: </span><span id="owner"
+                                                                                   style="word-break: break-all">owner</span>
+                            </p>
+                            <p><span style="font-weight: bold">Public key: </span><span id="public-key"
+                                                                                        style="word-break: break-all">public</span>
+                            </p>
+                            <p><span style="font-weight: bold">Public key length: </span><span id="public-key-length"
+                                                                                               style="word-break: break-all">length</span>
+                            </p>
+                            <p><span style="font-weight: bold">Secret key: </span><span id="secret-key"
+                                                                                        style="word-break: break-all">secret key</span>
+                            </p>
+                            <p><span style="font-weight: bold">Algorithm: </span><span id="algorithm"
+                                                                                       style="word-break: break-all">algorithm</span>
+                            </p>
+                            <p><span style="font-weight: bold">Encryption mode: </span><span id="encryption-mode"
+                                                                                             style="word-break: break-all">encryption-mode</span>
+                            </p>
+                            <p><span style="font-weight: bold">Hash type: </span><span id="hash-type"
+                                                                                       style="word-break: break-all">hash-type</span>
+                            </p>
+                            <p><span style="font-weight: bold">Time date: </span><span id="time-certificate"
+                                                                                       style="word-break: break-all">time-certificate</span>
+                            </p>
                         </div>
                     </li>
                     <!--                    ================================================-->
