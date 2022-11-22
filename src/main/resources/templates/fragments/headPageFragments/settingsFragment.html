@@ -10,10 +10,18 @@
 
         <div class="container-fluid mt-4 ms-2">
             <form>
-                <text class="h5">Address service</text>
-                <input class="form-control w-25 mt-3" type="text" aria-label="Address Service"
-                       placeholder="192.168.43.206">
-                <button type="submit" class="btn mt-2 ms-0">Test connection</button>
+                <div style="display: inline-flex;  flex-wrap: wrap; gap: 50px;">
+                    <div style="width: 250px;">
+                        <text class="h5">Address service</text>
+                        <input class="form-control" type="text" aria-label="Address service" placeholder="192.168.43.206" style="width: 250px;  margin: 20px 0 0 0;">
+                    </div>
+                    <div style="width: 250px;">
+                        <text class="h5">Address service</text>
+                        <input class="form-control" type="text" aria-label="Port service" placeholder="8091" style="width: 250px;  margin: 20px 0 0 0;">
+                    </div>
+                </div>
+                <p >
+                    <button type="submit" class="sexy-btn" style="width: 250px; margin: 20px 0 0 0;">Test connection</button>
                 <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from
                     our side</p>
 
@@ -33,54 +41,66 @@
                 </select>
                 <p class="text-description mt-3">The longest key will be the strongest</p>
 
-<!--                <p class="h5" >Encryption mode</p>-->
-<!--                <div class="container-fluid">-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1"-->
-<!--                               checked>-->
-<!--                        <label class="form-check-label" for="radioEncryption1">-->
-<!--                            ECB-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption2">-->
-<!--                        <label class="form-check-label" for="radioEncryption2">-->
-<!--                            CBC-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption3">-->
-<!--                        <label class="form-check-label" for="radioEncryption3">-->
-<!--                            PCBC-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">-->
-<!--                        <label class="form-check-label" for="radioEncryption4">-->
-<!--                            CFB-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption5">-->
-<!--                        <label class="form-check-label" for="radioEncryption5">-->
-<!--                            OFB-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption6">-->
-<!--                        <label class="form-check-label" for="radioEncryption6">-->
-<!--                            CTR-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>-->
+                <p class="h5">Messange digest type</p>
+                <select class="form-select w-25 mt-3" aria-label="Length key">
+                    <option value="1">MD2</option>
+                    <option value="2">MD5</option>
+                    <option value="3">SHA-1</option>
+                    <option value="4">SHA-224</option>
+                    <option value="5">SHA-256</option>
+                    <option value="6">SHA-384</option>
+                    <option value="7">SHA-512</option>
+                    <option value="8">Купина</option>
+                </select>
 
-                <p class="h5">Number of picture</p>
+                <!--                <p class="h5" >Encryption mode</p>-->
+                <!--                <div class="container-fluid">-->
+                <!--                    <div class="form-check">-->
+                <!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption1"-->
+                <!--                               checked>-->
+                <!--                        <label class="form-check-label" for="radioEncryption1">-->
+                <!--                            ECB-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="form-check">-->
+                <!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption2">-->
+                <!--                        <label class="form-check-label" for="radioEncryption2">-->
+                <!--                            CBC-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="form-check">-->
+                <!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption3">-->
+                <!--                        <label class="form-check-label" for="radioEncryption3">-->
+                <!--                            PCBC-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="form-check">-->
+                <!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption4">-->
+                <!--                        <label class="form-check-label" for="radioEncryption4">-->
+                <!--                            CFB-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="form-check">-->
+                <!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption5">-->
+                <!--                        <label class="form-check-label" for="radioEncryption5">-->
+                <!--                            OFB-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="form-check">-->
+                <!--                        <input class="form-check-input" type="radio" name="radioEncryption" id="radioEncryption6">-->
+                <!--                        <label class="form-check-label" for="radioEncryption6">-->
+                <!--                            CTR-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <!--                <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>-->
+
+                <p class="h5" style="margin: 15px 0 0 0;">Number of picture</p>
                 <input class="form-control w-25" type="number" id="typeNumber" value="1">
                 <!-- Замість '1' поставити метод що витягує нинішнє значення -->
                 <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>
-                <div class="container-fluid d-flex justify-content-center">
-                    <button type="submit" class="btn w-25">Apply</button>
+                <div>
+                    <button type="submit" class="sexy-btn" style="width: 250px; margin: 15px 0 0 0;">Apply</button>
                 </div>
             </form>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
