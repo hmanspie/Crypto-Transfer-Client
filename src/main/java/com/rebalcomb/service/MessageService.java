@@ -58,7 +58,7 @@ public class MessageService {
                         .doAfterRetry(l -> logger.warn("No connection setup with the remote server!"))))
                 .transport(TcpClientTransport
                         .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
-        incomingListener();
+       incomingListener();
     }
     public Flux<Message> findAll(){
         Flux<Message> flux = this.requester

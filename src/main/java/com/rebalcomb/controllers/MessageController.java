@@ -59,14 +59,7 @@ public class MessageController {
     public ModelAndView headPage(ModelAndView model, Principal principal){
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "main");
-        model.setViewName("headPage");
-        return model;
-    }
-
-    @GetMapping("/home")
-    public ModelAndView home(ModelAndView model, Principal principal){
-        model.addObject("isAdmin", util.isAdmin(principal));
-        model.addObject("headPageValue", "home");
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.setViewName("headPage");
         return model;
     }
@@ -76,6 +69,7 @@ public class MessageController {
         model.addObject("headPageValue", "write");
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("messageRequest", new MessageRequest());
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.setViewName("headPage");
         return model;
     }
@@ -85,6 +79,7 @@ public class MessageController {
         model.addObject("messages",messageService.findAllByRecipient(principal.getName()));
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "incoming");
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.setViewName("headPage");
         return model;
     }
@@ -94,6 +89,7 @@ public class MessageController {
         model.addObject("messages", messageService.findAllBySender(principal.getName()));
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "outcoming");
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.setViewName("headPage");
         return model;
     }
