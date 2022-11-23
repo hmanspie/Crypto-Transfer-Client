@@ -1,7 +1,8 @@
 <aside id="sidebar" class="nano" th:fragment="asideFragment">
     <div class="nano-content">
-        <div class="logo-container"><img class="rounded mx-auto d-block sidebar-logo" th:src="@{/image/logo/light-grey-logo.png}" alt="Logotype">
-        </div><a th:href="@{/headPage/write}" class="compose-button">Write</a>
+        <div th:insert="~{fragments/headPageFragments/asideMainServerStatusFragment :: (${isOnline} ? 'onlineFragment' : 'offlineFragment')}"></div>
+        <div class="logo-container"><img class="rounded mx-auto d-block sidebar-logo" th:src="@{/image/logo/light-grey-logo.png}" alt="Logotype"></div>
+        <a th:href="@{/headPage/write}" class="compose-button">Write</a>
         <menu class="menu-segment">
             <ul>
                 <li><a th:href="@{/headPage/incoming}">Incoming</a></li>

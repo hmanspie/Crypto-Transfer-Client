@@ -947,5 +947,23 @@ input:focus {
     text-align: center;
 }
 
+.server-offline-style{
+    padding-top: 4px;
+    background: rgba(255, 0, 0, 0.31);
+}
 
+.server-offline-style p{
+    color: white;
+    text-align: center;
+}
+
+.server-online-style{
+    padding-top: 4px;
+    background: rgba(0, 255, 42, 0.31);
+}
+
+.server-online-style p{
+    color: white;
+    text-align: center;
+}
 
