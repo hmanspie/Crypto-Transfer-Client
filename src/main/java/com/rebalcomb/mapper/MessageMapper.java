@@ -24,7 +24,7 @@ public class MessageMapper {
         Certificate certificate = new Certificate();
         certificate.setOwner(request.getUser_from());
         certificate.setPublicKey(ServerUtil.STR_PUBLIC_KEY);
-        certificate.setKeyLength(ServerUtil.STR_PUBLIC_KEY.length());
+        certificate.setKeyLength(ServerUtil.PUBLIC_KEY.getEncoded().length * 8);
         certificate.setSecretKey(secretKey);
         certificate.setAlgorithm("AES-128");
         certificate.setEncryptMode(ServerUtil.ENCRYPT_MODE);

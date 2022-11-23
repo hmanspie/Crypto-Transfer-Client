@@ -15,7 +15,6 @@ import io.rsocket.transport.netty.client.TcpClientTransport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.object.UpdatableSqlQuery;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +90,7 @@ public class UserService {
         updateEncryptMode();
     }
 
-    public Mono<Boolean> connection() {
+    public Mono<Boolean> isConnection() {
         this.requester = this.builder
                         .transport(TcpClientTransport
                             .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));

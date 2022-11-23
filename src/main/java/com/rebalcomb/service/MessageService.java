@@ -25,6 +25,7 @@ import reactor.util.retry.Retry;
 
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +50,16 @@ public class MessageService {
         this.messageRepository = messageRepository;
         this.certificateService = certificateService;
         this.builder = builder;
-//        this.requester = this.builder
-//                .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
-//                        .doBeforeRetry(l -> logger.warn("Retrying " + (l.totalRetriesInARow() + 1) + " connected to remote server!"))
-//                                .doAfterRetry(l -> logger.warn("No connection setup with the remote server!"))))
-//                                        .transport(TcpClientTransport
-//                                                .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
-//        incomingListener();
+    }
+
+    public void requesterInitialization(){
+        this.requester = this.builder
+                .rsocketConnector(c -> c.reconnect(Retry.fixedDelay(100, Duration.ofSeconds(5))
+                        .doBeforeRetry(l -> logger.warn("Retrying " + (l.totalRetriesInARow() + 1) + " connected to remote server!"))
+                        .doAfterRetry(l -> logger.warn("No connection setup with the remote server!"))))
+                .transport(TcpClientTransport
+                        .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
+        incomingListener();
     }
     public Flux<Message> findAll(){
         Flux<Message> flux = this.requester

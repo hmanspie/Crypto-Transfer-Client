@@ -4,6 +4,7 @@ import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.controllers.utils.Util;
 import com.rebalcomb.model.dto.ConnectionRequest;
 import com.rebalcomb.model.dto.MessageRequest;
+import com.rebalcomb.model.dto.SettingRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
 import com.rebalcomb.model.entity.Message;
 import com.rebalcomb.model.entity.User;
@@ -100,6 +101,7 @@ public class MessageController {
         model.addObject("headPageValue", "setting");
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("connectionRequest", new ConnectionRequest());
+        model.addObject("settingRequest", new SettingRequest());
         model.setViewName("headPage");
         return model;
     }
@@ -110,12 +112,23 @@ public class MessageController {
     // todo Failed to resolve '2141241' after 3 queries
     // todo Connection timed out: no further information
     // todo Зробити вивід помилки на сторінку
+
     @PostMapping("/testConnection")
-    public ModelAndView testConnection(ModelAndView model, ConnectionRequest connectionRequest){
+    public ModelAndView testConnection(ModelAndView model, ConnectionRequest connectionRequest, Principal principal) {
         ServerUtil.REMOTE_SERVER_IP_ADDRESS = connectionRequest.getIpAddress();
         ServerUtil.REMOTE_SERVER_PORT = Integer.valueOf(connectionRequest.getPort());
-        if(userService.connection().block())
+        if (userService.isConnection().block()) {
             userService.requesterInitialization();
+            messageService.requesterInitialization();
+        }
+        model.addObject("headPageValue", "setting");
+        model.setViewName("headPage");
+        return model;
+    }
+
+    @PostMapping("/applySetting")
+    public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest){
+
         model.addObject("headPageValue", "setting");
         model.setViewName("headPage");
         return model;
