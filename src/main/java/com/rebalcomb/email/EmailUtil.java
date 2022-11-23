@@ -1,5 +1,9 @@
 package com.rebalcomb.email;
 
+import com.rebalcomb.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -13,6 +17,7 @@ import java.util.Date;
  */
 public class EmailUtil {
 
+    private static final Logger logger = LogManager.getLogger(EmailUtil.class);
 
     /**
      * @author Alexandr Bratchyk
@@ -45,13 +50,13 @@ public class EmailUtil {
             msg.setContent(body,"text/html");
 
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-            System.out.println("Message is ready");
+//            System.out.println("Message is ready");
             Transport.send(msg);
 
-            System.out.println("EMail Sent Successfully!!");
+            //System.out.println("EMail Sent Successfully!!");
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error("No internet connection, message dont send");
         }
     }
 }

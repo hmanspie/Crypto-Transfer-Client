@@ -18,7 +18,7 @@ public class TLSEmail {
         final String toEmail = email; // can be any email id
 
 
-        System.out.println("TLSEmail Start");
+//        System.out.println("TLSEmail Start");
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
         props.put("mail.smtp.port", "587"); //TLS Port
