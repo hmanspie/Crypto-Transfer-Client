@@ -18,8 +18,7 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 
 public class AESUtil {
-    //private static final byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    private static final IvParameterSpec ivspec = new IvParameterSpec(ServerUtil.IV_VALUE);
+    //private final IvParameterSpec ivspec = new IvParameterSpec(ServerUtil.IV_VALUE);
 
     private static final GsonBuilder gsonBuilder = new GsonBuilder();
     private static Gson gson = null;
@@ -28,11 +27,11 @@ public class AESUtil {
         String strToEncrypt = gson.toJson(messageRequest);
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(SECRET_KEY.toCharArray(), ServerUtil.SALT_VALUE.getBytes(), 65536, 128);
+            KeySpec spec = new PBEKeySpec(SECRET_KEY.toCharArray(), ServerUtil.SALT_VALUE.getBytes(), 65536, ServerUtil.AES_LENGTH);
             SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
             Cipher cipher = Cipher.getInstance("AES/"+ ServerUtil.ENCRYPT_MODE +"/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivspec);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(ServerUtil.IV_VALUE));
             return Base64.getEncoder()
                     .encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
         } catch (InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
@@ -45,11 +44,11 @@ public class AESUtil {
         try {
             gson = gsonBuilder.setPrettyPrinting().create();
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(SECRET_KEY.toCharArray(), ServerUtil.SALT_VALUE.getBytes(), 65536, 128);
+            KeySpec spec = new PBEKeySpec(SECRET_KEY.toCharArray(), ServerUtil.SALT_VALUE.getBytes(), 65536, ServerUtil.AES_LENGTH);
             SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
             Cipher cipher = Cipher.getInstance("AES/"+ ServerUtil.ENCRYPT_MODE +"/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivspec);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(ServerUtil.IV_VALUE));
             return gson.fromJson(new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt))), MessageRequest.class);
         } catch (InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             System.out.println("Error occured during decryption: " + e.toString());

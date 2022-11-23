@@ -31,9 +31,6 @@ public class Certificate {
     private Integer keyLength;
 
     @Column(nullable = false)
-    private String secretKey;
-
-    @Column(nullable = false)
     private String algorithm;
 
     @Column(nullable = false)

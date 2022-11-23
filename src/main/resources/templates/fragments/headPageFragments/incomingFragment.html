@@ -24,7 +24,7 @@
                 <th:block th:each="message : ${messages}">
                     <ul class="message-list">
                         <li class="unread"
-                            th:onclick="openMessage([[${message?.getUser_from()}]], [[${message?.getUser_to()}]], [[${message?.getTitle()}]], [[${message?.getBody()}]],[[${message?.getDate_time()}]], [[${message?.getHash()}]], [[${message?.getCertificate()?.getOwner()}]], [[${message?.getCertificate()?.getPublicKey()}]], [[${message?.getCertificate()?.getKeyLength()}]], [[${message?.getCertificate()?.getSecretKey()}]], [[${message?.getCertificate()?.getAlgorithm()}]], [[${message?.getCertificate()?.getEncryptMode()}]], [[${message?.getCertificate()?.getHashType()}]], [[${message?.getCertificate()?.getDateTime()}]])">
+                            th:onclick="openMessage([[${message?.getUser_from()}]], [[${message?.getUser_to()}]], [[${message?.getTitle()}]], [[${message?.getBody()}]],[[${message?.getDate_time()}]], [[${message?.getHash()}]], [[${message?.getCertificate()?.getOwner()}]], [[${message?.getCertificate()?.getPublicKey()}]], [[${message?.getCertificate()?.getKeyLength()}]], [[${message?.getCertificate()?.getAlgorithm()}]], [[${message?.getCertificate()?.getEncryptMode()}]], [[${message?.getCertificate()?.getHashType()}]], [[${message?.getCertificate()?.getDateTime()}]])">
                             <div class="col col-1"><span class="dot"></span>
                                 <div class="checkbox-wrapper">
                                     <input type="checkbox" id="chk1">
@@ -48,7 +48,7 @@
         </div>
 
         <script th:inline="javascript">
-            function openMessage(from, to, title, body, time_message, hash, owner, publicKey, publicKeyLength, secretKey, algorithm, encryptMode, hashType, timeCertificate) {
+            function openMessage(from, to, title, body, time_message, hash, owner, publicKey, publicKeyLength, algorithm, encryptMode, hashType, timeCertificate) {
                 time_message = time_message.substring(0, 10) + " " + time_message.substring(11, 19);
 
                 let fromHTML = document.getElementById("from");
@@ -86,9 +86,6 @@
 
                 let publicKeyLengthHTML = document.getElementById("public-key-length");
                 publicKeyLengthHTML.innerText = publicKeyLength;
-
-                let secretKeyHTML = document.getElementById("secret-key");
-                secretKeyHTML.innerText = secretKey;
 
                 let algorithmHTML = document.getElementById("algorithm");
                 algorithmHTML.innerText = algorithm;
@@ -187,9 +184,6 @@
                             </p>
                             <p><span style="font-weight: bold">Public key length: </span><span id="public-key-length"
                                                                                                style="word-break: break-all">length</span>
-                            </p>
-                            <p><span style="font-weight: bold">Secret key: </span><span id="secret-key"
-                                                                                        style="word-break: break-all">secret key</span>
                             </p>
                             <p><span style="font-weight: bold">Algorithm: </span><span id="algorithm"
                                                                                        style="word-break: break-all">algorithm</span>

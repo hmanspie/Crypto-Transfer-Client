@@ -26,6 +26,10 @@
                     our side</p>
             </form>
             <form th:object="${settingRequest}" th:action="@{/headPage/applySetting}" th:method="post">
+                <text class="h5">Server name</text>
+                <input th:field="*{serverID}" class="form-control w-25 mt-3" type="text" aria-label="Address Service"
+                       th:placeholder="${serverId}">
+                <p class="h5"></p>
                 <p class="h5">RSA Length key</p>
                 <select th:field="*{rsaLength}" class="form-select w-25 mt-3" aria-label="Length key">
                     <option th:text="${rsaLen}" th:value="${rsaLen}" th:selected="${rsaLen}"></option>

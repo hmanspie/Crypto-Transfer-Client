@@ -25,7 +25,6 @@ import reactor.util.retry.Retry;
 
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +129,7 @@ public class MessageService {
             block.setFrom(messageRequest.getUser_from());
             block.setTo(messageRequest.getUser_to());
             block.setMessage(encryptMessage(messageRequest));
-            block.setHash(Hash.getHashSHA(messageRequest.getBodyMessage()));
+            block.setHash(Hash.getHash(messageRequest.getBodyMessage()));
             return send(block).block();
         }
         return false;

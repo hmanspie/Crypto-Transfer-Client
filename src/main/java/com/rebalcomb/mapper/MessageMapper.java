@@ -24,11 +24,10 @@ public class MessageMapper {
         Certificate certificate = new Certificate();
         certificate.setOwner(request.getUser_from());
         certificate.setPublicKey(ServerUtil.STR_PUBLIC_KEY);
-        certificate.setKeyLength(ServerUtil.PUBLIC_KEY.getEncoded().length * 8);
-        certificate.setSecretKey(secretKey);
-        certificate.setAlgorithm("AES-128");
+        certificate.setKeyLength(ServerUtil.RSA_LENGTH);
+        certificate.setAlgorithm("AES-" + ServerUtil.AES_LENGTH);
         certificate.setEncryptMode(ServerUtil.ENCRYPT_MODE);
-        certificate.setHashType("SHA-512");
+        certificate.setHashType(ServerUtil.HASH_ALGORITHM);
         certificate.setDateTime(Timestamp.valueOf(request.getDateTime()));
         return certificate;
     }
