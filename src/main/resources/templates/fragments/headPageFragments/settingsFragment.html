@@ -13,11 +13,11 @@
                 <div style="display: inline-flex;  flex-wrap: wrap; gap: 50px;">
                     <div style="width: 250px;">
                         <text class="h5">Address service</text>
-                        <input class="form-control" type="text" aria-label="Address service" th:field="*{ipAddress}" placeholder="192.168.43.206" style="width: 250px;  margin: 20px 0 0 0;">
+                        <input class="form-control" type="text" aria-label="Address service" th:field="*{ipAddress}" th:placeholder="${addressServer}" style="width: 250px;  margin: 20px 0 0 0;">
                     </div>
                     <div style="width: 250px;">
                         <text class="h5">Address service</text>
-                        <input class="form-control" type="text" aria-label="Port service" th:field="*{port}" placeholder="8091" style="width: 250px;  margin: 20px 0 0 0;">
+                        <input class="form-control" type="text" aria-label="Port service" th:field="*{port}" th:placeholder="${portServer}" style="width: 250px;  margin: 20px 0 0 0;">
                     </div>
                 </div>
                 <p >
@@ -28,6 +28,7 @@
             <form th:object="${settingRequest}" th:action="@{/headPage/applySetting}" th:method="post">
                 <p class="h5">RSA Length key</p>
                 <select th:field="*{rsaLength}" class="form-select w-25 mt-3" aria-label="Length key">
+                    <option th:text="${rsaLen}" th:value="${rsaLen}" th:selected="${rsaLen}"></option>
                     <option value="512">512</option>
                     <option value="1024">1024</option>
                     <option value="2048">2048</option>
@@ -36,6 +37,7 @@
 
                 <p class="h5">AES Length key</p>
                 <select th:field="*{aesLength}" class="form-select w-25 mt-3" aria-label="Length key">
+                    <option th:text="${aesLen}" th:value="${aesLen}" th:selected="${aesLen}"></option>
                     <option value="128">128</option>
                     <option value="192">192</option>
                     <option value="256">256</option>
@@ -44,6 +46,9 @@
 
                 <p class="h5">Messange digest type</p>
                 <select th:field="*{hashType}" class="form-select w-25 mt-3" aria-label="Length key">
+                    <option th:text="${hash}" th:value="${hash}" th:selected="${hash}"></option>
+                    <option value="MD2">MD2</option>
+                    <option value="MD2">MD2</option>
                     <option value="MD2">MD2</option>
                     <option value="MD5">MD5</option>
                     <option value="SHA-1">SHA-1</option>
@@ -55,7 +60,7 @@
                 </select>
 
                 <p class="h5" style="margin: 15px 0 0 0;">Number of picture</p>
-                <input th:field="*{imagesPoolCount}" class="form-control w-25" type="number" id="typeNumber" value="1">
+                <input th:field="*{imagesPoolCount}" class="form-control w-25" type="number" id="typeNumber" th:placeholder="${pool}">
                 <!-- Замість '1' поставити метод що витягує нинішнє значення -->
                 <p class="text-description mt-3">A large number of pictures increases the time of transmission of the message and reduces the profitability of revealing the message</p>
                 <div>

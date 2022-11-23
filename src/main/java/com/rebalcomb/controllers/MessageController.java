@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -96,14 +98,25 @@ public class MessageController {
         return model;
     }
 
-    @GetMapping("/setting")
-    public ModelAndView setting(ModelAndView model, Principal principal){
-        model.addObject("headPageValue", "setting");
+    private ModelAndView inputSetting(ModelAndView model, Principal principal){
         model.addObject("isAdmin", util.isAdmin(principal));
+        model.addObject("headPageValue", "setting");
         model.addObject("connectionRequest", new ConnectionRequest());
         model.addObject("settingRequest", new SettingRequest());
+        model.addObject("addressServer", ServerUtil.REMOTE_SERVER_IP_ADDRESS);
+        model.addObject("portServer", ServerUtil.REMOTE_SERVER_PORT);
+        model.addObject("serverId", ServerUtil.SERVER_ID);
+        model.addObject("aesLen", ServerUtil.AES_LENGTH);
+        model.addObject("rsaLen", ServerUtil.RSA_LENGTH);
+        model.addObject("hash", ServerUtil.HASH_ALGORITHM);
+        model.addObject("pool", ServerUtil.POOL_IMAGES_LENGTH);
         model.setViewName("headPage");
         return model;
+    }
+
+    @GetMapping("/setting")
+    public ModelAndView setting(ModelAndView model, Principal principal){
+        return inputSetting(model, principal);
     }
 
     // todo пофіксити помилку якщо не коректні ip адреса і порт
@@ -121,17 +134,19 @@ public class MessageController {
             userService.requesterInitialization();
             messageService.requesterInitialization();
         }
-        model.addObject("headPageValue", "setting");
-        model.setViewName("headPage");
-        return model;
+        return inputSetting(model, principal);
     }
 
+    // todo   ServerUtil.SERVER_ID = settingRequest.getServerID(); не може бути null
+    // todo For input string: "" --------> ServerUtil.POOL_IMAGES_LENGTH = Integer.valueOf(settingRequest.getImagesPoolCount()); не може бути null
     @PostMapping("/applySetting")
-    public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest){
-
-        model.addObject("headPageValue", "setting");
-        model.setViewName("headPage");
-        return model;
+    public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal){
+        ServerUtil.SERVER_ID = settingRequest.getServerID();
+        ServerUtil.AES_LENGTH = Integer.valueOf(settingRequest.getAesLength());
+        ServerUtil.RSA_LENGTH = Integer.valueOf(settingRequest.getRsaLength());
+        ServerUtil.HASH_ALGORITHM = settingRequest.getHashType();
+        ServerUtil.POOL_IMAGES_LENGTH = Integer.valueOf(settingRequest.getImagesPoolCount());
+        return inputSetting(model, principal);
     }
 
     @GetMapping("/users")
