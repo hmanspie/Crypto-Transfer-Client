@@ -124,7 +124,7 @@ public class UserController {
     }
 
     @PostMapping("/verificatedAccount")
-    public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, DuplicateAccountException {
         if (code.getCode().equals(EmailHandler.verificationCode)) {
 
             if (!userService.validatePassword(signUpRequest)) {
@@ -134,15 +134,17 @@ public class UserController {
                 model.addObject("howForm", true);
                 return model;
             }
-            if (userService.signUp(signUpRequest)) {
+            try {
+                userService.signUp(signUpRequest);
                 model.setViewName("/login");
-
-            } else {
+            } catch (Exception e) {
+                logger.error("Already existing account");
+                throw new DuplicateAccountException();
+            }
                 model.setViewName("login");
                 model.addObject("isError", true);
                 model.addObject("error", INFO);
                 model.addObject("howForm", true);
-            }
 
         } else {
             model.setViewName("email");

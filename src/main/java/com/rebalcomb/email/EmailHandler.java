@@ -3,7 +3,6 @@ package com.rebalcomb.email;
 import java.security.SecureRandom;
 
 public class EmailHandler {
-    //TODO: Треба первіряти verificationCode з тим, що укаже користувач
     public static String verificationCode;
 
     public boolean isVereficated(String userCode)

@@ -4,6 +4,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.controllers.UserController;
 import com.rebalcomb.crypto.RSAUtil;
+import com.rebalcomb.exceptions.DuplicateAccountException;
 import com.rebalcomb.mapper.UserMapper;
 import com.rebalcomb.model.dto.ChangeSecretRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
@@ -324,11 +325,17 @@ public class UserService {
     }
 
     //todo потрібно зробити обробку винятку Duplicate entry 'exemple@gmail.com' for key 'users.users_email_uindex'
-    public Boolean signUp(SignUpRequest request) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public Boolean signUp(SignUpRequest request) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, DuplicateAccountException {
         User user = UserMapper.mapUserRequest(request);
         String secret = user.getSecret();
         user.setSecret(RSAUtil.encrypt(secret, ServerUtil.PUBLIC_KEY));
-        user = signUp(user).block();
+
+        try {
+            user = signUp(user).block();
+        } catch (Exception e) {
+            throw new DuplicateAccountException();
+        }
+
         if (user != null) {
             user.setSecret(secret);
             save(user);

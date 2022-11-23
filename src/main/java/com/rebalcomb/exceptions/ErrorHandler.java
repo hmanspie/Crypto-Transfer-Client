@@ -44,4 +44,15 @@ public class ErrorHandler {
         modelAndView.setViewName(pageException);
         return modelAndView;
     }
+
+    @ExceptionHandler(FoundUserException.class)
+    public ModelAndView foundUserProcessor() {
+        String messageException = "Not found account!";
+        String pageException = "login";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(pageException);
+        modelAndView.addObject("isError", true);
+        modelAndView.addObject("error", messageException);
+        return modelAndView;
+    }
 }

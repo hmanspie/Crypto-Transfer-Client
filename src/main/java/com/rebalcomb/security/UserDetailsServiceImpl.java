@@ -1,8 +1,10 @@
 package com.rebalcomb.security;
 
 import com.rebalcomb.config.ServerUtil;
+import com.rebalcomb.exceptions.FoundUserException;
 import com.rebalcomb.model.entity.User;
 import com.rebalcomb.service.UserService;
+import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
     private final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
+
     @Autowired
     public UserDetailsServiceImpl(UserService userService) {
         this.userService = userService;
@@ -34,7 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     // todo якщо користувача не знайдено виникає виняток (No value present)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findByUsername(username).get();
+        User user = null;
+        user = userService.findByUsername(username).get();
+
         return SecurityUser.fromUser(user);
     }
 }
