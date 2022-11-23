@@ -31,6 +31,7 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     public static String INFO;
+    public SignUpRequest signUpRequest;
 
     @Autowired
     public UserController(UserService userService) {
@@ -94,6 +95,19 @@ public class UserController {
         return model;
     }
 
+    @PostMapping("/checkUsersEmail")
+    public ModelAndView checkUsersEmail(@Valid @ModelAttribute SignUpRequest signUpRequest, ModelAndView model) {
+        this.signUpRequest = signUpRequest;
+        new Thread(() -> {
+            new EmailHandler().send(signUpRequest.getEmail());
+        }).start();
+        model.setViewName("email");
+        model.addObject("checkCode", new CheckCode());
+        model.addObject("messageForUser", "");
+        model.addObject("headPageValue", "registration");
+        return model;
+    }
+
     @PostMapping("/sendCode")
     public ModelAndView sendCode(ModelAndView model, EmailRequest request) {
         EmailRequest.checkEmail = request.getEmail();
@@ -110,9 +124,26 @@ public class UserController {
     }
 
     @PostMapping("/verificatedAccount")
-    public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) {
+    public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         if (code.getCode().equals(EmailHandler.verificationCode)) {
-            model.setViewName("/login");
+
+            if (!userService.validatePassword(signUpRequest)) {
+                model.setViewName("login");
+                model.addObject("isError", true);
+                model.addObject("error", "Confirm password doesn't match!");
+                model.addObject("howForm", true);
+                return model;
+            }
+            if (userService.signUp(signUpRequest)) {
+                model.setViewName("/login");
+
+            } else {
+                model.setViewName("login");
+                model.addObject("isError", true);
+                model.addObject("error", INFO);
+                model.addObject("howForm", true);
+            }
+
         } else {
             model.setViewName("email");
             model.addObject("checkCode", new CheckCode());

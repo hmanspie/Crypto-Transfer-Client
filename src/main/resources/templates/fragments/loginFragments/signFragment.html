@@ -29,7 +29,7 @@
 
 <th:block xmlns:th="http://www.thymeleaf.org"  th:fragment="signUpFragment">
     <div class="box text-style">
-        <form th:object="${signUpRequest}" th:action="@{/registered}" th:method="post">
+        <form th:object="${signUpRequest}" th:action="@{/checkUsersEmail}" th:method="post">
             <div>
                 <h3 class="text-form head-text">Sign Up in CryptoChat</h3>
             </div>
