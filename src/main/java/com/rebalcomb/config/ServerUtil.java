@@ -13,13 +13,9 @@ public class ServerUtil {
     public static String REMOTE_SERVER_IP_ADDRESS = "localhost";
     public static Integer REMOTE_SERVER_PORT = 7000;
     public static Boolean IS_CONNECTION = false;
-
     public static String HASH_ALGORITHM = "SHA-512";
-
     public static Integer AES_LENGTH = 256;
-
     public static Integer RSA_LENGTH = 1024;
-
     public static Integer POOL_IMAGES_LENGTH = 5;
 
 

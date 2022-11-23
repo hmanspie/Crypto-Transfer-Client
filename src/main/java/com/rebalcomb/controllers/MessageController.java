@@ -95,6 +95,7 @@ public class MessageController {
     }
 
     private ModelAndView inputSetting(ModelAndView model, Principal principal){
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "setting");
         model.addObject("connectionRequest", new ConnectionRequest());
@@ -129,6 +130,7 @@ public class MessageController {
         if (userService.isConnection().block()) {
             userService.requesterInitialization();
             messageService.requesterInitialization();
+            ServerUtil.IS_CONNECTION = true;
         }
         return inputSetting(model, principal);
     }
@@ -147,6 +149,7 @@ public class MessageController {
 
     @GetMapping("/users")
     public ModelAndView users(ModelAndView model, Principal principal){
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("headPageValue", "users");
         model.addObject("users", userService.findAll());
         model.addObject("isAdmin", util.isAdmin(principal));
@@ -156,6 +159,7 @@ public class MessageController {
 
     @GetMapping("/logs")
     public ModelAndView logs(ModelAndView model, Principal principal){
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("headPageValue", "logs");
         model.addObject("logs", logService.findAll());
         model.addObject("isAdmin", util.isAdmin(principal));
@@ -165,6 +169,7 @@ public class MessageController {
 
     @GetMapping("/profile")
     public ModelAndView profile(ModelAndView model, Principal principal){
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("headPageValue", "profile");
         model.addObject("signUpRequest", getData(principal.getName()));
         model.addObject("isAdmin", util.isAdmin(principal));

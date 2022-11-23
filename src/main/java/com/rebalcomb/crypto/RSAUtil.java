@@ -1,5 +1,6 @@
 package com.rebalcomb.crypto;
 
+import com.rebalcomb.config.ServerUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,7 @@ public class RSAUtil {
 
     public RSAUtil() throws NoSuchAlgorithmException {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-        keyGen.initialize(1024);
+        keyGen.initialize(ServerUtil.RSA_LENGTH);
         KeyPair pair = keyGen.generateKeyPair();
         this.privateKey = pair.getPrivate();
         this.publicKey = pair.getPublic();
