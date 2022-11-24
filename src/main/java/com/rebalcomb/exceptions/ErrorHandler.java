@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ErrorHandler {
 
     @ExceptionHandler(DuplicateAccountException.class)
-    public ModelAndView duplicateAccountProcessor(){
+    public ModelAndView duplicateAccountProcessor(String user){
         String messageException = "This account is already registered";
         String pageException = "login";
         ModelAndView modelAndView = new ModelAndView();

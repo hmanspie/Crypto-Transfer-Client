@@ -2,16 +2,18 @@ package com.rebalcomb.controllers;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.rebalcomb.email.EmailHandler;
-import com.rebalcomb.email.TLSEmail;
 import com.rebalcomb.exceptions.DuplicateAccountException;
 import com.rebalcomb.model.dto.*;
+import com.rebalcomb.model.entity.Log;
 import com.rebalcomb.model.entity.User;
+import com.rebalcomb.model.entity.enums.TypeLog;
+import com.rebalcomb.service.LogService;
 import com.rebalcomb.service.UserService;
+import jdk.jfr.Timespan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,8 +23,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Principal;
-import java.util.Optional;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -30,12 +32,14 @@ public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
+    private final LogService logService;
     public static String INFO;
     public SignUpRequest signUpRequest;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, LogService logService) {
         this.userService = userService;
+        this.logService = logService;
     }
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
@@ -138,7 +142,8 @@ public class UserController {
                 userService.signUp(signUpRequest);
                 model.setViewName("/login");
             } catch (Exception e) {
-                logger.error("Already existing account");
+                logger.error("Already existing user");
+                logService.save(new Log(0L, TypeLog.SIGN_UP, Timestamp.valueOf(LocalDateTime.now()), "Already existing user"));
                 throw new DuplicateAccountException();
             }
                 model.setViewName("login");
