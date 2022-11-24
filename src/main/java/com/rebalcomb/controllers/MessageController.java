@@ -14,6 +14,7 @@ import com.rebalcomb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 
 @Controller
@@ -50,13 +52,14 @@ public class MessageController {
         this.logService = logService;
         this.util = util;
     }
+
     @GetMapping(value = "/findAll")
     public Flux<Message> findAll() {
         return messageService.findAll();
     }
 
     @GetMapping
-    public ModelAndView headPage(ModelAndView model, Principal principal){
+    public ModelAndView headPage(ModelAndView model, Principal principal) {
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "main");
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
@@ -65,7 +68,7 @@ public class MessageController {
     }
 
     @GetMapping("/write")
-    public ModelAndView write(ModelAndView model, Principal principal){
+    public ModelAndView write(ModelAndView model, Principal principal) {
         model.addObject("headPageValue", "write");
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("messageRequest", new MessageRequest());
@@ -76,7 +79,7 @@ public class MessageController {
 
     @GetMapping("/incoming")
     public ModelAndView incoming(ModelAndView model, Principal principal) throws IOException, InterruptedException {
-        model.addObject("messages",messageService.findAllByRecipient(principal.getName()));
+        model.addObject("messages", messageService.findAllByRecipient(principal.getName()));
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "incoming");
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
@@ -94,7 +97,7 @@ public class MessageController {
         return model;
     }
 
-    private ModelAndView inputSetting(ModelAndView model, Principal principal){
+    private ModelAndView inputSetting(ModelAndView model, Principal principal) {
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "setting");
@@ -112,7 +115,7 @@ public class MessageController {
     }
 
     @GetMapping("/setting")
-    public ModelAndView setting(ModelAndView model, Principal principal){
+    public ModelAndView setting(ModelAndView model, Principal principal) {
         return inputSetting(model, principal);
     }
 
@@ -125,30 +128,68 @@ public class MessageController {
 
     @PostMapping("/testConnection")
     public ModelAndView testConnection(ModelAndView model, ConnectionRequest connectionRequest, Principal principal) {
-        ServerUtil.REMOTE_SERVER_IP_ADDRESS = connectionRequest.getIpAddress();
-        ServerUtil.REMOTE_SERVER_PORT = Integer.valueOf(connectionRequest.getPort());
-        if (userService.isConnection().block()) {
-            userService.requesterInitialization();
-            messageService.requesterInitialization();
-            ServerUtil.IS_CONNECTION = true;
+        if (!Pattern.matches("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", connectionRequest.getIpAddress())) {
+            //не привильна ip адреса
+            return model;
         }
+
+        int port = 0;
+        try {
+            port = Integer.parseInt(connectionRequest.getPort());
+        } catch (Exception e) {
+            //не коректний порт
+            return model;
+        }
+
+        if (port <= 0 || port > 7000) {
+            //не коректний порт
+            return model;
+        }
+        ServerUtil.REMOTE_SERVER_IP_ADDRESS = connectionRequest.getIpAddress();
+        ServerUtil.REMOTE_SERVER_PORT = port;
+        try {
+            userService.isConnection().block();
+        } catch (Exception e) {
+            //час очікування перевищено
+            return model;
+        }
+        userService.requesterInitialization();
+        messageService.requesterInitialization();
+        ServerUtil.IS_CONNECTION = true;
         return inputSetting(model, principal);
     }
 
     // todo   ServerUtil.SERVER_ID = settingRequest.getServerID(); не може бути null
     // todo For input string: "" --------> ServerUtil.POOL_IMAGES_LENGTH = Integer.valueOf(settingRequest.getImagesPoolCount()); не може бути null
     @PostMapping("/applySetting")
-    public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal){
+    public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal) {
+        if (!(settingRequest.getServerID().length() > 1) ) {
+            //не коректний сервер id
+            return model;
+        }
+
+        int poolImages = 0;
+        try {
+            poolImages = Integer.parseInt(settingRequest.getImagesPoolCount());
+        } catch (Exception e) {
+            //не коректний пул картинок
+            return model;
+        }
+
+        if (poolImages < 1) {
+            //не коректний пул картинок
+            return model;
+        }
         ServerUtil.SERVER_ID = settingRequest.getServerID();
         ServerUtil.AES_LENGTH = Integer.valueOf(settingRequest.getAesLength());
         ServerUtil.RSA_LENGTH = Integer.valueOf(settingRequest.getRsaLength());
         ServerUtil.HASH_ALGORITHM = settingRequest.getHashType();
-        ServerUtil.POOL_IMAGES_LENGTH = Integer.valueOf(settingRequest.getImagesPoolCount());
+        ServerUtil.POOL_IMAGES_LENGTH = poolImages;
         return inputSetting(model, principal);
     }
 
     @GetMapping("/users")
-    public ModelAndView users(ModelAndView model, Principal principal){
+    public ModelAndView users(ModelAndView model, Principal principal) {
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("headPageValue", "users");
         model.addObject("users", userService.findAll());
@@ -158,7 +199,7 @@ public class MessageController {
     }
 
     @GetMapping("/logs")
-    public ModelAndView logs(ModelAndView model, Principal principal){
+    public ModelAndView logs(ModelAndView model, Principal principal) {
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("headPageValue", "logs");
         model.addObject("logs", logService.findAll());
@@ -168,7 +209,7 @@ public class MessageController {
     }
 
     @GetMapping("/profile")
-    public ModelAndView profile(ModelAndView model, Principal principal){
+    public ModelAndView profile(ModelAndView model, Principal principal) {
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("headPageValue", "profile");
         model.addObject("signUpRequest", getData(principal.getName()));
@@ -178,7 +219,7 @@ public class MessageController {
         return model;
     }
 
-    public SignUpRequest getData(String username){
+    public SignUpRequest getData(String username) {
         Optional<User> user = userService.findByUsername(username);
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setUsername(user.get().getUsername());
@@ -186,9 +227,10 @@ public class MessageController {
         signUpRequest.setFullName(user.get().getFullName());
         return signUpRequest;
     }
+
     @GetMapping("/changeSecretKey")
     public ModelAndView changeSecretKey(ModelAndView model, Principal principal) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        if(userService.changeSecretKey(principal.getName())){
+        if (userService.changeSecretKey(principal.getName())) {
             model.addObject("info", "Secret key changed successfully!");
         } else
             model.addObject("info", "Secret key not changed!");

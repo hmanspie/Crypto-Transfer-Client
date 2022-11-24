@@ -9,8 +9,10 @@ import com.rebalcomb.mapper.UserMapper;
 import com.rebalcomb.model.dto.ChangeSecretRequest;
 import com.rebalcomb.model.dto.SignUpRequest;
 import com.rebalcomb.model.dto.UpdateRequest;
+import com.rebalcomb.model.entity.Log;
 import com.rebalcomb.model.entity.User;
 import com.rebalcomb.model.entity.enums.Role;
+import com.rebalcomb.model.entity.enums.TypeLog;
 import com.rebalcomb.repositories.UserRepository;
 import io.rsocket.transport.netty.client.TcpClientTransport;
 import org.apache.logging.log4j.LogManager;
@@ -49,9 +51,12 @@ public class UserService {
     private final RSocketRequester.Builder builder;
     private final Logger logger = LogManager.getLogger(UserService.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final LogService logService;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
-    public UserService(UserRepository userRepository, RSocketRequester.Builder builder) throws NoSuchAlgorithmException {
+    public UserService(UserRepository userRepository, RSocketRequester.Builder builder, LogService logService) throws NoSuchAlgorithmException {
+        this.logService = logService;
         rsaUtil = new RSAUtil();
         this.builder = builder;
         this.userRepository = userRepository;
@@ -347,6 +352,7 @@ public class UserService {
         try {
             user = signUp(user).block();
         } catch (Exception e) {
+            logService.save(new Log(0L, TypeLog.SIGN_UP, Timestamp.valueOf(LocalDateTime.now()), "Already existing user"));
             throw new DuplicateAccountException();
         }
 
