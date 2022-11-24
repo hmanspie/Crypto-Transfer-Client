@@ -44,14 +44,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private RSocketRequester requester;
-    private Thread threadUpdateUsers;
-    private Thread threadUpdateSalt;
     private Thread threadUpdateEncryptMode;
-    private RSAUtil rsaUtil;
-    private Thread threadUpdateIV;
+    private final RSAUtil rsaUtil;
     private final RSocketRequester.Builder builder;
     private final Logger logger = LogManager.getLogger(UserService.class);
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public UserService(UserRepository userRepository, RSocketRequester.Builder builder) throws NoSuchAlgorithmException {
@@ -79,12 +76,11 @@ public class UserService {
         if (ServerUtil.PUBLIC_KEY == null) {
             try {
                 getPublicKeyFromRemoteServer();
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (InvalidKeySpecException e) {
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
                 throw new RuntimeException(e);
             }
         }
+        updateEncryptAlgorithm();
         updateUsersTable();
         updateSalt();
         updateIV();
@@ -127,35 +123,38 @@ public class UserService {
     }
 
     public Mono<String> getPublicKey(String serverId) {
-        Mono<String> mono = this.requester
+        return this.requester
                 .route("server.getPublicKey")
                 .data(serverId)
                 .retrieveMono(String.class);
-        return mono;
     }
 
     public Mono<String> getSalt(UpdateRequest updateRequest) {
-        Mono<String> mono = this.requester
+        return this.requester
                 .route("server.getSalt")
                 .data(updateRequest)
                 .retrieveMono(String.class);
-        return mono;
     }
 
     public Mono<String> getEncryptMode(String serverID) {
-        Mono<String> mono = this.requester
+        return this.requester
                 .route("server.getEncryptMode")
                 .data(serverID)
                 .retrieveMono(String.class);
-        return mono;
+    }
+
+    public Mono<String> getEncryptAlgorithm(String serverID) {
+        return this.requester
+                .route("server.getEncryptAlgorithm")
+                .data(serverID)
+                .retrieveMono(String.class);
     }
 
     public Mono<byte[]> getIV(UpdateRequest updateRequest) {
-        Mono<byte[]> mono = this.requester
+        return this.requester
                 .route("server.getIV")
                 .data(updateRequest)
                 .retrieveMono(byte[].class);
-        return mono;
     }
 
     public Mono<User> signUp(User user) {
@@ -208,16 +207,33 @@ public class UserService {
         return changeSecret(changeSecretRequest).block();
     }
 
-    public void updateEncryptMode() {
-        threadUpdateEncryptMode = new Thread(() -> {
-            ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
-            logger.info(ServerUtil.SERVER_ID + " -> update encrypt mode: " + ServerUtil.ENCRYPT_MODE + " successfully!");
+    public void updateEncryptAlgorithm() {
+        Thread threadUpdateEncryptAlgorithm = new Thread(() -> {
+            ServerUtil.ENCRYPT_ALGORITHM = getEncryptAlgorithm(ServerUtil.SERVER_ID).block();
             do {
                 try {
                     Thread.sleep(1000);
-                    if (LocalDateTime.now().getSecond() == 0) {
+                    if (LocalDateTime.now().getSecond() == 15) {
+                        ServerUtil.ENCRYPT_ALGORITHM = getEncryptAlgorithm(ServerUtil.SERVER_ID).block();
+                        logger.info(ServerUtil.SERVER_ID + " -> " + "  get encrypt algorithm: " + ServerUtil.ENCRYPT_ALGORITHM + " | " + Timestamp.valueOf(LocalDateTime.now()));
+                    }
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            } while (true);
+        });
+        threadUpdateEncryptAlgorithm.start();
+    }
+
+    public void updateEncryptMode() {
+        threadUpdateEncryptMode = new Thread(() -> {
+            ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
+            do {
+                try {
+                    Thread.sleep(1000);
+                    if (LocalDateTime.now().getSecond() == 15) {
                         ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
-                        logger.info(ServerUtil.SERVER_ID + " -> update encrypt mode: " + ServerUtil.ENCRYPT_MODE + " successfully!");
+                        logger.info(ServerUtil.SERVER_ID + " -> " + "  get encrypt mode: " + ServerUtil.ENCRYPT_MODE + " | " + Timestamp.valueOf(LocalDateTime.now()));
                     }
                 } catch (Exception e) {
                     logger.error(e);
@@ -228,7 +244,7 @@ public class UserService {
     }
 
     public void updateIV() {
-        threadUpdateIV = new Thread(() -> {
+        Thread threadUpdateIV = new Thread(() -> {
             UpdateRequest updateRequest = generateKeyPair();
             try {
                 ServerUtil.IV_VALUE = RSAUtil.decrypt(getIV(updateRequest).block(), rsaUtil.getPrivateKey());
@@ -236,18 +252,17 @@ public class UserService {
                      NoSuchAlgorithmException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
-            logger.info(ServerUtil.SERVER_ID + " -> update IV: " + Arrays.toString(ServerUtil.IV_VALUE) + " successfully!");
             do {
                 try {
                     Thread.sleep(1000);
-                    if (LocalDateTime.now().getSecond() == 0) {
+                    if (LocalDateTime.now().getSecond() == 45) {
                         try {
                             ServerUtil.IV_VALUE = RSAUtil.decrypt(getIV(updateRequest).block(), rsaUtil.getPrivateKey());
                         } catch (NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
                                  NoSuchAlgorithmException | InvalidKeyException e) {
                             throw new RuntimeException(e);
                         }
-                        logger.info(ServerUtil.SERVER_ID + " -> update IV: " + Arrays.toString(ServerUtil.IV_VALUE) + " successfully!");
+                        logger.info(ServerUtil.SERVER_ID + " -> get IV: " + Arrays.toString(ServerUtil.IV_VALUE) + " | " + Timestamp.valueOf(LocalDateTime.now()));
                     }
                 } catch (Exception e) {
                     logger.error(e);
@@ -258,7 +273,7 @@ public class UserService {
     }
 
     public void updateSalt() {
-        threadUpdateSalt = new Thread(() -> {
+        Thread threadUpdateSalt = new Thread(() -> {
             UpdateRequest updateRequest = generateKeyPair();
             try {
                 ServerUtil.SALT_VALUE = RSAUtil.decrypt(getSalt(updateRequest).block(), rsaUtil.getPrivateKey());
@@ -266,7 +281,6 @@ public class UserService {
                      NoSuchAlgorithmException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
-            logger.info(ServerUtil.SERVER_ID + " -> update salt: " + ServerUtil.SALT_VALUE + " successfully!");
             do {
                 try {
                     Thread.sleep(1000);
@@ -277,7 +291,7 @@ public class UserService {
                                  NoSuchAlgorithmException | InvalidKeyException e) {
                             throw new RuntimeException(e);
                         }
-                        logger.info(ServerUtil.SERVER_ID + " -> update salt: " + ServerUtil.SALT_VALUE + " successfully!");
+                        logger.info(ServerUtil.SERVER_ID + " -> get salt: " + ServerUtil.SALT_VALUE + " | " + Timestamp.valueOf(LocalDateTime.now()));
                     }
                 } catch (Exception e) {
                     logger.error(e);
@@ -288,7 +302,7 @@ public class UserService {
     }
 
     public void updateUsersTable() {
-        threadUpdateUsers = new Thread(() -> {
+        Thread threadUpdateUsers = new Thread(() -> {
             UpdateRequest updateRequest = generateKeyPair();
             do {
                 try {
@@ -301,7 +315,7 @@ public class UserService {
                             userRepository.save(user);
                         }
                     }
-                    logger.info(ServerUtil.SERVER_ID + " -> update: " + users.size() + " user successfully!");
+                    logger.info(ServerUtil.SERVER_ID + " -> update users: " + users.size() + " | " + Timestamp.valueOf(LocalDateTime.now()));
                 } catch (Exception e) {
                     logger.error(e);
                 }

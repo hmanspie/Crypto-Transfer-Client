@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 @Controller
 public class UserController {
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     public static String INFO;
     public SignUpRequest signUpRequest;
@@ -45,7 +45,7 @@ public class UserController {
 
     @PostMapping("/registered")
     public ModelAndView registered(@Valid @ModelAttribute SignUpRequest signUpRequest,
-                                   ModelAndView model) throws InterruptedException, ExecutionException, DuplicateAccountException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+                                   ModelAndView model) throws DuplicateAccountException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         if (!userService.validatePassword(signUpRequest)) {
             model.setViewName("login");
             model.addObject("isError", true);
