@@ -46,13 +46,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private RSocketRequester requester;
-    private Thread threadUpdateEncryptMode;
     private final RSAUtil rsaUtil;
     private final RSocketRequester.Builder builder;
     private final Logger logger = LogManager.getLogger(UserService.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final LogService logService;
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public UserService(UserRepository userRepository, RSocketRequester.Builder builder, LogService logService) throws NoSuchAlgorithmException {
@@ -78,13 +76,7 @@ public class UserService {
                 .transport(TcpClientTransport
                         .create(ServerUtil.REMOTE_SERVER_IP_ADDRESS, ServerUtil.REMOTE_SERVER_PORT));
 
-        if (ServerUtil.PUBLIC_KEY == null) {
-            try {
-                getPublicKeyFromRemoteServer();
-            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        updateGetPublicKey();
         updateEncryptAlgorithm();
         updateUsersTable();
         updateSalt();
@@ -230,8 +222,27 @@ public class UserService {
         threadUpdateEncryptAlgorithm.start();
     }
 
+    public void updateGetPublicKey() {
+        Thread threadGetPublicKey = new Thread(() -> {
+            try {
+                getPublicKeyFromRemoteServer();
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                throw new RuntimeException(e);
+            }
+            do {
+                try {
+                    Thread.sleep(50000);
+                    getPublicKeyFromRemoteServer();
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            } while (true);
+        });
+        threadGetPublicKey.start();
+    }
+
     public void updateEncryptMode() {
-        threadUpdateEncryptMode = new Thread(() -> {
+        Thread threadUpdateEncryptMode = new Thread(() -> {
             ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
             do {
                 try {

@@ -130,7 +130,7 @@ public class MessageController {
     public ModelAndView testConnection(ModelAndView model, ConnectionRequest connectionRequest, Principal principal) {
         if (!Pattern.matches("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", connectionRequest.getIpAddress())) {
             //не привильна ip адреса
-            return model;
+            return inputSetting(model, principal);
         }
 
         int port = 0;
@@ -138,12 +138,12 @@ public class MessageController {
             port = Integer.parseInt(connectionRequest.getPort());
         } catch (Exception e) {
             //не коректний порт
-            return model;
+            return inputSetting(model, principal);
         }
 
-        if (port <= 0 || port > 7000) {
+        if (port <= 0 || port > 65000) {
             //не коректний порт
-            return model;
+            return inputSetting(model, principal);
         }
         ServerUtil.REMOTE_SERVER_IP_ADDRESS = connectionRequest.getIpAddress();
         ServerUtil.REMOTE_SERVER_PORT = port;
@@ -151,7 +151,7 @@ public class MessageController {
             userService.isConnection().block();
         } catch (Exception e) {
             //час очікування перевищено
-            return model;
+            return inputSetting(model, principal);
         }
         userService.requesterInitialization();
         messageService.requesterInitialization();
@@ -165,7 +165,7 @@ public class MessageController {
     public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal) {
         if (!(settingRequest.getServerID().length() > 1) ) {
             //не коректний сервер id
-            return model;
+            return inputSetting(model, principal);
         }
 
         int poolImages = 0;
@@ -173,12 +173,12 @@ public class MessageController {
             poolImages = Integer.parseInt(settingRequest.getImagesPoolCount());
         } catch (Exception e) {
             //не коректний пул картинок
-            return model;
+            return inputSetting(model, principal);
         }
 
         if (poolImages < 1) {
             //не коректний пул картинок
-            return model;
+            return inputSetting(model, principal);
         }
         ServerUtil.SERVER_ID = settingRequest.getServerID();
         ServerUtil.AES_LENGTH = Integer.valueOf(settingRequest.getAesLength());
