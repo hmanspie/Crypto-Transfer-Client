@@ -354,7 +354,6 @@ public class UserService {
         return false;
     }
 
-    //todo потрібно зробити обробку винятку Duplicate entry 'exemple@gmail.com' for key 'users.users_email_uindex'
     public Boolean signUp(SignUpRequest request) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, DuplicateAccountException {
         User user = UserMapper.mapUserRequest(request);
         String secret = user.getSecret();
