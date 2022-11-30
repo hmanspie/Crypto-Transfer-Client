@@ -210,14 +210,22 @@ public class HeadPageController {
     @PostMapping("/updateProfile")
     public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
                                       ModelAndView model, Principal principal) {
+//        if(updateProfileRequest.getUsername().equals("") ||
+//                updateProfileRequest.getFullName().equals("") ||
+//                    updateProfileRequest.getEmail().equals("") ||
+//                        updateProfileRequest.getPassword().equals("")) {
+//            model.addObject("error", "Confirm password doesn't match!");
+//            profile(model, principal);
+//            return model;
+//        }
+
         if (!userService.validatePassword(updateProfileRequest)) {
             model.addObject("error", "Confirm password doesn't match!");
             profile(model, principal);
             return model;
         }
         if (userService.updateProfile(updateProfileRequest)) {
-            model.addObject("isError", false);
-            model.addObject("info", INFO);
+            model.addObject("information", "Update profile successfully!");
             profile(model, principal);
         }
         return model;
@@ -235,9 +243,9 @@ public class HeadPageController {
     @GetMapping("/changeSecretKey")
     public ModelAndView changeSecretKey(ModelAndView model, Principal principal) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         if (userService.changeSecretKey(principal.getName())) {
-            model.addObject("info", "Secret key changed successfully!");
+            model.addObject("information", "Secret key changed successfully!");
         } else
-            model.addObject("info", "Secret key not changed!");
+            model.addObject("error", "Secret key not changed!");
         model.addObject("signUpRequest", getData(principal.getName()));
         model.addObject("key", userService.findSecretByUsername(principal.getName()));
         model.addObject("updateProfileRequest", new SignUpRequest());
