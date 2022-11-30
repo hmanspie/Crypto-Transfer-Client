@@ -121,14 +121,6 @@ public class HeadPageController {
         return inputSetting(model, principal);
     }
 
-    // todo пофіксити помилку якщо не коректні ip адреса і порт
-    // todo ошибка port out of range:70000
-    // todo Connection refused: no further information
-    // todo Failed to resolve '2141241' after 3 queries
-    // todo Connection timed out: no further information
-    // todo Зробити вивід помилки на сторінку
-
-    // todo Regex не робочий
     // todo Винести всі перевірки в окремий метод
     @PostMapping("/testConnection")
     public ModelAndView testConnection(ModelAndView model, ConnectionRequest connectionRequest, Principal principal) {
@@ -160,8 +152,6 @@ public class HeadPageController {
         return inputSetting(model, principal);
     }
 
-    // todo   ServerUtil.SERVER_ID = settingRequest.getServerID(); не може бути null
-    // todo For input string: "" --------> ServerUtil.POOL_IMAGES_LENGTH = Integer.valueOf(settingRequest.getImagesPoolCount()); не може бути null
     @PostMapping("/applySetting")
     public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal, ModelMap modelMap) {
         if (settingRequest.getServerID().equals("")) {
