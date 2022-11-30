@@ -1,5 +1,6 @@
 package com.rebalcomb.controllers;
 
+import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.controllers.utils.Util;
 import com.rebalcomb.mapper.MessageRequestMapper;
 import com.rebalcomb.model.dto.MessageRequest;
@@ -53,9 +54,6 @@ public class SendController {
         }
         MessageRequest messageRequestNew = MessageRequestMapper.mapMessageRequest(messageRequest, principal.getName());
         if(messageService.sendMessage(messageRequestNew)){
-            Message message = messageService.findTopByOrderByIdDesc();
-            message.setIs_send(true);
-            messageService.save(message);
             model.addObject("isSend", true);
             model.addObject("messages", messageService.findAllBySender(principal.getName()));
             model.addObject("headPageValue", "outcoming");

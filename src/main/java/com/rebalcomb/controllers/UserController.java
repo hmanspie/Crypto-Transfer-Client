@@ -1,6 +1,7 @@
 package com.rebalcomb.controllers;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.rebalcomb.config.ServerUtil;
 import com.rebalcomb.email.EmailHandler;
 import com.rebalcomb.exceptions.DuplicateAccountException;
 import com.rebalcomb.model.dto.*;
@@ -101,6 +102,13 @@ public class UserController {
 
     @PostMapping("/checkUsersEmail")
     public ModelAndView checkUsersEmail(@Valid @ModelAttribute SignUpRequest signUpRequest, ModelAndView model) {
+        if(!ServerUtil.IS_CONNECTION){
+            model.setViewName("login");
+            model.addObject("isError", true);
+            model.addObject("error", "Remote server no connected!");
+            model.addObject("howForm", true);
+            return model;
+        }
         this.signUpRequest = signUpRequest;
         new Thread(() -> {
             new EmailHandler().send(signUpRequest.getEmail());
@@ -128,9 +136,8 @@ public class UserController {
     }
 
     @PostMapping("/verificatedAccount")
-    public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, DuplicateAccountException {
+    public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) throws DuplicateAccountException {
         if (code.getCode().equals(EmailHandler.verificationCode)) {
-
             if (!userService.validatePassword(signUpRequest)) {
                 model.setViewName("login");
                 model.addObject("isError", true);
@@ -140,24 +147,24 @@ public class UserController {
             }
             try {
                 userService.signUp(signUpRequest);
-                model.setViewName("/login");
+                model.setViewName("login");
+                model.addObject("isError", false);
+                model.addObject("error", signUpRequest.getFullName() + " registered successful!");
+                model.addObject("howForm", false);
+                return model;
             } catch (Exception e) {
                 logger.error("Already existing user");
                 logService.save(new Log(0L, TypeLog.SIGN_UP, Timestamp.valueOf(LocalDateTime.now()), "Already existing user"));
                 throw new DuplicateAccountException();
             }
-                model.setViewName("login");
-                model.addObject("isError", true);
-                model.addObject("error", INFO);
-                model.addObject("howForm", true);
-
         } else {
             model.setViewName("email");
             model.addObject("checkCode", new CheckCode());
             model.addObject("messageForUser", "Invalid verification code");
             model.addObject("headPageValue", "registration");
+            model.addObject("signUpRequest", new SignUpRequest());
+            return model;
         }
-        return model;
     }
 
     @PostMapping("/createNewPassword")
@@ -203,23 +210,4 @@ public class UserController {
         return "logout";
     }
 
-    @PostMapping("/updateProfile")
-    public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
-                                      ModelAndView model) {
-        if (!userService.validatePassword(updateProfileRequest)) {
-            model.addObject("error", "Confirm password doesn't match!");
-            model.addObject("headPageValue", "profile");
-            model.setViewName("headPage");
-            return model;
-        }
-        if (userService.updateProfile(updateProfileRequest)) {
-            model.addObject("isError", false);
-            model.addObject("info", INFO);
-            model.addObject("signUnRequest", updateProfileRequest);
-        } else {
-            model.addObject("isError", true);
-            model.addObject("error", INFO);
-        }
-        return model;
-    }
 }

@@ -6,6 +6,8 @@
                     class="line"></span><span class="line"></span><span class="line line-angle1"></span><span
                     class="line line-angle2"></span></a>Settings<a><span
                     class="icon glyphicon glyphicon-chevron-down"></span></a></h1>
+            <p class="text-description mt-3" style="color: green" th:text="${information}"></p>
+            <p class="text-description mt-3" style="color: red" th:text="${error}"></p>
         </header>
 
         <div class="container-fluid mt-4 ms-2">
@@ -21,7 +23,9 @@
                     </div>
                 </div>
                 <p >
-                    <button type="submit" class="sexy-btn" style="width: 250px; margin: 20px 0 0 0;">Test connection</button>
+                    <button type="submit" class="sexy-btn" style="width: 250px; margin: 20px 0 0 0;">
+                        Connect to remote server
+                    </button>
                 <p class="text-description mt-3">If you don't have connection try change IP service. Maybe it's problem from
                     our side</p>
             </form>

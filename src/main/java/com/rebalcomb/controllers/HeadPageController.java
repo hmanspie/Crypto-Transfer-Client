@@ -14,9 +14,10 @@ import com.rebalcomb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,28 +26,29 @@ import reactor.core.publisher.Flux;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 
 @Controller
 @RequestMapping("/headPage")
-public class MessageController {
+public class HeadPageController {
 
-    private Logger logger = LoggerFactory.getLogger(MessageController.class);
+    private final Logger logger = LoggerFactory.getLogger(HeadPageController.class);
     private final MessageService messageService;
     private final UserService userService;
     private final LogService logService;
     private final Util util;
 
+    public static String INFO;
+
     @Autowired
-    public MessageController(MessageService messageService, UserService userService, LogService logService, Util util) {
+    public HeadPageController(MessageService messageService, UserService userService, LogService logService, Util util) {
         this.messageService = messageService;
         this.userService = userService;
         this.logService = logService;
@@ -126,31 +128,30 @@ public class MessageController {
     // todo Connection timed out: no further information
     // todo Зробити вивід помилки на сторінку
 
+    // todo Regex не робочий
+    // todo Винести всі перевірки в окремий метод
     @PostMapping("/testConnection")
     public ModelAndView testConnection(ModelAndView model, ConnectionRequest connectionRequest, Principal principal) {
         if (!Pattern.matches("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", connectionRequest.getIpAddress())
-                || connectionRequest.getIpAddress().equals("localhost")) {
+                && !connectionRequest.getIpAddress().equals("localhost")) {
+            model.addObject("error", "Incorrect server ip address!");
             return inputSetting(model, principal);
         }
-
-        int port = 0;
         try {
-            port = Integer.parseInt(connectionRequest.getPort());
-        } catch (Exception e) {
-            //не коректний порт
-            return inputSetting(model, principal);
-        }
-
-        if (port <= 0 || port > 65000) {
-            //не коректний порт
+            int port = Integer.parseInt(connectionRequest.getPort());
+            if (port <= 0 || port > 65534)
+                throw new Exception();
+            ServerUtil.REMOTE_SERVER_PORT = port;
+        }catch (Exception e) {
+            model.addObject("error", "Incorrect server port!");
             return inputSetting(model, principal);
         }
         ServerUtil.REMOTE_SERVER_IP_ADDRESS = connectionRequest.getIpAddress();
-        ServerUtil.REMOTE_SERVER_PORT = port;
         try {
             userService.isConnection().block();
+            model.addObject("information", "Connected to a remote server!");
         } catch (Exception e) {
-            //час очікування перевищено
+            model.addObject("error", "No response from server!");
             return inputSetting(model, principal);
         }
         userService.requesterInitialization();
@@ -162,29 +163,26 @@ public class MessageController {
     // todo   ServerUtil.SERVER_ID = settingRequest.getServerID(); не може бути null
     // todo For input string: "" --------> ServerUtil.POOL_IMAGES_LENGTH = Integer.valueOf(settingRequest.getImagesPoolCount()); не може бути null
     @PostMapping("/applySetting")
-    public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal) {
-        if (!(settingRequest.getServerID().length() > 1) ) {
-            //не коректний сервер id
+    public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal, ModelMap modelMap) {
+        if (settingRequest.getServerID().equals("")) {
+            modelMap.addAttribute("error", "Server id not entered!");
             return inputSetting(model, principal);
         }
-
-        int poolImages = 0;
         try {
-            poolImages = Integer.parseInt(settingRequest.getImagesPoolCount());
+            int poolImages = Integer.parseInt(settingRequest.getImagesPoolCount());
+            if (poolImages < 1) {
+                throw new Exception();
+            }
+            ServerUtil.POOL_IMAGES_LENGTH = poolImages;
         } catch (Exception e) {
-            //не коректний пул картинок
-            return inputSetting(model, principal);
-        }
-
-        if (poolImages < 1) {
-            //не коректний пул картинок
+            modelMap.addAttribute("error", "The picture pool is not correct!");
             return inputSetting(model, principal);
         }
         ServerUtil.SERVER_ID = settingRequest.getServerID();
         ServerUtil.AES_LENGTH = Integer.valueOf(settingRequest.getAesLength());
         ServerUtil.RSA_LENGTH = Integer.valueOf(settingRequest.getRsaLength());
         ServerUtil.HASH_ALGORITHM = settingRequest.getHashType();
-        ServerUtil.POOL_IMAGES_LENGTH = poolImages;
+        modelMap.addAttribute("information", "Changes saved successfully!");
         return inputSetting(model, principal);
     }
 
@@ -219,6 +217,22 @@ public class MessageController {
         return model;
     }
 
+    @PostMapping("/updateProfile")
+    public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
+                                      ModelAndView model, Principal principal) {
+        if (!userService.validatePassword(updateProfileRequest)) {
+            model.addObject("error", "Confirm password doesn't match!");
+            profile(model, principal);
+            return model;
+        }
+        if (userService.updateProfile(updateProfileRequest)) {
+            model.addObject("isError", false);
+            model.addObject("info", INFO);
+            profile(model, principal);
+        }
+        return model;
+    }
+
     public SignUpRequest getData(String username) {
         Optional<User> user = userService.findByUsername(username);
         SignUpRequest signUpRequest = new SignUpRequest();
@@ -238,6 +252,7 @@ public class MessageController {
         model.addObject("key", userService.findSecretByUsername(principal.getName()));
         model.addObject("updateProfileRequest", new SignUpRequest());
         model.addObject("headPageValue", "profile");
+        model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.setViewName("headPage");
         return model;
     }

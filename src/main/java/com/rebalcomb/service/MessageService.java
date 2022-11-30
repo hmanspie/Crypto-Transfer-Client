@@ -159,6 +159,7 @@ public class MessageService {
         return userService.findAllUsername();
     }
     public void save(Message message){
+        message.setIs_send(true);
         messageRepository.save(message);
     }
 
