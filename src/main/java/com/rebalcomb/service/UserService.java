@@ -249,7 +249,7 @@ public class UserService {
                     Thread.sleep(1000);
                     if (LocalDateTime.now().getSecond() == 15) {
                         ServerUtil.ENCRYPT_MODE = getEncryptMode(ServerUtil.SERVER_ID).block();
-                        logger.info(ServerUtil.SERVER_ID + " -> " + "  get encrypt mode: " + ServerUtil.ENCRYPT_MODE + " | " + Timestamp.valueOf(LocalDateTime.now()));
+                        logger.info(ServerUtil.SERVER_ID + " -> " + "get encrypt mode: " + ServerUtil.ENCRYPT_MODE + " | " + Timestamp.valueOf(LocalDateTime.now()));
                     }
                 } catch (Exception e) {
                     logger.error(e);
@@ -404,7 +404,7 @@ public class UserService {
         return userRepository.findSecretByUsername(username);
     }
 
-    List<String> findAllUsername() {
+    public List<String> findAllUsername() {
         return userRepository.findAllUsername();
     }
 

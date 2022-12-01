@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -43,13 +44,23 @@ public class SendController {
 
     @PostMapping("/sendNewMessage")
     public ModelAndView login(ModelAndView model, @Valid @ModelAttribute MessageRequest messageRequest, Principal principal) throws InterruptedException, IOException, ExecutionException, NoSuchAlgorithmException {
+        List<String> usernameList = userService.findAllUsername();
+        if(!usernameList.contains(messageRequest.getUser_to())){
+            model.addObject("error", "Address not found!");
+            model.addObject("isSend", false);
+            model.addObject("headPageValue", "write");
+            model.addObject("isAdmin", util.isAdmin(principal));
+            model.addObject("messageRequest", new MessageRequest());
+            model.setViewName("headPage");
+            return model;
+        }
+
         if(messageRequest.getUser_to().equals(principal.getName())){
             model.addObject("isSend", false);
             model.addObject("headPageValue", "write");
             model.addObject("isAdmin", util.isAdmin(principal));
             model.addObject("messageRequest", new MessageRequest());
             model.setViewName("headPage");
-            logger.error("Address not found!");
             return model;
         }
         MessageRequest messageRequestNew = MessageRequestMapper.mapMessageRequest(messageRequest, principal.getName());
@@ -68,7 +79,6 @@ public class SendController {
             model.addObject("messageRequest", new MessageRequest());
             model.addObject("isAdmin", util.isAdmin(principal));
             model.setViewName("headPage");
-            logger.error("Address not found!");
             return model;
         }
     }

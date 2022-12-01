@@ -45,8 +45,6 @@ public class HeadPageController {
     private final LogService logService;
     private final Util util;
 
-    public static String INFO;
-
     @Autowired
     public HeadPageController(MessageService messageService, UserService userService, LogService logService, Util util) {
         this.messageService = messageService;
@@ -71,6 +69,9 @@ public class HeadPageController {
 
     @GetMapping("/write")
     public ModelAndView write(ModelAndView model, Principal principal) {
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+        }
         model.addObject("headPageValue", "write");
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("messageRequest", new MessageRequest());
@@ -80,7 +81,10 @@ public class HeadPageController {
     }
 
     @GetMapping("/incoming")
-    public ModelAndView incoming(ModelAndView model, Principal principal) throws IOException, InterruptedException {
+    public ModelAndView incoming(ModelAndView model, Principal principal) {
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+        }
         model.addObject("messages", messageService.findAllByRecipient(principal.getName()));
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "incoming");
@@ -91,6 +95,9 @@ public class HeadPageController {
 
     @GetMapping("/outcoming")
     public ModelAndView outcoming(ModelAndView model, Principal principal) throws IOException {
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+        }
         model.addObject("messages", messageService.findAllBySender(principal.getName()));
         model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "outcoming");
@@ -118,6 +125,9 @@ public class HeadPageController {
 
     @GetMapping("/setting")
     public ModelAndView setting(ModelAndView model, Principal principal) {
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+        }
         return inputSetting(model, principal);
     }
 
@@ -154,6 +164,10 @@ public class HeadPageController {
 
     @PostMapping("/applySetting")
     public ModelAndView applySetting(ModelAndView model, SettingRequest settingRequest, Principal principal, ModelMap modelMap) {
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+            return inputSetting(model, principal);
+        }
         if (settingRequest.getServerID().equals("")) {
             modelMap.addAttribute("error", "Server id not entered!");
             return inputSetting(model, principal);
@@ -198,6 +212,9 @@ public class HeadPageController {
 
     @GetMapping("/profile")
     public ModelAndView profile(ModelAndView model, Principal principal) {
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+        }
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.addObject("headPageValue", "profile");
         model.addObject("signUpRequest", getData(principal.getName()));
@@ -208,27 +225,20 @@ public class HeadPageController {
     }
 
     @PostMapping("/updateProfile")
-    public ModelAndView updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
+    public void updateProfile(@Valid @ModelAttribute SignUpRequest updateProfileRequest,
                                       ModelAndView model, Principal principal) {
-//        if(updateProfileRequest.getUsername().equals("") ||
-//                updateProfileRequest.getFullName().equals("") ||
-//                    updateProfileRequest.getEmail().equals("") ||
-//                        updateProfileRequest.getPassword().equals("")) {
-//            model.addObject("error", "Confirm password doesn't match!");
-//            profile(model, principal);
-//            return model;
-//        }
-
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+            profile(model, principal);
+        }
         if (!userService.validatePassword(updateProfileRequest)) {
             model.addObject("error", "Confirm password doesn't match!");
             profile(model, principal);
-            return model;
         }
         if (userService.updateProfile(updateProfileRequest)) {
             model.addObject("information", "Update profile successfully!");
             profile(model, principal);
         }
-        return model;
     }
 
     public SignUpRequest getData(String username) {
@@ -242,16 +252,29 @@ public class HeadPageController {
 
     @GetMapping("/changeSecretKey")
     public ModelAndView changeSecretKey(ModelAndView model, Principal principal) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        if (!checkConnection()) {
+            model.addObject("error", "There is no connection to the remote server!");
+            return addObjectToModelChangeSecretKey(model, principal);
+        }
         if (userService.changeSecretKey(principal.getName())) {
             model.addObject("information", "Secret key changed successfully!");
         } else
             model.addObject("error", "Secret key not changed!");
+        return addObjectToModelChangeSecretKey(model, principal);
+    }
+    private ModelAndView addObjectToModelChangeSecretKey(ModelAndView model, Principal principal){
         model.addObject("signUpRequest", getData(principal.getName()));
         model.addObject("key", userService.findSecretByUsername(principal.getName()));
         model.addObject("updateProfileRequest", new SignUpRequest());
+        model.addObject("isAdmin", util.isAdmin(principal));
         model.addObject("headPageValue", "profile");
         model.addObject("isOnline", ServerUtil.IS_CONNECTION);
         model.setViewName("headPage");
         return model;
+    }
+    private Boolean checkConnection(){
+        if(ServerUtil.IS_CONNECTION)
+            return true;
+        return false;
     }
 }
