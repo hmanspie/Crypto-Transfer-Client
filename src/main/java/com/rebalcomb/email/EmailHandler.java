@@ -19,9 +19,9 @@ public class EmailHandler {
     public void send(String email) {
         SecureRandom random = new SecureRandom();
         String code = String.valueOf(random.nextInt(999999));
-        verificationCode.put(email, code);
+        verificationCode.put(code, email);
 
         TLSEmail tlsEmail = new TLSEmail();
-        tlsEmail.answerToEmail(code, email);
+        tlsEmail.answerToEmail(email, code);
     }
 }
