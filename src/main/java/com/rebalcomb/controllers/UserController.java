@@ -137,7 +137,7 @@ public class UserController {
 
     @PostMapping("/verificatedAccount")
     public ModelAndView verificatedAccount(ModelAndView model, CheckCode code) throws DuplicateAccountException {
-        if (code.getCode().equals(EmailHandler.verificationCode)) {
+        if (new EmailHandler().isVereficated(code.getCode())) {
             if (!userService.validatePassword(signUpRequest)) {
                 model.setViewName("login");
                 model.addObject("isError", true);
@@ -169,7 +169,7 @@ public class UserController {
 
     @PostMapping("/createNewPassword")
     public ModelAndView createNewPassword(ModelAndView model, CheckCode code) {
-        if (code.getCode().equals(EmailHandler.verificationCode)) {
+        if (new EmailHandler().isVereficated(code.getCode())) {
             model.setViewName("recoveryPassword");
             model.addObject("updatePassword", new UpdatePassword());
             model.addObject("updatePassword", new UpdatePassword());
