@@ -864,7 +864,7 @@ input:focus {
 .write-fragment-container textarea{
     margin-top: 7px;
     width: 100%;
-    height: 40em;              /*650px*/
+    height: 35em;              /*650px*/
     border: none;
     resize: none;
 }
