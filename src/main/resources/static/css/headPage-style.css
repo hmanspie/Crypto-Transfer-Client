@@ -971,6 +971,36 @@ input:focus {
 
 /* == INCOMING, OUTCOMING == */
 
+/* == 27.12 == */
+.sexy-btn-connect-to-server-apply-for-profile{
+    width: 150px;
+    font-size: 20px;
+    height: 60px;
+    appearance: none;
+    background-color: #000000;
+    border: 2px solid #1A1A1A;
+    border-radius: 15px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-weight: 600;
+    line-height: normal;
+    margin: 0;
+    /*min-height: 60px;*/
+    min-width: 0;
+    outline: none;
+    padding: 16px 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    will-change: transform;
+}
+
 @media all and (max-width: 600px) {
     #main .header .page-title .icon {
         margin-left: 10px;
@@ -1004,3 +1034,146 @@ input:focus {
         height: 5em;
     }
 }
+    /* == NEW GENERATION 27.12.22 == */
+
+#main .header {
+    padding: 50px 60px;
+    border-bottom: 1px solid #EFEFEF;
+    overflow: hidden;
+}
+
+    .col-mar-for-profile{
+        width: 40%;
+    }
+    .form-control-for-mobile-for-profile{
+        width: 250px;
+        margin: 20px 0 0 0;
+        font-size: 18px;
+        display: block;
+        padding: 0.375rem 0.75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.25rem;
+    }
+
+    .h5-for-mobile-for-profile{
+        font-size: 30px;
+    }
+    .h6-for-mobile-for-profile{
+        font-size: 20px;
+    }
+
+    .sexy-btn-connect-to-server-apply-for-profile{
+        width: 220px;
+        font-size: 20px;
+        height: 60px;
+        appearance: none;
+        background-color: #000000;
+        border: 2px solid #1A1A1A;
+        border-radius: 15px;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        cursor: pointer;
+        display: inline-block;
+        font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+        /*min-height: 60px;*/
+        min-width: 0;
+        outline: none;
+        padding: 16px 24px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        will-change: transform;
+    }
+
+    .col-mar-for-profile{
+        width: 40%;
+    }
+
+    .row-for-profile{
+        padding: 0 3% 3% 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4%;
+        width: 100%;
+    }
+
+
+    .mt-4-for-profile {
+        margin: 5px 60px 10px 60px;
+        width: 100%;
+    }
+
+    @media all and (max-width: 1000px) {
+
+        #main .header {
+            padding: 15px 60px 85px 15px;
+            border-bottom: 1px solid #EFEFEF;
+            overflow: hidden;
+        }
+
+        #main .header-for-profile{
+            padding-bottom: 0px;
+        }
+
+        .page-title{
+            margin-bottom: 5px;
+        }
+
+        .mt-4-for-profile {
+            margin: 0px 0px 12px 15px;
+            padding-right: 15px;
+        }
+
+        .p-for-profile{
+            margin-bottom: 0px;
+        }
+
+        .h5-for-mobile-for-profile{
+            font-size: 20px;
+        }
+
+        .h6-for-mobile-for-profile{
+            font-size: 12px;
+        }
+
+        .sexy-btn-connect-to-server-apply-for-profile{
+            width: 200px;
+            font-size: 15px;
+            height: 60px;
+        }
+
+        .form-control-for-mobile-for-profile{
+            width: 100%;
+            font-size: 13px;
+            height: 25px;
+        }
+
+        .row-for-profile{
+            padding: 0 3% 3% 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4%;
+            width: 100%;
+        }
+
+        .row2-for-profile{
+            display: grid;
+        }
+
+    }
+
+
