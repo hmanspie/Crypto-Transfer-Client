@@ -13,6 +13,8 @@
     -webkit-text-fill-color: transparent;
 }
 
+
+
 /* ======== ANIMATION ========*/
 
 /* Animation, when fragments switched */
@@ -20,17 +22,6 @@
     animation: 3s show ease;
 }
 
-/* ======== HEADER ========*/
-
-/* logotype */
-.logo{
-    margin-top: 5%;
-    height: 130px;
-}
-
-/* ======== BODY ========*/
-
-/* title */
 .head-text{
     margin-top: 70px;
     font-size: 25px;
@@ -63,21 +54,6 @@
     border-color: #334c28;
 }
 
-/* 'Forgot password?' text */
-.forgot-text{
-    text-decoration: none;
-    color: #9eb19d;
-    margin-top: 20px;
-    margin-left: 55%;
-    font-size: 12px;
-    display: table;
-}
-
-.forgot-text:hover{
-    color: black;
-}
-
-/* sign in(out) button */
 
 .button-sign{
     outline: none;
@@ -105,17 +81,6 @@
     border-color: grey;
 }
 
-/* divider 'OR' style */
-.dividerOr{
-    margin-top: 30px;
-}
-
-/* link to sign up */
-.link-to-sign-box{
-    margin-top:1%;
-    text-align: center;
-}
-
 .link-to-sign-box text{
     color: #696969;
     font-size: 12px;
@@ -129,45 +94,24 @@
 .link-to-sign-box a:hover{
     color:black;
 }
+.head-text{
+    margin-top: 10%;
 
-/* =========================== */
-
-/* ERROR */
-.error-text{
-    background: #9d2e2e;
+    font-size: 65px;
 }
 
-.info-text{
-    background: green;
+.m-left{
+    padding-left: 35px;
 }
-
-.notification{
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: table;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    font-size: 15px;
-}
-
-/* =============================== */
-
-/* ХЛАМ */
-/*@keyframes show {*/
-/*    from { opacity: 0; }*/
-/*    to { opacity: 1; }*/
-/*}*/
 
 @media all and (max-width: 1000px) {
+    .m-left{
+        padding-left: 0;
+    }
 .head-text{
     margin-top: 30%;
-    font-size: 65px;
-} 
 
-.telinput{
-height: 50px;
-weight: 400px;
+    font-size: 65px;
 }
 
 .input-block input {
@@ -185,15 +129,6 @@ weight: 400px;
     font-size: 40px;
     min-height: auto;
     min-width: 10%;
-}
-
-.forgot-text{
-    margin-left: 55%;
-    font-size: 20px; 
-}
-
-.link-to-sign-box{
-    margin-top:2%;
 }
 
 .link-to-sign-box text{
@@ -230,7 +165,7 @@ weight: 400px;
                 <h3 class="text-form head-text">Verification</h3>
             </div>
             <div class="input-block">
-                <h2 class="text-form">Enter your email if you forgot your password</h2>
+                <h2 class="text-form m-left">Enter your email if you forgot your password</h2>
                 <div>
                     <input autocomplete="off" name="username" type="text" id="username" th:field="*{email}"
                            required>

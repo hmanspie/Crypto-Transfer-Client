@@ -69,7 +69,7 @@
     text-decoration: none;
     color: #9eb19d;
     margin-top: 20px;
-    margin-left: 55%;
+    margin-left: 53.5%;
     font-size: 12px;
     display: table;
 }
@@ -152,13 +152,69 @@
     font-size: 15px;
 }
 
-/* =============================== */
 
-/* ХЛАМ */
-/*@keyframes show {*/
-/*    from { opacity: 0; }*/
-/*    to { opacity: 1; }*/
-/*}*/
+@media all and (max-width: 1000px) {
 
+    .logo{
+        margin-top: 20%;
+        height: 200px;
+    }
 
+    .head-text{
+        margin-top: 10%;
+        font-size: 65px;
+    }
 
+    h2.text-form{
+        font-size: 35px;
+        margin-left: 30%;
+        margin-top: 4%;
+    }
+
+    .telinput{
+        height: 50px;
+        weight: 400px;
+    }
+
+    .input-block input {
+        margin-left: 30%;
+        width: 400px;
+        font-size: 30px;
+    }
+
+    .button-sign{
+        width: 31.5%;
+        height: 80px;
+        margin-top: 50px;
+        margin-left: 35%;
+        border-radius: 45px;
+        font-size: 40px;
+        min-height: auto;
+        min-width: 10%;
+    }
+
+    .forgot-text{
+        margin-left: 46%;
+        font-size: 31px;
+    }
+
+    .link-to-sign-box{
+        margin-top:2%;
+    }
+
+    .link-to-sign-box text{
+        font-size: 25px;
+    }
+
+    .link-to-sign-box a{
+        margin-top: 5%;
+        font-size: 25px;
+    }
+
+    .head-text2{
+        margin-top: 10%;
+        font-size: 65px;
+        text-align: center;
+    }
+
+}
