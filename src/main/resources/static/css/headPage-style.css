@@ -967,3 +967,40 @@ input:focus {
     text-align: center;
 }
 
+/* =========================== ANDROID OPTIMIZATION STYLES =========================== */
+
+/* == INCOMING, OUTCOMING == */
+
+@media all and (max-width: 600px) {
+    #main .header .page-title .icon {
+        margin-left: 10px;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+
+    #main .message-list li .col-1 .dot {
+        margin: 22px 6px 0;
+    }
+
+    #main .message-list li .col-1 .title {
+        left: 100px;
+        ax-width: 100px;
+    }
+
+    #main .message-list li .col-2 .date {
+        padding-left: 100px;
+        position: inherit;
+    }
+
+/* == WRITE FRAGMENT == */
+
+    .write-fragment-container button {
+        width: 100%;
+    }
+
+    .write-fragment-container textarea {
+        height: 5em;
+    }
+}
