@@ -14,7 +14,7 @@
               class="line line-angle2"></span></a>Logs<a><span
               class="icon glyphicon glyphicon-chevron-down"></span></a></h1>
     </header>
-
+    <div style="width: 100%; overflow-x: scroll;">
     <table class="table table-hover">
       <thead>
       <tr>
@@ -29,7 +29,7 @@
       <th:block th:each="log: ${logs}">
         <tr>
           <td th:text="${log.getDate_time()}"></td>
-          <td th:text="${log.getInfo()}"></td>
+          <td><p class="p-w-for-logs" th:text="${log.getInfo()}"></p></td>
           <td th:text="${log.getType().toString()}"></td>
           <td></td>
           <td></td>
@@ -37,5 +37,6 @@
       </th:block>
       </tbody>
     </table>
+    </div>
   </main>
 </div>

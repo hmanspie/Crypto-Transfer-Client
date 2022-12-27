@@ -17,8 +17,8 @@
             <p class="text-description mt-3" style="color: red" th:text="${error}"></p>
         </header>
 
-
-        <table class="table table-hover">
+        <div class="hor-scroll">
+            <table class="table table-hover " style="overflow-x: scroll;">
             <thead>
             <tr>
                 <th scope="col">Email</th>
@@ -39,33 +39,33 @@
                     <td th:text="${user.getUsername()}"></td>
                     <form th:action="@{'/users/edit/' + ${user?.getId()}}" th:method="post">
                         <td>
-                            <select class="form-select w-50" name="role" id="role">
+                            <select class="form-select-my" name="role" id="role">
                                 <option th:each="role : ${T(com.rebalcomb.model.entity.enums.Role).values()}"
                                         th:value="${role}" th:text="${role}"
                                         th:selected="${role} == ${user.getRole()}"></option>
                             </select>
                         </td>
                         <td>
-                            <select class="form-select w-50" name="userStatus" id="userStatus">
+                            <select class="form-select-my" name="userStatus" id="userStatus">
                                 <option th:each="status : ${T(com.rebalcomb.model.entity.enums.Status).values()}"
                                         th:value="${status}" th:text="${status}"
                                         th:selected="${status} == ${user.getStatus()}"></option>
                             </select>
                         </td>
-                        <td th:text="${user.getRegTime()}"></td>
+                        <td><p class="p-w-for-users" th:text="${user.getRegTime()}"></p></td>
                         <td>
-                            <input type="image" th:src="@{/image/icons/save.svg}"/>
+                            <input class="input-my" type="image" th:src="@{/image/icons/save.svg}"/>
                         </td>
                     </form>
                     <form th:action="@{'/users/delete/' + ${user?.getId()}}">
                         <td>
-                            <input type="image" th:src="@{/image/icons/delete.svg}"/>
+                            <input class="input-my" type="image" th:src="@{/image/icons/delete.svg}"/>
                         </td>
                     </form>
                 </tr>
             </th:block>
             </tbody>
-        </table>
-
+            </table>
+        </div>
     </main>
 </div>
