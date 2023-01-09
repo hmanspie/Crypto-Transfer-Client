@@ -54,7 +54,11 @@ td {
     -moz-appearance: none;
     appearance: none;
 }
+
 @media all and (max-width: 1000px) {
+    #main .header{
+        padding: 15px 60px 0px 15px;
+    }
     .hor-scroll {
         overflow-x: scroll;
     }
@@ -66,7 +70,8 @@ td {
     .p-w-for-logs{
         margin-bottom: 0;
         margin-top: 0;
-        width: 130px;
+        width: 150px;
+        font-size: 11px;
     }
     .input-my{
         margin-top: 17px;

@@ -368,7 +368,7 @@ a:hover {
     opacity: 0.5;
 }
 #main .action-bar {
-    padding: 20px 60px;
+    padding: 20px 50px;
     border-bottom: 1px solid #EFEFEF;
     overflow: hidden;
 }
@@ -703,8 +703,8 @@ a:hover {
         margin-right: 0;
     }
     .show-message #message {
-        left: 20%;
-        width: 80%;
+        left: 0%;
+        width: 100%;
     }
 }
 @media only screen and (max-width: 600px) {
